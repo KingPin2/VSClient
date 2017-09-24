@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="350.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="main.formulare.NeueGruppeFXMLController">
+   <children>
+      <VBox layoutX="229.0" layoutY="28.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <BorderPane prefHeight="100.0" prefWidth="600.0">
+               <center>
+                  <Label text="Gruppe anlegen" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="Arial Black" size="12.0" />
+                     </font>
+                  </Label>
+               </center>
+            </BorderPane>
+            <HBox prefHeight="52.0" prefWidth="350.0">
+               <children>
+                  <Label prefWidth="80.0" text="Gruppenname">
+                     <HBox.margin>
+                        <Insets left="50.0" right="8.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="tfGruppenname" promptText="Name eingeben" />
+               </children>
+            </HBox>
+            <HBox prefHeight="75.0" prefWidth="350.0">
+               <children>
+                  <Label prefWidth="80.0" text="Moderator">
+                     <HBox.margin>
+                        <Insets left="50.0" right="8.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ComboBox fx:id="cbMod" prefWidth="150.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="bSpeichern" mnemonicParsing="false" text="Speichern">
+                     <HBox.margin>
+                        <Insets left="140.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="bAbbrechen" mnemonicParsing="false" onAction="#close" text="Abbrechen">
+                     <HBox.margin>
+                        <Insets left="8.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

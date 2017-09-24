@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root type="javafx.scene.layout.HBox" HBox.hgrow="ALWAYS" prefHeight="40.0" prefWidth="320.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox.margin>
+        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+    </VBox.margin>
+    <Label fx:id="user" minWidth="80.0" HBox.hgrow="ALWAYS">
+        <font>
+            <Font name="Arial Black" size="12.0"/>
+        </font>
+    </Label>
+    <TextArea fx:id="message" editable="false" wrapText="true" minWidth="220.0" prefHeight="30.0" HBox.hgrow="ALWAYS">
+        <font>
+            <Font name="Arial" size="12.0"/>
+        </font>
+    </TextArea>
+
+</fx:root>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="583.0" minWidth="320.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="main.anzeigetafel.AnzeigetafelFXMLController">
+    <children>
+       <VBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <BorderPane fx:id="BorderPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
+                    <VBox.margin>
+                        <Insets bottom="30.0" left="30.0" top="30.0" right="30.0"/>
+                    </VBox.margin>
+                    <center>
+                        <Label fx:id="lTafel" text="Anzeigetafel XY">
+                            <font>
+                                <Font name="Arial Black" size="16.0"/>
+                            </font>
+                        </Label>
+                    </center>
+                </BorderPane>
+                <ScrollPane fx:id="scrollpane" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <content>
+                        <VBox fx:id="vbox" layoutX="182.0" layoutY="132.0" prefHeight="583.0" prefWidth="518.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+                    </content>
+                </ScrollPane>
+            </children>
+       </VBox>
+    </children>
+</AnchorPane>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="main.formulare.GruppeVerwaltenFXMLController">
+   <children>
+      <VBox layoutX="200.0" layoutY="58.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <BorderPane prefHeight="100.0" prefWidth="350.0">
+               <center>
+                  <Label text="Gruppenverwaltung" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="Arial Black" size="12.0" />
+                     </font>
+                  </Label>
+               </center>
+            </BorderPane>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label prefWidth="80.0" text="Gruppe: ">
+                     <HBox.margin>
+                        <Insets left="40.0" right="8.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ComboBox prefWidth="150.0">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </ComboBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label prefWidth="80.0" text="Member: ">
+                     <HBox.margin>
+                        <Insets left="40.0" right="8.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ComboBox prefWidth="150.0">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </ComboBox>
+                  <Button mnemonicParsing="false" text="entfernen" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label prefWidth="80.0" text="User: ">
+                     <HBox.margin>
+                        <Insets left="40.0" right="8.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ChoiceBox prefWidth="150.0">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </ChoiceBox>
+                  <Button mnemonicParsing="false" text="einladen" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label prefWidth="80.0" text="Moderator: ">
+                     <HBox.margin>
+                        <Insets left="40.0" right="8.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ComboBox prefWidth="150.0">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </ComboBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button mnemonicParsing="false" text="Speichern">
+                     <HBox.margin>
+                        <Insets left="145.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" text="Abbrechen">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

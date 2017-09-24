@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.guivs.AdminAnsichtFXMLController">
+   <children>
+      <VBox layoutX="201.0" layoutY="30.0" prefHeight="600.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="Datei">
+                  <items>
+                    <MenuItem fx:id="miAktualisieren" mnemonicParsing="false" text="Aktualisieren" />
+                    <Menu fx:id="mAnzeigetafel" mnemonicParsing="false" text="Anzeigetafel öffnen">
+                        <items>
+                        
+                        </items>
+                    </Menu>
+                    <SeparatorMenuItem />
+                    <MenuItem fx:id="miAbmelden" mnemonicParsing="false" text="Abmelden" /> 
+                    <MenuItem fx:id="miSchliessen" mnemonicParsing="false" onAction="#schliessen" text="Schließen" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Bearbeiten">
+                  <items>
+                    <MenuItem fx:id="miNeueNachricht" mnemonicParsing="false" onAction="#neueNachricht" text="Neue Nachricht" />
+                    <MenuItem fx:id="miBearbeiten" mnemonicParsing="false" onAction="#bearbeiteNachricht" text="Nachricht bearbeiten" />
+                    <MenuItem fx:id="miLoeschen" mnemonicParsing="false" onAction="#loeschen" text="Nachricht löschen" />
+                    <SeparatorMenuItem />
+                    <MenuItem fx:id="miNeuerUser" mnemonicParsing="false" text="User anlegen" />
+                    <MenuItem fx:id="miUserBearbeiten" mnemonicParsing="false" text="User bearbeiten" />
+                    <SeparatorMenuItem />
+                    <MenuItem fx:id="miNeueGruppe" mnemonicParsing="false" text="Gruppe anlegen" />
+                    <MenuItem fx:id="miGruppeBearbeiten" mnemonicParsing="false" text="Gruppe bearbeiten" />
+                    <SeparatorMenuItem />
+                    <MenuItem fx:id="miNeueAnzeigetafel" mnemonicParsing="false" text="Anzeigetafel anlegen" />
+                    <MenuItem fx:id="miAnzeigetafelBearbeiten" mnemonicParsing="false" text="Anzeigetafel bearbeiten" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Hilfe">
+                  <items>
+                    <MenuItem fx:id="miAbout" mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <ToolBar fx:id="menubar" prefHeight="24.0" prefWidth="200.0" />
+            <HBox prefHeight="552.0" prefWidth="900.0">
+               <children>
+                  <VBox prefHeight="548.0" prefWidth="294.0">
+                     <children>
+                        <Button fx:id="bNeueNachricht" mnemonicParsing="false" onAction="#neueNachricht" prefWidth="110.0" text="Neue Nachricht">
+                           <VBox.margin>
+                              <Insets bottom="4.0" left="16.0" top="4.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="bBearbeiten" mnemonicParsing="false" onAction="#bearbeiteNachricht" prefWidth="110.0" text="Bearbeiten">
+                           <VBox.margin>
+                              <Insets bottom="4.0" left="16.0" top="4.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="bLoeschen" mnemonicParsing="false" onAction="#loeschen" prefWidth="110.0" text="Löschen">
+                           <VBox.margin>
+                              <Insets bottom="4.0" left="16.0" top="4.0" />
+                           </VBox.margin>
+                        </Button>
+                        <ChoiceBox fx:id="cbAnzeigetafel" prefWidth="110.0">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets bottom="4.0" left="16.0" top="4.0" />
+                           </VBox.margin>
+                        </ChoiceBox>
+                        <Button fx:id="bAnzeigetafel" mnemonicParsing="false" prefWidth="110.0" text="Öffnen">
+                           <VBox.margin>
+                              <Insets bottom="4.0" left="16.0" top="4.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Accordion>
+                          <panes>
+                            <TitledPane animated="false" prefHeight="424.0" prefWidth="147.0" text="Admintools">
+                                 <padding>
+                                    <Insets top="16.0" />
+                                 </padding>
+                                 <content>
+                                 </content>
+                                 <content>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Accordion>
+                                            <panes>
+                                              <TitledPane animated="false" text="User">
+                                                   <content>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="anlegen">
+                                                               <VBox.margin>
+                                                                  <Insets bottom="4.0" left="4.0" top="4.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="bearbeiten">
+                                                               <VBox.margin>
+                                                                  <Insets bottom="4.0" left="4.0" top="4.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </VBox>
+                                                   </content></TitledPane>
+                                              <TitledPane animated="false" text="Gruppen">
+                                                   <content>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="anlegen">
+                                                               <VBox.margin>
+                                                                  <Insets bottom="4.0" left="4.0" top="4.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="bearbeiten">
+                                                               <VBox.margin>
+                                                                  <Insets bottom="4.0" left="4.0" top="4.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </VBox>
+                                                   </content></TitledPane>
+                                              <TitledPane animated="false" text="Anzeigetafeln">
+                                                   <content>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="anlegen">
+                                                               <VBox.margin>
+                                                                  <Insets bottom="4.0" left="4.0" top="4.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="bearbeiten">
+                                                               <VBox.margin>
+                                                                  <Insets bottom="4.0" left="4.0" top="4.0" />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </VBox>
+                                                   </content></TitledPane>
+                                            </panes>
+                                          </Accordion>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </TitledPane>
+                          </panes>
+                        </Accordion>
+                     </children>
+                  </VBox>
+                  <TableView fx:id="tTabelle" prefHeight="382.0" prefWidth="900.0">
+                    <columns>
+                        <TableColumn fx:id="tcUser" prefWidth="75.0" text="User" />
+                      <TableColumn fx:id="tcNachrichten" prefWidth="823.0" text="Nachrichten" />
+                    </columns>
+                  </TableView>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

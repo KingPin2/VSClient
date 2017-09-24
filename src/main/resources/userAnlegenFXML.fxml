@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.formulare.UserAnlegenFXMLController">
+   <children>
+      <VBox layoutX="145.0" layoutY="83.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <BorderPane prefHeight="100.0" prefWidth="350.0">
+               <center>
+                  <Label text="Neuen User anlegen" BorderPane.alignment="CENTER">
+                      <font>
+                          <Font name="Arial Black" size="12.0" />
+                      </font>
+                  </Label>
+               </center>
+            </BorderPane>
+            <HBox prefHeight="60.0" prefWidth="350.0">
+               <children>
+                  <Label alignment="BOTTOM_LEFT" contentDisplay="BOTTOM" prefWidth="60.0" text="Username">
+                     <HBox.margin>
+                        <Insets left="50.0" right="8.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="tfUsername" promptText="neuen Usernamen eingeben">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="60.0" prefWidth="350.0">
+               <children>
+                  <Label prefWidth="60.0" text="Passwort">
+                     <HBox.margin>
+                        <Insets left="50.0" right="8.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="tfPasswort" promptText="neues Passwort eingeben">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="70.0" prefWidth="350.0">
+               <children>
+                  <Label text="Berechtigung">
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </Label>
+                  <RadioButton fx:id="rbUser" mnemonicParsing="false" text="User">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </RadioButton>
+                  <RadioButton fx:id="rbAdmin" mnemonicParsing="false" text="Admin">
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
+                  </RadioButton>
+               </children>
+            </HBox>
+            <HBox prefHeight="88.0" prefWidth="350.0">
+               <children>
+                  <Button fx:id="bSpeichern" mnemonicParsing="false" onAction="#speichereUser" text="Speichern">
+                     <HBox.margin>
+                        <Insets left="135.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="bAbbrechen" mnemonicParsing="false" onAction="#close" text="Abbrechen">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
