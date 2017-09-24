@@ -45,14 +45,10 @@ public class loginFXMLController implements Initializable {
         PopUpMessage pm = new PopUpMessage();
         try
         {
-            Control.isLegit(tfUsername.getText());
-            Control.isLegit(pfPassword.getText());
-
-
             GUIVS.instance.setMe
             (
                     //TODO Client.login gibt userobjekt zurück
-                GUIVS.instance.getControl().getC().loginUser(tfUsername.getText(),pfPassword.getText())
+                GUIVS.instance.getControl().getC().loginUser(Control.isLegit(tfUsername.getText()),Control.isLegit(pfPassword.getText()))
                     
             );
             

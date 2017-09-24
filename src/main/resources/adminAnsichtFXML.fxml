@@ -32,10 +32,10 @@
                     <MenuItem fx:id="miBearbeiten" mnemonicParsing="false" onAction="#bearbeiteNachricht" text="Nachricht bearbeiten" />
                     <MenuItem fx:id="miLoeschen" mnemonicParsing="false" onAction="#loeschen" text="Nachricht löschen" />
                     <SeparatorMenuItem />
-                    <MenuItem fx:id="miNeuerUser" mnemonicParsing="false" text="User anlegen" />
-                    <MenuItem fx:id="miUserBearbeiten" mnemonicParsing="false" text="User bearbeiten" />
+                    <MenuItem fx:id="miNeuerUser" mnemonicParsing="false" onAction="#neuerUser" text="User anlegen" />
+                    <MenuItem fx:id="miUserBearbeiten" onAction="#userVerwalten" mnemonicParsing="false" text="User bearbeiten" />
                     <SeparatorMenuItem />
-                    <MenuItem fx:id="miNeueGruppe" mnemonicParsing="false" text="Gruppe anlegen" />
+                    <MenuItem fx:id="miNeueGruppe" mnemonicParsing="false" onAction="#gruppeAnlegen" text="Gruppe anlegen" />
                     <MenuItem fx:id="miGruppeBearbeiten" mnemonicParsing="false" text="Gruppe bearbeiten" />
                     <SeparatorMenuItem />
                     <MenuItem fx:id="miNeueAnzeigetafel" mnemonicParsing="false" text="Anzeigetafel anlegen" />
@@ -99,12 +99,12 @@
                                                    <content>
                                                       <VBox prefHeight="200.0" prefWidth="100.0">
                                                          <children>
-                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="anlegen">
+                                                            <Button mnemonicParsing="false" prefWidth="110.0" onAction="#neuerUser" text="anlegen">
                                                                <VBox.margin>
                                                                   <Insets bottom="4.0" left="4.0" top="4.0" />
                                                                </VBox.margin>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="bearbeiten">
+                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="bearbeiten" onAction="#userVerwalten">
                                                                <VBox.margin>
                                                                   <Insets bottom="4.0" left="4.0" top="4.0" />
                                                                </VBox.margin>
@@ -116,7 +116,7 @@
                                                    <content>
                                                       <VBox prefHeight="200.0" prefWidth="100.0">
                                                          <children>
-                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="anlegen">
+                                                            <Button mnemonicParsing="false" prefWidth="110.0" onAction="#gruppeAnlegen" text="anlegen">
                                                                <VBox.margin>
                                                                   <Insets bottom="4.0" left="4.0" top="4.0" />
                                                                </VBox.margin>

@@ -42,11 +42,11 @@
                         <Insets left="50.0" right="8.0" top="4.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField fx:id="tfPasswort" promptText="neues Passwort eingeben">
+                  <PasswordField fx:id="tfPasswort" promptText="neues Passwort eingeben">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
-                  </TextField>
+                  </PasswordField>
                </children>
             </HBox>
             <HBox prefHeight="70.0" prefWidth="350.0">

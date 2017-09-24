@@ -30,10 +30,10 @@ public class Control {
     
     public Control()
     {
-        c = new Client("192.168.0.93");
+        c = new Client("localhost");
     }
     
-    public static boolean isLegit(String probe) throws Exception 
+    public static String isLegit(String probe) throws Exception
     {
         if(probe.contains("'") || probe.contains("`"))
         {
@@ -45,7 +45,7 @@ public class Control {
         }
         else
         {
-            return true;
+            return probe;
         }
     }
 }

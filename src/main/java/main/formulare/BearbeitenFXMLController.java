@@ -5,6 +5,7 @@
  */
 package main.formulare;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
@@ -29,7 +30,8 @@ public class BearbeitenFXMLController implements Initializable {
     @FXML private TextArea taNachricht;
     @FXML private Button bAbbrechen;
     @FXML private Button bSpeichern;
-    private Message m;
+    public Message m;
+
 
     public Message getM() {
         return m;
@@ -39,7 +41,7 @@ public class BearbeitenFXMLController implements Initializable {
         this.m = m;
     }
     
-   
+
     
     @FXML 
     private void speichern()
@@ -68,15 +70,20 @@ public class BearbeitenFXMLController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    private void ladeNachricht()
+    {
+        if(this.m == null)
+        {
+            this.m = ObjectFactory.createMessage("Nachricht konnte nicht geladen werden", GUIVS.instance.getMe());
+        }
+        //bAbbrechen.setCancelButton(true);
+        taNachricht.setText(this.m.getMessage());
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if(m.equals(null))
-        {
-            m = ObjectFactory.createMessage("Nachricht konnte nicht geladen werden", GUIVS.instance.getMe());
-        }
-        bAbbrechen.setCancelButton(true);
-        editLabelText();
-        taNachricht.setText(m.getMessage());
+
+        Platform.runLater(new Runnable(){@Override public void run(){ladeNachricht();}});
+
     }    
     
 }

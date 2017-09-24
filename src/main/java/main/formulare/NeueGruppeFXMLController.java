@@ -5,6 +5,10 @@
  */
 package main.formulare;
 
+import javafx.application.Platform;
+import javafx.stage.Stage;
+import main.classes.GUIVS;
+import main.classes.PopUpMessage;
 import main.database.*;
 import main.objects.Group;
 import main.objects.User;
@@ -23,7 +27,7 @@ import javafx.scene.control.TextField;
  */
 public class NeueGruppeFXMLController implements Initializable {
 
-    
+    private PopUpMessage pm;
     @FXML
     private Button bSpeichern;
     
@@ -39,11 +43,48 @@ public class NeueGruppeFXMLController implements Initializable {
 
     
     private Group group = null;
-    
+    private User user;
+
+    @FXML
+    private void close()
+    {
+
+        Stage stage = (Stage) bAbbrechen.getScene().getWindow();
+        stage.close();
+    }
+
     @FXML
     private void speichern()
     {
-        this.group = ObjectFactory.createEmptyGroup(tfGruppenname.getText(),(User) cbMod.getSelectionModel().getSelectedItem());
+        try
+        {
+            this.group = ObjectFactory.createEmptyGroup(tfGruppenname.getText(),
+                    GUIVS.instance.getControl().getC().getUserByName(cbMod.getSelectionModel().getSelectedItem().toString()));
+
+            GUIVS.instance.getControl().getC().saveGroup(group);
+            pm.showInformation("Information","Gruppe erfolgreich gespeichert!");
+            close();
+        }catch(Exception e)
+        {
+
+        }
+    }
+
+    private void initGUI()
+    {
+
+        try
+        {
+            for (User u : GUIVS.instance.getControl().getC().getUsers())
+            {
+                cbMod.getItems().add(u.getName());
+            }
+            cbMod.getSelectionModel().selectFirst();
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -52,8 +93,16 @@ public class NeueGruppeFXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        pm = new PopUpMessage();
         bAbbrechen.setCancelButton(true);
-        
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                initGUI();
+            }
+        });
     }    
     
 }

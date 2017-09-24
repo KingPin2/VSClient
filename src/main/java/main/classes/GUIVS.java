@@ -72,10 +72,58 @@ public class GUIVS extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(GUIVS.class.getResource("/neueNachrichtFXML.fxml"));
         Parent p = loader.load();
-        
+
         Scene vtScene = new Scene(p);
         Stage vtStage = new Stage();
         vtStage.setTitle("Neue Nachricht");
+        vtStage.initOwner(previousStage);
+        vtStage.initModality(Modality.WINDOW_MODAL);
+        vtStage.setScene(vtScene);
+        vtStage.setResizable(false);
+        vtStage.showAndWait();
+    }
+
+    public static void neuerUser() throws Exception
+    {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIVS.class.getResource("/userAnlegenFXML.fxml"));
+        Parent p = loader.load();
+
+        Scene vtScene = new Scene(p);
+        Stage vtStage = new Stage();
+        vtStage.setTitle("Neuer User");
+        vtStage.initOwner(previousStage);
+        vtStage.initModality(Modality.WINDOW_MODAL);
+        vtStage.setScene(vtScene);
+        vtStage.setResizable(false);
+        vtStage.showAndWait();
+    }
+
+    public static void userVerwalten() throws Exception
+    {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIVS.class.getResource("/userVerwaltenFXML.fxml"));
+        Parent p = loader.load();
+
+        Scene vtScene = new Scene(p);
+        Stage vtStage = new Stage();
+        vtStage.setTitle("User Verwalten");
+        vtStage.initOwner(previousStage);
+        vtStage.initModality(Modality.WINDOW_MODAL);
+        vtStage.setScene(vtScene);
+        vtStage.setResizable(false);
+        vtStage.showAndWait();
+    }
+
+    public static void gruppeAnlegen() throws Exception
+    {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIVS.class.getResource("/neueGruppeFXML.fxml"));
+        Parent p = loader.load();
+
+        Scene vtScene = new Scene(p);
+        Stage vtStage = new Stage();
+        vtStage.setTitle("Gruppe anlegen");
         vtStage.initOwner(previousStage);
         vtStage.initModality(Modality.WINDOW_MODAL);
         vtStage.setScene(vtScene);
@@ -90,6 +138,7 @@ public class GUIVS extends Application {
         Parent p = loader.load();
         BearbeitenFXMLController mc = loader.<BearbeitenFXMLController>getController();
         mc.setM(m);
+
         
         Scene vtScene = new Scene(p);
         Stage vtStage = new Stage();

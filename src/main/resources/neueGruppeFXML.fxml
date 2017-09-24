@@ -44,7 +44,7 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="bSpeichern" mnemonicParsing="false" text="Speichern">
+                  <Button fx:id="bSpeichern" mnemonicParsing="false" onAction="#speichern" text="Speichern">
                      <HBox.margin>
                         <Insets left="140.0" />
                      </HBox.margin>
