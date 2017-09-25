@@ -60,8 +60,7 @@ public class NeueGruppeFXMLController implements Initializable {
         {
             this.group = ObjectFactory.createEmptyGroup(tfGruppenname.getText(),
                     GUIVS.instance.getControl().getC().getUserByName(cbMod.getSelectionModel().getSelectedItem().toString()));
-
-            GUIVS.instance.getControl().getC().saveGroup(group);
+            GUIVS.instance.getControl().getC().saveGroup(this.group);
             pm.showInformation("Information","Gruppe erfolgreich gespeichert!");
             close();
         }catch(Exception e)
@@ -93,6 +92,13 @@ public class NeueGruppeFXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        try
+        {
+            System.out.println(GUIVS.instance.getControl().getC().getUserByName("merlin").toString());
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         pm = new PopUpMessage();
         bAbbrechen.setCancelButton(true);
         Platform.runLater(new Runnable()

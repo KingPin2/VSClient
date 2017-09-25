@@ -11,6 +11,7 @@ public class Message implements Serializable{
     private String message;
     private User author;
     private Group group;
+    private long timestamp;
 
     /**
      * Create message (with given ID -> Update message in main.database)
@@ -19,11 +20,12 @@ public class Message implements Serializable{
      * @param group
      * @param author
      */
-    public Message(int id, String message, Group group, User author) {
+    public Message(int id, String message, Group group, User author, Long timestamp) {
         setID(id);
         setMessage(message);
         setAuthor(author);
         setGroup(group);
+        this.timestamp = timestamp;
     }
 
 
@@ -33,7 +35,7 @@ public class Message implements Serializable{
      * @param author
      */
     public Message(String message, User author){
-        this(-1, message,null, author);
+        this(-1, message,null, author, System.currentTimeMillis());
     }
 
     /**
@@ -43,7 +45,7 @@ public class Message implements Serializable{
      * @param group
      */
     public Message(String message, User author, Group group){
-        this(-1, message, group, author);
+        this(-1, message, group, author, System.currentTimeMillis());
     }
 
     /**
@@ -83,6 +85,7 @@ public class Message implements Serializable{
         if (message == null || message.isEmpty()){
             throw new IllegalArgumentException("Message null or empty.");
         }
+        timestamp = System.currentTimeMillis();
         this.message = message;
     }
 
@@ -98,6 +101,7 @@ public class Message implements Serializable{
      * Set Message author
      */
     public void setAuthor(User author){
+        timestamp = System.currentTimeMillis();
         this.author = author;
     }
 
@@ -113,7 +117,16 @@ public class Message implements Serializable{
      * Set Message group
      */
     public void setGroup(Group group) {
+        timestamp = System.currentTimeMillis();
         this.group = group;
+    }
+
+    /**
+     * Get Message timestamp
+     * @return
+     */
+    public long getTimestamp() {
+        return timestamp;
     }
 
     @Override
@@ -123,6 +136,7 @@ public class Message implements Serializable{
                 ", message='" + message + '\'' +
                 ", author=" + author +
                 ", group=" + group +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }

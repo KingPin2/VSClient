@@ -64,7 +64,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
         {
             ArrayList<User> user = new ArrayList<>();
             user.add(selectedUser);
-            GUIVS.instance.getControl().getC().saveGroupMembers(selectedGroup.getID(), user);
+          //  GUIVS.instance.getControl().getC().saveGroupMembers(selectedGroup.getID(), user);
             pm.showInformation("Einladung","User " + selectedUser.getName() + " wurde zur Gruppe hinzugefügt");
             updateGroupMembers();
         } catch (Exception e)
@@ -148,10 +148,11 @@ public class GruppeVerwaltenFXMLController implements Initializable
         cbMember.getItems().clear();
         try
         {
-            ArrayList<User> members = GUIVS.instance.getControl().getC().getGroupMembers(selectedGroup.getID());
-            if(members != null)
+
+            selectedGroup.getMembers();
+            if(selectedGroup.getMembers() != null)
             {
-                for (User u : members)
+                for (User u : selectedGroup.getMembers())
                 {
                     if (u != null)
                     {
@@ -170,19 +171,11 @@ public class GruppeVerwaltenFXMLController implements Initializable
         cbUser.getItems().clear();
         try
         {
-            ArrayList<User> notInGroup = GUIVS.instance.getControl().getC().getUsers();
-            ArrayList<User> members = GUIVS.instance.getControl().getC().getGroupMembers(selectedGroup.getID());
-            if(members != null)
-            {
-                notInGroup.removeAll(members);
-            }
-            if(notInGroup != null)
-            {
-                for (User u : notInGroup)
+                for (User u : GUIVS.instance.getControl().getC().getUsersNotInGroup(selectedGroup))
                 {
                     cbUser.getItems().add(u.getName());
                 }
-            }
+
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -196,7 +189,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
             //Mögliche Mods sind:
 
             //Alle Mitglieder der Gruppe
-            ArrayList<User> members = GUIVS.instance.getControl().getC().getGroupMembers(selectedGroup.getID());
+            ArrayList<User> members = selectedGroup.getMembers();
             selectedMod = selectedGroup.getModerator();
             if(members != null)
             {
@@ -263,6 +256,5 @@ public class GruppeVerwaltenFXMLController implements Initializable
                 initGUI();
             }
         });
-    }    
-    
+    }
 }
