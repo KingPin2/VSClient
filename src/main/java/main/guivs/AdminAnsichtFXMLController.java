@@ -131,6 +131,16 @@ public class AdminAnsichtFXMLController implements Initializable
         }
 
     }
+    @FXML
+    private void abmelden()
+    {
+        GUIVS.instance.setMe(null);
+        GUIVS.setPreviousStage(null);
+        schliessen();
+        Stage stage = new Stage();
+        GUIVS.login(stage);
+
+    }
 
     @FXML
     private void gruppeBearbeiten()

@@ -22,7 +22,7 @@
                         </items>
                     </Menu>
                     <SeparatorMenuItem />
-                    <MenuItem fx:id="miAbmelden" mnemonicParsing="false" text="Abmelden" /> 
+                    <MenuItem fx:id="miAbmelden" mnemonicParsing="false" onAction="#abmelden" text="Abmelden" />
                     <MenuItem fx:id="miSchliessen" mnemonicParsing="false" onAction="#schliessen" text="Schließen" />
                   </items>
                 </Menu>
@@ -71,10 +71,10 @@
                         </Button>
                         <ChoiceBox fx:id="cbAnzeigetafel" prefWidth="110.0">
                            <opaqueInsets>
-                              <Insets />
+                              <Insets  />
                            </opaqueInsets>
                            <VBox.margin>
-                              <Insets bottom="4.0" left="16.0" top="4.0" />
+                              <Insets bottom="4.0" left="16.0" top="20.0" />
                            </VBox.margin>
                         </ChoiceBox>
                         <Button fx:id="bAnzeigetafel" mnemonicParsing="false" prefWidth="110.0" text="Öffnen">
