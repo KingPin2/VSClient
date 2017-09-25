@@ -29,7 +29,7 @@
                         <Insets left="40.0" right="8.0" top="4.0" />
                      </HBox.margin>
                   </Label>
-                  <ComboBox prefWidth="150.0">
+                  <ComboBox fx:id="cbGruppe" onAction="#onChangeGroup" prefWidth="150.0">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -43,12 +43,12 @@
                         <Insets left="40.0" right="8.0" top="4.0" />
                      </HBox.margin>
                   </Label>
-                  <ComboBox prefWidth="150.0">
+                  <ComboBox fx:id="cbMember" onAction="#onChangeMember" prefWidth="150.0">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
                   </ComboBox>
-                  <Button mnemonicParsing="false" text="entfernen" />
+                  <Button fx:id="bKick" onAction="#kick" mnemonicParsing="false" text="entfernen" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
@@ -58,12 +58,12 @@
                         <Insets left="40.0" right="8.0" top="4.0" />
                      </HBox.margin>
                   </Label>
-                  <ChoiceBox prefWidth="150.0">
+                  <ComboBox fx:id="cbUser" onAction="#onChangeUser" prefWidth="150.0">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
-                  </ChoiceBox>
-                  <Button mnemonicParsing="false" text="einladen" />
+                  </ComboBox>
+                  <Button fx:id="bInvite" onAction="#invite" mnemonicParsing="false" text="einladen" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
@@ -73,7 +73,7 @@
                         <Insets left="40.0" right="8.0" top="4.0" />
                      </HBox.margin>
                   </Label>
-                  <ComboBox prefWidth="150.0">
+                  <ComboBox fx:id="cbMod" onAction="#onChangeMod" prefWidth="150.0">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -82,12 +82,12 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" text="Speichern">
+                  <Button fx:id="bSave" onAction="#save" mnemonicParsing="false" text="Speichern">
                      <HBox.margin>
                         <Insets left="145.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="Abbrechen">
+                  <Button fx:id="bCancel" onAction="#close" mnemonicParsing="false" text="Abbrechen">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>

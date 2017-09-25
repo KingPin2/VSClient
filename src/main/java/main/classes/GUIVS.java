@@ -130,6 +130,22 @@ public class GUIVS extends Application {
         vtStage.setResizable(false);
         vtStage.showAndWait();
     }
+
+    public static void gruppeVerwalten() throws Exception
+    {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIVS.class.getResource("/gruppeVerwaltenFXML.fxml"));
+        Parent p = loader.load();
+
+        Scene vtScene = new Scene(p);
+        Stage vtStage = new Stage();
+        vtStage.setTitle("Gruppen verwalten");
+        vtStage.initOwner(previousStage);
+        vtStage.initModality(Modality.WINDOW_MODAL);
+        vtStage.setScene(vtScene);
+        vtStage.setResizable(false);
+        vtStage.showAndWait();
+    }
     
      public static void bearbeiteNachricht(Message m) throws Exception
     {

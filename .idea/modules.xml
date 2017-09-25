@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/VT.iml" filepath="$PROJECT_DIR$/VT.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VT_main.iml" filepath="$PROJECT_DIR$/.idea/modules/VT_main.iml" group="VT" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VT_test.iml" filepath="$PROJECT_DIR$/.idea/modules/VT_test.iml" group="VT" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VSClient.iml" filepath="$PROJECT_DIR$/.idea/modules/VSClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VSClient_main.iml" filepath="$PROJECT_DIR$/.idea/modules/VSClient_main.iml" group="VSClient" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VSClient_test.iml" filepath="$PROJECT_DIR$/.idea/modules/VSClient_test.iml" group="VSClient" />
     </modules>
   </component>
 </project>

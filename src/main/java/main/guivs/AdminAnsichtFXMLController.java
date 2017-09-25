@@ -132,6 +132,18 @@ public class AdminAnsichtFXMLController implements Initializable
 
     }
 
+    @FXML
+    private void gruppeBearbeiten()
+    {
+        try
+        {
+            GUIVS.gruppeVerwalten();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
 
     @FXML
     private void userVerwalten()
