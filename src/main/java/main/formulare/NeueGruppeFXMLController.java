@@ -30,7 +30,7 @@ public class NeueGruppeFXMLController implements Initializable {
     private PopUpMessage pm;
     @FXML
     private Button bSpeichern;
-    
+
     @FXML
     private Button bAbbrechen;
     

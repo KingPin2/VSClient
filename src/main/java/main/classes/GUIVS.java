@@ -69,9 +69,9 @@ public class GUIVS extends Application {
         return instance.previousStage;
     }
 
-    private static void setIcon(Stage stage)
+    public static void setIcon(Stage stage)
     {
-      //  stage.getIcons().add( new Image( GUIVS.class.getResourceAsStream("C:\\Users\\Laura\\IdeaProjects\\VSClient\\src\\main\\java\\main\\classes\\pt_logo_x24.png")));
+        stage.getIcons().add(new Image("pt_logo_x24.png"));
     }
 
     public static void neueNachricht() throws Exception

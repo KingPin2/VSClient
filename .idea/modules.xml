@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VSClient.iml" filepath="$PROJECT_DIR$/.idea/modules/VSClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/VSClient.iml" filepath="$PROJECT_DIR$/.idea/VSClient.iml" />
+      <module fileurl="file://C:\Users\kane-\IdeaProjects\VSClient\.idea\modules\VSClient.iml" filepath="C:\Users\kane-\IdeaProjects\VSClient\.idea\modules\VSClient.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/VSClient_main.iml" filepath="$PROJECT_DIR$/.idea/modules/VSClient_main.iml" group="VSClient" />
+      <module fileurl="file://C:\Users\kane-\IdeaProjects\VSClient\.idea\modules\VSClient_main.iml" filepath="C:\Users\kane-\IdeaProjects\VSClient\.idea\modules\VSClient_main.iml" group="VSClient" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/VSClient_test.iml" filepath="$PROJECT_DIR$/.idea/modules/VSClient_test.iml" group="VSClient" />
+      <module fileurl="file://C:\Users\kane-\IdeaProjects\VSClient\.idea\modules\VSClient_test.iml" filepath="C:\Users\kane-\IdeaProjects\VSClient\.idea\modules\VSClient_test.iml" group="VSClient" />
     </modules>
   </component>
 </project>
