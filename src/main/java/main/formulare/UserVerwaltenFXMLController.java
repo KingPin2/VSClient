@@ -36,7 +36,10 @@ public class UserVerwaltenFXMLController implements Initializable
 
    @FXML
    private Button bSpeichern;
-   
+
+   @FXML
+   private Button bDelete;
+
    @FXML
    private Button bAbbrechen;
     
@@ -56,7 +59,27 @@ public class UserVerwaltenFXMLController implements Initializable
    private TextField tfPasswort;
 
    private final ToggleGroup berechtigung = new ToggleGroup();
-   
+
+   @FXML
+   private void deleteUser()
+   {
+       try {
+           User user = GUIVS.instance.getControl().getC().getUserByName(cbUserwahl.getSelectionModel().getSelectedItem().toString());
+           boolean auswahl = pm.showDialog("Möchten Sie den User " + cbUserwahl.getSelectionModel().getSelectedItem().toString() + "wirklich löschen?");
+           if(auswahl) {
+               GUIVS.instance.getControl().getC().deleteUser(user);
+               pm.showInformation("Information", "Der User wurde gelöscht.");
+           }
+           else
+           {
+               pm.showInformation("Information", "Der User wurde nicht gelöscht.");
+           }
+
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+
+   }
    
     @FXML
     private void close()

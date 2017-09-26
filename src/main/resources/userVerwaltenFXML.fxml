@@ -86,7 +86,12 @@
                <children>
                   <Button fx:id="bSpeichern" mnemonicParsing="false" onAction="#speichereUser" text="Speichern">
                      <HBox.margin>
-                        <Insets left="135.0" />
+                        <Insets left="65.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="bDelete" mnemonicParsing="false" onAction="#deleteUser" text="Löschen">
+                     <HBox.margin>
+                        <Insets left="10.0" />
                      </HBox.margin>
                   </Button>
                   <Button fx:id="bAbbrechen" mnemonicParsing="false" onAction="#close" text="Abbrechen">

@@ -60,23 +60,45 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
     @FXML private void invite()
     {
-        try
+        if(cbUser.getSelectionModel().getSelectedItem() != null) {
+            try {
+
+                selectedGroup.addMember(selectedUser);
+                GUIVS.instance.getControl().getC().saveGroup(selectedGroup);
+                pm.showInformation("Einladung", "User " + selectedUser.getName() + " wurde zur Gruppe hinzugefügt");
+                updateGroupMembers();
+                updateUsers();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else
         {
-            ArrayList<User> user = new ArrayList<>();
-            user.add(selectedUser);
-          //  GUIVS.instance.getControl().getC().saveGroupMembers(selectedGroup.getID(), user);
-            pm.showInformation("Einladung","User " + selectedUser.getName() + " wurde zur Gruppe hinzugefügt");
-            updateGroupMembers();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
+            pm.showError("Fehler", "Keine User ausgwählt!");
         }
 
     }
 
     @FXML private void kick()
     {
-        //GUIVS.instance.getControl().getC().;
+        if(cbMember.getSelectionModel().getSelectedItem() != null && !(cbMember.getSelectionModel().getSelectedItem().equals(selectedGroup.getModerator().getName()))) {
+            selectedGroup.removeMember(selectedMember);
+            try {
+                GUIVS.instance.getControl().getC().saveGroup(selectedGroup);
+                updateUsers();
+                updateGroupMembers();
+                pm.showInformation("Information", "der User wurde aus der Gruppe " + selectedGroup.getName() + " entfernt.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if(cbMember.getSelectionModel().getSelectedItem() != null && cbMember.getSelectionModel().getSelectedItem().equals(selectedGroup.getModerator().getName()))
+        {
+            pm.showError("Fehler", "Um dieses Mitglied der Gruppe zu entfernen, müssen Sie vorher einen anderen Moderator festlegen!!");
+        }
+        else
+        {
+            pm.showError("Fehler", "Kein Member ausgewählt!");
+        }
 
     }
 
@@ -100,7 +122,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
     {
         try
         {
-            selectedMod = GUIVS.instance.getControl().getC().getUserByName( cbMod.getSelectionModel().getSelectedItem().toString());
+            selectedMod = selectedGroup.getModerator();
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -110,7 +132,14 @@ public class GruppeVerwaltenFXMLController implements Initializable
     {
         try
         {
-            selectedMember = GUIVS.instance.getControl().getC().getUserByName( cbMember.getSelectionModel().getSelectedItem().toString());
+
+            if(cbMember.getSelectionModel().getSelectedItem() != null)
+            {
+                selectedMember = GUIVS.instance.getControl().getC().getUserByName(cbMember.getSelectionModel().getSelectedItem().toString());
+            }else
+            {
+                cbMember.getSelectionModel().selectFirst();
+            }
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -121,7 +150,14 @@ public class GruppeVerwaltenFXMLController implements Initializable
     {
         try
         {
-            selectedUser = GUIVS.instance.getControl().getC().getUserByName( cbUser.getSelectionModel().getSelectedItem().toString());
+            if( cbUser.getSelectionModel().getSelectedItem() != null)
+            {
+                selectedUser = GUIVS.instance.getControl().getC().getUserByName(cbUser.getSelectionModel().getSelectedItem().toString());
+            }
+            else
+            {
+                cbUser.getSelectionModel().selectFirst();
+            }
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -148,8 +184,6 @@ public class GruppeVerwaltenFXMLController implements Initializable
         cbMember.getItems().clear();
         try
         {
-
-            selectedGroup.getMembers();
             if(selectedGroup.getMembers() != null)
             {
                 for (User u : selectedGroup.getMembers())
@@ -171,10 +205,12 @@ public class GruppeVerwaltenFXMLController implements Initializable
         cbUser.getItems().clear();
         try
         {
-                for (User u : GUIVS.instance.getControl().getC().getUsersNotInGroup(selectedGroup))
-                {
-                    cbUser.getItems().add(u.getName());
-                }
+            ArrayList<User> notInGroup = GUIVS.instance.getControl().getC().getUsersNotInGroup(selectedGroup);
+                    if(notInGroup != null) {
+                        for (User u : notInGroup) {
+                            cbUser.getItems().add(u.getName());
+                        }
+                    }
 
         } catch (Exception e)
         {
