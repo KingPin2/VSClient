@@ -5,6 +5,10 @@
  */
 package main.anzeigetafel;
 
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import main.objects.Group;
 import main.objects.Message;
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,28 +40,44 @@ public class AnzeigetafelFXMLController implements Initializable {
     
     @FXML
     private Label lTafel;
-    
-    private ArrayList<Message> m;
 
-    public ArrayList<Message> getM() {
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    private Group group;
+    private ObservableList<Message> m;
+
+    public ObservableList<Message> getM() {
         return m;
     }
 
-    public void setM(ArrayList<Message> m) {
+    public void setM(ObservableList<Message> m) {
         this.m = m;
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        ArrayList<Nachrichtenbox> c = new ArrayList();
-        
-        for(Message me: m)
-        {
-            c.add(new Nachrichtenbox(me));
-        }
-        
-        vbox.getChildren().addAll(c);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                ObservableList<Nachrichtenbox> nb = FXCollections.observableArrayList();
+                if(m != null) {
+                    for (Message me : m) {
+                        nb.add(new Nachrichtenbox(me));
+                    }
+                }
+
+                vbox.getChildren().addAll(nb);
+                lTafel.setText(group.getName());
+            }
+        });
+
         
         scrollpane.setHbarPolicy(ScrollBarPolicy.NEVER);
         scrollpane.setVbarPolicy(ScrollBarPolicy.ALWAYS);

@@ -5,21 +5,37 @@
  */
 package main.guivs;
 
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import main.classes.GUIVS;
 import main.classes.IconButtonFXMLController;
 import main.classes.PopUpMessage;
 import main.database.ObjectFactory;
+import main.database.exceptions.DatabaseConnectionException;
+import main.database.exceptions.DatabaseObjectNotFoundException;
 import main.objects.Group;
 import main.objects.Message;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.rmi.RemoteException;
+import java.util.*;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
+import main.objects.User;
 
 /**
  * FXML Controller class
@@ -29,6 +45,8 @@ import javafx.scene.image.Image;
 public class AdminAnsichtFXMLController implements Initializable
 {
     private PopUpMessage pm;
+
+    public ObservableList<Message> nachrichten;
 
     // private ArrayList<ChoiceBox <KeyValuePair > > cbEntries;
     //Immer sichtbar in Navigation
@@ -54,70 +72,97 @@ public class AdminAnsichtFXMLController implements Initializable
     //MenuBar
 
     //Datei...
-//    @FXML
-//    private MenuItem miAktualisieren;
-//    @FXML
-//    private Menu mAnzeigetafel;
-//
-//    //Seperator...
-//    @FXML
-//    private MenuItem miAbmelden;
-//    @FXML
-//    private MenuItem miSchliessen;
-//
-//
-//    //Bearbeiten...
-//    @FXML
-//    private MenuItem miNeueNachricht;
-//    @FXML
-//    private MenuItem miBearbeiten;
-//    @FXML
-//    private MenuItem miLoeschen;
-//
-//    //Seperator...
-//    @FXML
-//    private MenuItem miNeuerUser;
-//    @FXML
-//    private MenuItem miUserBearbeiten;
-//
-//    //Seperator...
-//    @FXML
-//    private MenuItem miNeueGruppe;
-//    @FXML
-//    private MenuItem miGruppeBearbeiten;
-//
-//    //Seperator...
-//    @FXML
-//    private MenuItem miNeueAnzeigetafel;
-//    @FXML
-//    private MenuItem miAnzeigetafelBearbeiten;
-//
-//
-//    //Hilfe...
-//    @FXML
-//    private MenuItem miAbout;
-//
-//    @FXML
-//    private ToolBar menubar;
-//
-//    //Acchordion
-//    //User...
-//    @FXML
-//    private Button bUserAnlegen;
-//    @FXML
-//    private Button bUserBearbeiten;
-//
-//    //Gruppe...
-//    @FXML
-//    private Button bGruppeAnlegen;
-//    @FXML
-//    private Button bGruppeBearbeiten;
-//
-//    //Anzeigetafel...
-//    @FXML
-//    private Button bAnzeigetafelAnlegen;
-//    @FXML
-//    private Button bAnzeigetafelBearbeiten;
+    @FXML
+    private MenuItem miAktualisieren;
+    @FXML
+    private Menu mAnzeigetafel;
+
+    //Seperator...
+    @FXML
+    private MenuItem miAbmelden;
+    @FXML
+    private MenuItem miSchliessen;
+
+
+    //Bearbeiten...
+    @FXML
+    private MenuItem miNeueNachricht;
+    @FXML
+    private MenuItem miBearbeiten;
+    @FXML
+    private MenuItem miLoeschen;
+
+    //Seperator...
+    @FXML
+    private MenuItem miNeuerUser;
+    @FXML
+    private MenuItem miUserBearbeiten;
+
+    //Seperator...
+    @FXML
+    private MenuItem miNeueGruppe;
+    @FXML
+    private MenuItem miGruppeBearbeiten;
+
+    //Seperator...
+    @FXML
+    private MenuItem miNeueAnzeigetafel;
+    @FXML
+    private MenuItem miAnzeigetafelBearbeiten;
+
+
+    //Hilfe...
+    @FXML
+    private MenuItem miAbout;
+
+    @FXML
+    private ToolBar menubar;
+
+    //Acchordion
+    //User...
+    @FXML
+    private Button bUserAnlegen;
+    @FXML
+    private Button bUserBearbeiten;
+
+    //Gruppe...
+    @FXML
+    private Button bGruppeAnlegen;
+    @FXML
+    private Button bGruppeBearbeiten;
+
+    //Anzeigetafel...
+    @FXML
+    private Button bAnzeigetafelAnlegen;
+    @FXML
+    private Button bAnzeigetafelBearbeiten;
+
+    private Group selectedGroup;
+
+    @FXML private void onBoardChange()
+    {
+        try {
+            selectedGroup = cbAnzeigetafel.getSelectionModel().getSelectedItem().toString() != null?  GUIVS.instance.getControl().getC().getGroupByName( cbAnzeigetafel.getSelectionModel().getSelectedItem().toString()) : selectedGroup;
+        } catch (DatabaseConnectionException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (DatabaseObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void anzeigetafel()
+    {
+        try
+        {
+            GUIVS.oeffneAnzeigetafel(selectedGroup);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
 
     @FXML
@@ -233,15 +278,84 @@ public class AdminAnsichtFXMLController implements Initializable
         {
             // TODO
             pm = new PopUpMessage();
-            System.out.println("TEST");
-            // menubar.getItems().add(new IconButtonFXMLController(new Image("pt_logo_x24.png")));
-            // Message m = ObjectFactory.createMessage("Test", ObjectFactory.createUser("Merlin", "blubb", 2));
+            nachrichten = FXCollections.observableArrayList() ;
             try {
-                //   GUIVS.bearbeiteNachricht(m);
-            } catch (Exception e) {
+                for(Message m: GUIVS.instance.getControl().getC().getMessages())
+                {
+                    nachrichten.add(m);
+
+                }
+            } catch (DatabaseConnectionException e) {
+                e.printStackTrace();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (DatabaseObjectNotFoundException e) {
                 e.printStackTrace();
             }
-            //Wenn ich Moderator bin, dann
+
+
+            //tcUser.setCellValueFactory(new PropertyValueFactory<User, String>("author");
+            tcUser.setCellValueFactory(
+                    new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>()
+            {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Message, String> param) {
+//                    int dritteshochkommata = 0;
+//                    int vierteshochkommata = 0;
+//                    dritteshochkommata = param.getValue().toString().
+//
+//                    String username = param.getValue().toString().
+                    String username = param.getValue().getAuthor().getName();
+                    SimpleStringProperty name = new SimpleStringProperty(username);
+                    return name;
+                }
+            });
+
+
+
+            tcNachrichten.setCellValueFactory(new PropertyValueFactory<Message, String>("message"));
+            tTabelle.setItems(nachrichten);
+
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        ArrayList<Group> g ;
+                        if(GUIVS.instance.getMe().getLevel()== 2)
+                        {
+                            g = GUIVS.instance.getControl().getC().getGroups();
+                        }
+                        else
+                        {
+                            g = GUIVS.instance.getControl().getC().getGroupsByUser(GUIVS.instance.getMe());
+                        }
+                        if(g != null){
+                            for(Group group: g)
+                            {
+                                cbAnzeigetafel.getItems().add(group.getName());
+                            }
+                        }
+                        cbAnzeigetafel.getSelectionModel().selectFirst();
+                        selectedGroup = GUIVS.instance.getControl().getC().getGroupByName(cbAnzeigetafel.getSelectionModel().getSelectedItem().toString());
+                    } catch (DatabaseConnectionException e) {
+                        e.printStackTrace();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    } catch (DatabaseObjectNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            // menubar.getItems().add(new IconButtonFXMLController(new Image("pt_logo_x24.png")));
+// Message m = ObjectFactory.createMessage("Test", ObjectFactory.createUser("Merlin", "blubb", 2));
+//            try {
+//                //   GUIVS.bearbeiteNachricht(m);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//Wenn ich Moderator bin, dann
 //        if (GUIVS.instance.getMe().getLevel() == 1 && GUIVS.instance.isMod()) {
 //            //schalte Adminfunktionen ab
 //            bAnzeigetafelAnlegen.setDisable(true);
@@ -317,5 +431,30 @@ public class AdminAnsichtFXMLController implements Initializable
 //                pm.showError("Exception", e.toString());
 //            }
 //        }
+//            Thread t = new Thread(
+//                    () -> {
+//                        try {
+//                            while(true)
+//                            {
+//                                 Thread.sleep(2000);
+//                                 try {
+//                                     System.out.println("test");
+//                                    nachrichten.add(ObjectFactory.createGroupMessage("Hallo Welt 42", GUIVS.instance.getMe(), GUIVS.instance.getControl().getC().getGroupByName("Broadcast")));
+//                                     } catch (DatabaseConnectionException e1) {
+//                                      e1.printStackTrace();
+//                                 } catch (RemoteException e1) {
+//                                     e1.printStackTrace();
+//                                     } catch (DatabaseObjectNotFoundException e1) {
+//                                     e1.printStackTrace();
+//                                    }
+//                                catch (InterruptedException e1){
+//                                e1.printStackTrace();
+//                            }}
+//                        }
+//
+//                    }
+//            );
+//            t.start();
         }
-    }
+}
+

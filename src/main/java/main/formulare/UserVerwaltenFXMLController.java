@@ -22,6 +22,7 @@ import main.classes.Control;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
 import main.database.ObjectFactory;
+import main.database.exceptions.DatabaseObjectNotFoundException;
 import main.objects.User;
 
 /**
@@ -65,10 +66,12 @@ public class UserVerwaltenFXMLController implements Initializable
    {
        try {
            User user = GUIVS.instance.getControl().getC().getUserByName(cbUserwahl.getSelectionModel().getSelectedItem().toString());
-           boolean auswahl = pm.showDialog("Möchten Sie den User " + cbUserwahl.getSelectionModel().getSelectedItem().toString() + "wirklich löschen?");
+           boolean auswahl = pm.showDialog("Möchten Sie den User " + cbUserwahl.getSelectionModel().getSelectedItem().toString() + " wirklich löschen?");
            if(auswahl) {
                GUIVS.instance.getControl().getC().deleteUser(user);
                pm.showInformation("Information", "Der User wurde gelöscht.");
+               cbUserwahl.getItems().clear();
+               initGUI();
            }
            else
            {
@@ -138,26 +141,27 @@ public class UserVerwaltenFXMLController implements Initializable
     {
         try
         {
-            User u = GUIVS.instance.getControl().getC().getUserByName(cbUserwahl.getSelectionModel().getSelectedItem().toString());
-            if (u != null)
-            {
-                tfUsername.setText(u.getName());
-                tfPasswort.setText(u.getPassword());
-                switch (u.getLevel())
-                {
-                    case 1:
-                        rbUser.setSelected(true);
-                        break;
-                    case 2:
-                        rbAdmin.setSelected(true);
-                        break;
+            if(cbUserwahl.getSelectionModel().getSelectedItem() != null) {
+                User u = GUIVS.instance.getControl().getC().getUserByName(cbUserwahl.getSelectionModel().getSelectedItem().toString());
+
+                if (u != null) {
+                    tfUsername.setText(u.getName());
+                    tfPasswort.setText(u.getPassword());
+                    switch (u.getLevel()) {
+                        case 1:
+                            rbUser.setSelected(true);
+                            break;
+                        case 2:
+                            rbAdmin.setSelected(true);
+                            break;
+                    }
+                } else {
+                    //TODO
                 }
             }
-            else
-            {
-                //TODO
-            }
-        } catch (Exception e)
+        }
+        catch(DatabaseObjectNotFoundException de){}
+        catch (Exception e)
         {
             e.printStackTrace();
         }

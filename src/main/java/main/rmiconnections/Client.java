@@ -4,76 +4,83 @@ package main.rmiconnections;
  * Merlin, 16.08.2017
  */
 
+import main.database.exceptions.DatabaseConnectionException;
+import main.database.exceptions.DatabaseObjectNotDeletedException;
+import main.database.exceptions.DatabaseObjectNotFoundException;
+import main.database.exceptions.DatabaseObjectNotSavedException;
 import main.objects.Board;
 import main.objects.Group;
 import main.objects.Message;
 import main.objects.User;
+
+import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import main.rmiinterface.*;
 
-public class Client implements Functions{
+public class Client extends UnicastRemoteObject implements NotifyUpdate{
 
     private Registry registry;
     private Functions rmi;
+    private String clientID = "NONE";
 
     
-    public User getUserById(int id) throws Exception {
+    public User getUserById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getUserById(id);
     }
 
-    public User getUserByName(String username) throws Exception {
+    public User getUserByName(String username) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getUserByName(username);
     }
 
-    public ArrayList<User> getUsers() throws Exception {
+    public ArrayList<User> getUsers() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getUsers();
     }
 
-    public ArrayList<User> getUsersByLevel(int level) throws Exception {
+    public ArrayList<User> getUsersByLevel(int level) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getUsersByLevel(level);
     }
 
-    public void saveUser(User user) throws Exception {
+    public void saveUser(User user) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException {
         this.rmi.saveUser(user);
     }
 
-    public Board getBoardById(int id) throws Exception {
+    public Board getBoardById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getBoardById(id);
     }
 
-    public ArrayList<Board> getBoards() throws Exception {
+    public ArrayList<Board> getBoards() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getBoards();
     }
 
-    public void saveBoard(Board board) throws Exception {
+    public void saveBoard(Board board) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException {
         this.rmi.saveBoard(board);
     }
 
-    public Group getGroupById(int id) throws Exception {
+    public Group getGroupById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getGroupById(id);
     }
-    @Override
-    public ArrayList<Group> getGroups() throws Exception {
+    public ArrayList<Group> getGroups() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getGroups();
     }
 
-    public ArrayList<Group> getGroupsByUser(User u) throws Exception {
+    public ArrayList<Group> getGroupsByUser(User u) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getGroupsByUser(u);
     }
 
-    @Override
-    public ArrayList<Group> getGroupsByModerator(User u) throws Exception
+    public ArrayList<Group> getGroupsByModerator(User u)
     {
         return null;
     }
 
-    public void saveGroup(Group group) throws Exception {
+    public void saveGroup(Group group) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException {
         this.rmi.saveGroup(group);
     }
 
-    public ArrayList<User> getUsersNotInGroup(Group group) throws Exception {
+    public ArrayList<User> getUsersNotInGroup(Group group) throws RemoteException {
         return this.rmi.getUsersNotInGroup(group);
     }
 
@@ -93,67 +100,60 @@ public class Client implements Functions{
     }
 */
     
-    public Message getMessageById(int id) throws Exception {
+    public Message getMessageById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getMessageById(id);
     }
 
-    @Override
-    public ArrayList<Message> getMessagesByUser(User u) throws Exception
-    {
-        return null;
-    }
-
-    public ArrayList<Message> getMessageByUser(User u) throws Exception {
+    public ArrayList<Message> getMessagesByUser(User u) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getMessagesByUser(u);
     }
 
-    public ArrayList<Message> getMessages() throws Exception {
+    public ArrayList<Message> getMessages() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getMessages();
     }
 
-    public ArrayList<Message> getMessagesByGroup(Group g) throws Exception {
+    public ArrayList<Message> getMessagesByGroup(Group g) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getMessagesByGroup(g);
     }
 
-    public void saveMessage(Message message) throws Exception {
+    public void saveMessage(Message message) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException {
         this.rmi.saveMessage(message);
     }
 
-    public User loginUser(String username, String password) throws Exception {
+    public User loginUser(String username, String password) throws RemoteException {
         return this.rmi.loginUser(username, password);
     }
-    public String test(int testID) throws Exception{
+    public String test(int testID) throws RemoteException {
         return this.rmi.test(42);
     }
 
-    public Group getGroupByName(String name) throws Exception
-    {
+    public Group getGroupByName(String name) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getGroupByName(name);
     }
 
-    public void deleteMessage(Message m) throws Exception{
+    public void deleteMessage(Message m) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException {
          this.rmi.deleteMessage(m);
     }
 
-    @Override
-    public void deleteUser(User u) throws Exception
-    {
+    public void deleteUser(User u) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException {
         this.rmi.deleteUser(u);
     }
 
-    @Override
-    public void deleteBoard(Board b) throws Exception
-    {
+    public void deleteBoard(Board b) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException {
         this.rmi.deleteBoard(b);
     }
 
-    @Override
-    public void deleteGroup(Group g) throws Exception
-    {
+    public void deleteGroup(Group g) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException {
         this.rmi.deleteGroup(g);
     }
 
-    public Client(String host) {
+    public void disconnect() throws RemoteException {
+        this.rmi.disconnect(clientID);
+    }
+
+
+    public Client(String host) throws RemoteException {
+        super();
         try {
             /*
             if(System.getSecurityManager() == null) {
@@ -161,11 +161,31 @@ public class Client implements Functions{
             }*/
             this.registry = LocateRegistry.getRegistry(host);
             this.rmi = (Functions) registry.lookup("Functions");
-        } catch (Exception e) {
+            clientID = rmi.connect(this);
+        }
+        catch (Exception e) {
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onUpdateGroup() throws RemoteException {
+System.out.println("onUpdateGroup");
+    }
+
+    @Override
+    public void onUpdateUser() throws RemoteException {
+        System.out.println("onUpdateUser");
+
+    }
+
+    @Override
+    public void onUpdateMessage() throws RemoteException {
+        System.out.println("onUpdateMessage");
+
+    }
+
 
     //Main zum Testen
     //public static void main(String[] args)

@@ -19,6 +19,7 @@ import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
+import main.database.exceptions.DatabaseObjectNotFoundException;
 import main.objects.Group;
 import main.objects.User;
 
@@ -54,7 +55,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
     @FXML private void close()
     {
-        Stage stage = (Stage) bCancel.getScene().getWindow();
+        Stage stage = (Stage) cbGruppe.getScene().getWindow();
         stage.close();
     }
 
@@ -102,11 +103,33 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
     }
 
+    @FXML
+    private void deleteGroup()
+    {
+        try {
+            if(selectedGroup != null) {
+                GUIVS.instance.getControl().getC().deleteGroup(selectedGroup);
+                pm.showInformation("Information","Gruppe gelöscht!!");
+                updateGroups();
+            }
+            else
+            {
+                pm.showInformation("Information","Keine Gruppe ausgewählt!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @FXML private void save()
     {
         if( ! selectedMod.equals(selectedGroup.getModerator()))
         {
             selectedGroup.setModerator(selectedMod);
+            pm.showInformation("Information","Neuer Moderator gespeichert");
+        }
+        else
+        {
+            pm.showInformation("Information","Moderator wurde nicht geändert");
         }
 
         try
@@ -122,7 +145,8 @@ public class GruppeVerwaltenFXMLController implements Initializable
     {
         try
         {
-            selectedMod = selectedGroup.getModerator();
+            //getPossibleMods() benötigt
+          //  selectedMod = g
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -178,6 +202,39 @@ public class GruppeVerwaltenFXMLController implements Initializable
         updateUsers();
         updateMods();
     }
+    private void updateGroups()
+    {
+        try
+        {
+            if(GUIVS.instance.getControl().getC().getGroups() != null) {
+                for (Group g : GUIVS.instance.getControl().getC().getGroups()) {
+                    cbGruppe.getItems().add(g.getName());
+                }
+
+                cbGruppe.getSelectionModel().selectFirst();
+                selectedGroup = GUIVS.instance.getControl().getC().getGroupByName(cbGruppe.getSelectionModel().getSelectedItem().toString());
+                selectedMod = selectedGroup.getModerator();
+                updateGroupMembers();
+                updateUsers();
+                updateMods();
+            }else
+            {
+                pm.showError("Error","Keine Gruppen angelegt!");
+                close();
+            }
+
+        }
+        catch (DatabaseObjectNotFoundException e)
+        {
+            pm.showError("Error","Keine Gruppen angelegt!");
+            close();
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     private void updateGroupMembers()
     {
@@ -226,6 +283,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
             //Alle Mitglieder der Gruppe
             ArrayList<User> members = selectedGroup.getMembers();
+            if(cbMod.getSelectionModel().getSelectedItem().toString().equals(selectedGroup.getModerator().getName()))
             selectedMod = selectedGroup.getModerator();
             if(members != null)
             {
@@ -260,37 +318,21 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
     private void initGUI()
     {
-        try
-        {
-            for (Group g : GUIVS.instance.getControl().getC().getGroups())
-            {
-                cbGruppe.getItems().add(g.getName());
-            }
-            cbGruppe.getSelectionModel().selectFirst();
-            selectedGroup = GUIVS.instance.getControl().getC().getGroupByName( cbGruppe.getSelectionModel().getSelectedItem().toString());
-            selectedMod = selectedGroup.getModerator();
-            updateGroupMembers();
-            updateUsers();
-            updateMods();
-
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
+            updateGroups();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        pm = new PopUpMessage();
-        Platform.runLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                initGUI();
-            }
-        });
+
+            pm = new PopUpMessage();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    initGUI();
+                }
+            });
+
+        }
     }
-}
+

@@ -71,18 +71,21 @@ public class loginFXMLController implements Initializable {
                 {
                     Stage stage = (Stage) bLogin.getScene().getWindow();
                     stage.close();
+                   //GUIVS.instance.getControl().getC().registerClient();
                     GUIVS.adminAnsicht();
                 }
                 else
                 {
                     Stage stage = (Stage) bLogin.getScene().getWindow();
                     stage.close();
+                  // GUIVS.instance.getControl().getC().registerClient();
                     GUIVS.userAnsicht();
                 }
             }
             else if(GUIVS.instance.getMe().getLevel() == 2)
             {
                 //TODO: öffne Adminansicht
+              //  GUIVS.instance.getControl().getC().registerClient();
                 Stage stage = (Stage) bLogin.getScene().getWindow();
                 stage.close();
                 GUIVS.adminAnsicht();

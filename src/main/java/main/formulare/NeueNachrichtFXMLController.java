@@ -6,13 +6,26 @@
 package main.formulare;
 
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+import main.classes.GUIVS;
+import main.classes.PopUpMessage;
+import main.database.ObjectFactory;
+import main.database.exceptions.DatabaseConnectionException;
+import main.database.exceptions.DatabaseObjectNotFoundException;
+import main.database.exceptions.DatabaseObjectNotSavedException;
+import main.objects.Group;
+import main.objects.Message;
 
 /**
  * FXML Controller class
@@ -21,11 +34,26 @@ import javafx.stage.Stage;
  */
 public class NeueNachrichtFXMLController implements Initializable {
 
+    private PopUpMessage pm;
     @FXML private Label lAnzeigeTafel;
     @FXML private TextArea taNachricht;
     @FXML private Button bAbbrechen;
     @FXML private Button bSenden;
-    
+    @FXML private ChoiceBox cbGroup;
+    private Group selectedGroup;
+
+    @FXML private void onGroupChange()
+    {
+        try {
+            selectedGroup = cbGroup.getSelectionModel().getSelectedItem().toString() != null?  GUIVS.instance.getControl().getC().getGroupByName( cbGroup.getSelectionModel().getSelectedItem().toString()) : selectedGroup;
+        } catch (DatabaseConnectionException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (DatabaseObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
     
     
     @FXML 
@@ -34,16 +62,50 @@ public class NeueNachrichtFXMLController implements Initializable {
         Stage stage = (Stage) bAbbrechen.getScene().getWindow();
         stage.close();
     }        
-    
+
+    private void updateGroups()
+    {
+        cbGroup.getItems().clear();
+        try {
+            ArrayList<Group> groups = GUIVS.instance.getControl().getC().getGroups();
+            if(groups != null)
+            {
+                for(Group g: groups) {
+                    cbGroup.getItems().add(g.getName());
+                }
+            }
+        } catch (DatabaseConnectionException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (DatabaseObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML 
     private void senden()
     {
-        
+        Message m = ObjectFactory.createGroupMessage(taNachricht.getText(),GUIVS.instance.getMe(),selectedGroup);
+
+        try {
+            GUIVS.instance.getControl().getC().saveMessage(m);
+            pm.showInformation("Information","Ihre Nachricht wurde gespeichert!");
+        } catch (DatabaseObjectNotSavedException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (DatabaseConnectionException e) {
+            e.printStackTrace();
+        }
+        abbrechen();
     }
         
-    private void editLabelText()
+
+    private void initGUI()
     {
-        
+        updateGroups();
+        cbGroup.getSelectionModel().selectFirst();
     }
     /**
      * Initializes the controller class.
@@ -51,8 +113,15 @@ public class NeueNachrichtFXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        editLabelText();
         this.bAbbrechen.requestFocus();
+       pm = new PopUpMessage();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                initGUI();
+            }
+        });
+
     }    
     
 }

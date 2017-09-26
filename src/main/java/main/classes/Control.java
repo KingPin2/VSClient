@@ -9,6 +9,8 @@ import main.exceptions.EmptyStringException;
 import main.exceptions.IllegalCharacterException;
 import main.rmiconnections.*;
 
+import java.rmi.RemoteException;
+
 
 /**
  *
@@ -30,7 +32,11 @@ public class Control {
     
     public Control()
     {
-        c = new Client("localhost");
+        try {
+            c = new Client("localhost");
+        } catch (RemoteException rm) {
+            rm.printStackTrace();
+        }
     }
     
     public static String isLegit(String probe) throws Exception
