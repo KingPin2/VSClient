@@ -54,70 +54,71 @@ public class AdminAnsichtFXMLController implements Initializable
     //MenuBar
 
     //Datei...
-    @FXML
-    private MenuItem miAktualisieren;
-    @FXML
-    private Menu mAnzeigetafel;
+//    @FXML
+//    private MenuItem miAktualisieren;
+//    @FXML
+//    private Menu mAnzeigetafel;
+//
+//    //Seperator...
+//    @FXML
+//    private MenuItem miAbmelden;
+//    @FXML
+//    private MenuItem miSchliessen;
+//
+//
+//    //Bearbeiten...
+//    @FXML
+//    private MenuItem miNeueNachricht;
+//    @FXML
+//    private MenuItem miBearbeiten;
+//    @FXML
+//    private MenuItem miLoeschen;
+//
+//    //Seperator...
+//    @FXML
+//    private MenuItem miNeuerUser;
+//    @FXML
+//    private MenuItem miUserBearbeiten;
+//
+//    //Seperator...
+//    @FXML
+//    private MenuItem miNeueGruppe;
+//    @FXML
+//    private MenuItem miGruppeBearbeiten;
+//
+//    //Seperator...
+//    @FXML
+//    private MenuItem miNeueAnzeigetafel;
+//    @FXML
+//    private MenuItem miAnzeigetafelBearbeiten;
+//
+//
+//    //Hilfe...
+//    @FXML
+//    private MenuItem miAbout;
+//
+//    @FXML
+//    private ToolBar menubar;
+//
+//    //Acchordion
+//    //User...
+//    @FXML
+//    private Button bUserAnlegen;
+//    @FXML
+//    private Button bUserBearbeiten;
+//
+//    //Gruppe...
+//    @FXML
+//    private Button bGruppeAnlegen;
+//    @FXML
+//    private Button bGruppeBearbeiten;
+//
+//    //Anzeigetafel...
+//    @FXML
+//    private Button bAnzeigetafelAnlegen;
+//    @FXML
+//    private Button bAnzeigetafelBearbeiten;
 
-    //Seperator...
-    @FXML
-    private MenuItem miAbmelden;
-    @FXML
-    private MenuItem miSchliessen;
-
-
-    //Bearbeiten...
-    @FXML
-    private MenuItem miNeueNachricht;
-    @FXML
-    private MenuItem miBearbeiten;
-    @FXML
-    private MenuItem miLoeschen;
-
-    //Seperator...
-    @FXML
-    private MenuItem miNeuerUser;
-    @FXML
-    private MenuItem miUserBearbeiten;
-
-    //Seperator...
-    @FXML
-    private MenuItem miNeueGruppe;
-    @FXML
-    private MenuItem miGruppeBearbeiten;
-
-    //Seperator...
-    @FXML
-    private MenuItem miNeueAnzeigetafel;
-    @FXML
-    private MenuItem miAnzeigetafelBearbeiten;
-
-
-    //Hilfe...
-    @FXML
-    private MenuItem miAbout;
-
-    @FXML
-    private ToolBar menubar;
-
-    //Acchordion
-    //User...
-    @FXML
-    private Button bUserAnlegen;
-    @FXML
-    private Button bUserBearbeiten;
-
-    //Gruppe...
-    @FXML
-    private Button bGruppeAnlegen;
-    @FXML
-    private Button bGruppeBearbeiten;
-
-    //Anzeigetafel...
-    @FXML
-    private Button bAnzeigetafelAnlegen;
-    @FXML
-    private Button bAnzeigetafelBearbeiten;
 
     @FXML
     private void gruppeAnlegen()
@@ -191,7 +192,7 @@ public class AdminAnsichtFXMLController implements Initializable
         try {
             Message m = ObjectFactory.createMessage("Test, die Welt ist schön, es gibt ja threads", ObjectFactory.createUser("Merlin", "blubb", 2));
             //GUIVS.bearbeiteNachricht((Message) tTabelle.getSelectionModel().getSelectedItem());
-            GUIVS.instance.bearbeiteNachricht(m);
+            GUIVS.bearbeiteNachricht(m);
         } catch (Exception e) {
         }
     }
@@ -204,20 +205,24 @@ public class AdminAnsichtFXMLController implements Initializable
 
     @FXML
     private void loeschen() {
-        boolean b = pm.showDialog("Die ausgewählte Nachricht wird unwiderruflich gelöscht!");
-        if (b == true) {
-            if (!tTabelle.getSelectionModel().getSelectedItem().equals(null)) {
-                try {
-                    GUIVS.instance.getControl().getC().deleteMessage(tTabelle.getSelectionModel().getSelectedItem());
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if (tcNachrichten.getColumns().isEmpty())
+        {
+            pm.showInformation("Meldung", "Die Tabelle ist leer");
+        }
+        else
+        {
+            boolean b = pm.showDialog("Die ausgewählte Nachricht wird unwiderruflich gelöscht!");
+            if (b == true) {
+                if (!tTabelle.getSelectionModel().getSelectedItem().equals(null)) {
+                    try {
+                        GUIVS.instance.getControl().getC().deleteMessage(tTabelle.getSelectionModel().getSelectedItem());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        } else {
-
-            //lösche nicht
-
         }
+
     }
 
         /**

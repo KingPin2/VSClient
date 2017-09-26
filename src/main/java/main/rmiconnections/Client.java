@@ -54,7 +54,7 @@ public class Client implements Functions{
     public Group getGroupById(int id) throws Exception {
         return this.rmi.getGroupById(id);
     }
-
+    @Override
     public ArrayList<Group> getGroups() throws Exception {
         return this.rmi.getGroups();
     }
