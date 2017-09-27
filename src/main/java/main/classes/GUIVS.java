@@ -244,6 +244,7 @@ public class GUIVS extends Application {
     private static void fillgroups()
     {
         ArrayList<Group> groups;
+
         if(GUIVS.instance.getMe().getLevel() == 1) {
             try {
                 groups = GUIVS.instance.getControl().getC().getGroupsByUser(GUIVS.instance.getMe());
@@ -264,18 +265,24 @@ public class GUIVS extends Application {
         }
         else if( GUIVS.instance.getMe().getLevel() == 2)
         {
-            try {
+            try
+            {
                 groups = GUIVS.instance.getControl().getC().getGroups();
-                if(groups != null) {
-                    for (Group g : groups) {
+                if (groups != null)
+                {
+                    for (Group g : groups)
+                    {
                         group_messages.put(g.getName(), FXCollections.observableArrayList());
-                        if(GUIVS.instance.getControl().getC().getMessagesByGroup(g) != null) {
+
+                        if (GUIVS.instance.getControl().getC().getMessagesByGroup(g) != null)
+                        {
                             group_messages.get(g.getName()).addAll(GUIVS.instance.getControl().getC().getMessagesByGroup(g));
-                        }
+                        }//TODO warum springt der hier raus und durchläuft schlöeife nicht erneut?
                     }
                 }
 
-            } catch (DatabaseConnectionException e) {
+            }
+            catch (DatabaseConnectionException e) {
                 e.printStackTrace();
             } catch (RemoteException e) {
                 e.printStackTrace();
