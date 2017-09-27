@@ -11,6 +11,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import main.objects.Group;
 import main.objects.Message;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -24,85 +25,103 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
- *
  * @author Laura
  */
-public class AnzeigetafelFXMLController implements Initializable {
-    
+public class AnzeigetafelFXMLController implements Initializable
+{
+
     @FXML
     private VBox vbox;
-   
-    
+
+
     @FXML
     private ScrollPane scrollpane;
-    
+
     @FXML
     private HBox hbox;
-    
+
     @FXML
     private Label lTafel;
 
-    public Group getGroup() {
+    public Group getGroup()
+    {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public void setGroup(Group group)
+    {
         this.group = group;
     }
 
     private Group group;
     private ObservableList<Message> m;
 
-    public ObservableList<Message> getM() {
+    public ObservableList<Message> getM()
+    {
         return m;
     }
 
-    public void setM(ObservableList<Message> m) {
+    public void setM(ObservableList<Message> m)
+    {
         this.m = m;
     }
-    private  ObservableList<Nachrichtenbox> nb;
 
+    private ObservableList<Nachrichtenbox> nb;
+
+    public void reset()
+    {
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        Platform.runLater(new Runnable() {
+        Platform.runLater(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 nb = FXCollections.observableArrayList();
-                if(m != null) {
-                    for (Message me : m) {
+                if (m != null)
+                {
+                    for (Message me : m)
+                    {
                         nb.add(new Nachrichtenbox(me));
                     }
                 }
 
                 vbox.getChildren().addAll(nb);
                 lTafel.setText(group.getName());
+
+                scrollpane.setHbarPolicy(ScrollBarPolicy.NEVER);
+                scrollpane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+                scrollpane.setFitToHeight(true);
+                scrollpane.setFitToWidth(true);
             }
         });
 
-        m.addListener(new ListChangeListener<Message>()
-        {
-            @Override
-            public void onChanged(Change<? extends Message> c)
-            {
-                nb.clear();
-                vbox.getChildren().clear();
-                if(m != null) {
-                    for (Message me : m) {
-                        nb.add(new Nachrichtenbox(me));
-                    }
-                }
-                vbox.getChildren().addAll(nb);
-            }
-        });
-        
-        scrollpane.setHbarPolicy(ScrollBarPolicy.NEVER);
-        scrollpane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-        scrollpane.setFitToHeight(true);
-        scrollpane.setFitToWidth(true);
-        
-        
+//        m.addListener(new ListChangeListener<Message>()
+//        {
+//
+//            @Override
+//            public void onChanged(Change<? extends Message> c)
+//            {
+//
+//                nb.clear();
+//                vbox.getChildren().clear();
+//                if (m != null)
+//                {
+//                    for (Message me : m)
+//                    {
+//                        nb.add(new Nachrichtenbox(me));
+//                    }
+//                }
+//
+//                vbox.getChildren().addAll(nb);
+//                lTafel.setText(group.getName());
+//            }
+//        });
+
     }
 
 }

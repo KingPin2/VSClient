@@ -38,6 +38,11 @@ public class GUIVS extends Application {
     public static GUIVS instance;
     private Control control;
 
+    public static HashMap<String, ObservableList<Message>> getGroup_messages()
+    {
+        return group_messages;
+    }
+
     private static HashMap<String, ObservableList<Message>> group_messages = new HashMap<String, ObservableList<Message>>();
     public Control getControl() {
         return control;
@@ -107,7 +112,7 @@ public class GUIVS extends Application {
         loader.setLocation(GUIVS.class.getResource("/Anzeigetafel.fxml"));
         Parent root = loader.load();
         AnzeigetafelFXMLController ac = loader.<AnzeigetafelFXMLController>getController();
-        ObservableList<Message> messages = group_messages.get(g.getName());
+     //   ObservableList<Message> messages = group_messages.get(g.getName());
         ac.setM(GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
         {
             @Override
@@ -348,7 +353,6 @@ public class GUIVS extends Application {
         stage.show();
 
     }
-
 
     @Override
     public void start(Stage stage) throws Exception {

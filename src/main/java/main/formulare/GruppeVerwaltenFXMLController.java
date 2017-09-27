@@ -11,6 +11,8 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 import javafx.application.Platform;
+import javafx.beans.binding.ObjectExpression;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -51,6 +53,10 @@ public class GruppeVerwaltenFXMLController implements Initializable
     private User selectedUser;
     private User selectedMod;
     private User selectedMember;
+
+    ObservableList<Group> gruppen;
+    ObservableList<User> member;
+    ObservableList<User> users;
 
 
     @FXML private void close()
@@ -145,7 +151,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
     {
         try
         {
-            selectedMod = GUIVS.instance.getControl().getC().getUserByName(cbMod.getSelectionModel().getSelectedItem().toString());
+            //selectedMod = GUIVS.getcbMod.getSelectionModel().getSelectedItem());
 
         } catch (Exception e)
         {

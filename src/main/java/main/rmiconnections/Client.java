@@ -4,11 +4,13 @@ package main.rmiconnections;
  * Merlin, 16.08.2017
  */
 
+import javafx.collections.FXCollections;
 import main.classes.GUIVS;
 import main.database.exceptions.DatabaseConnectionException;
 import main.database.exceptions.DatabaseObjectNotDeletedException;
 import main.database.exceptions.DatabaseObjectNotFoundException;
 import main.database.exceptions.DatabaseObjectNotSavedException;
+import main.exceptions.NoItemSelectedException;
 import main.objects.Board;
 import main.objects.Group;
 import main.objects.Message;
@@ -20,6 +22,10 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+
 import main.rmiinterface.*;
 
 public class Client extends UnicastRemoteObject implements NotifyUpdate{
@@ -168,24 +174,52 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
             @Override
             public void run()
             {
-                GUIVS.instance.getControl().getGroups().clear();
-                try
-                {
-                    for(Group g: rmi.getGroups())
+                    switch (type)
                     {
-                        GUIVS.instance.getControl().getGroups().add(g);
+                        case SAVE:
+                            GUIVS.instance.getControl().getGroups().add(g);
+                            GUIVS.getGroup_messages().put(g.getName(), FXCollections.observableArrayList());
+                            break;
+                        case UPDATE:
+
+                            //Ersetze das Gruppenobjekt durch das neue Objekt (Groupname = unique)
+                            GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
+                            {
+                                @Override
+                                public boolean test(Group group)
+                                {
+                                    if (group.getName().equals(g.getName()))
+                                    {
+                                        return true;
+                                    } else
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }).set(0, g);
+                            break;
+                        case DELETE:
+                            GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
+                            {
+                                @Override
+                                public boolean test(Group group)
+                                {
+                                    if (group.getName().equals(g.getName()))
+                                    {
+                                        return true;
+                                    } else
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }).remove(0);
+                            GUIVS.getGroup_messages().remove(g.getName());
+                            break;
+                        default:
+                            System.out.println("Fehler in Update_group");
+                            break;
                     }
-                } catch (DatabaseObjectNotFoundException e)
-                {
-                    e.printStackTrace();
-                } catch (DatabaseConnectionException e)
-                {
-                    e.printStackTrace();
-                } catch (RemoteException e)
-                {
-                    e.printStackTrace();
                 }
-            }
         });
         t.start();
     }
@@ -198,27 +232,52 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
             @Override
             public void run()
             {
-                GUIVS.instance.getControl().getUsers().clear();
-                try
+                switch (type)
                 {
-                    try
-                    {
-                        for (User u : rmi.getUsers())
+                    case SAVE:
+                        GUIVS.instance.getControl().getUsers().add(u);
+                        break;
+                    case UPDATE:
+
+                        //Ersetze das Userobjekt durch das neue Objekt (Username = unique)
+                        GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
                         {
-                            GUIVS.instance.getControl().getUsers().add(u);
-                        }
-                    } catch (RemoteException e)
-                    {
-                        e.printStackTrace();
-                    }
-                } catch (DatabaseObjectNotFoundException e)
-                {
-                    e.printStackTrace();
-                } catch (DatabaseConnectionException e)
-                {
-                    e.printStackTrace();
+                            @Override
+                            public boolean test(User user)
+                            {
+                                if (user.getName().equals(u.getName()))
+                                {
+                                    return true;
+                                } else
+                                {
+                                    return false;
+                                }
+                            }
+                        }).set(0, u);
+                        break;
+                    case DELETE:
+                        GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
+                        {
+                            @Override
+                            public boolean test(User user)
+                            {
+                                if (user.getName().equals(u.getName()))
+                                {
+                                    return true;
+                                } else
+                                {
+                                    return false;
+                                }
+                            }
+                        }).remove(0);
+                        break;
+                    default:
+                        System.out.println("Fehler in Update_user");
+                        break;
                 }
             }
+
+
         });
         t.start();
     }
@@ -234,24 +293,77 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
             @Override
             public void run()
             {
-                System.out.println(m + type.toString());
-                GUIVS.instance.getControl().getMessages().clear();
-                try
+                switch (type)
                 {
-                    ArrayList<Message> temp = rmi.getMessages();
-                    for (Message m : temp)
-                    {
+                    case SAVE:
                         GUIVS.instance.getControl().getMessages().add(m);
-                    }
-                } catch (DatabaseObjectNotFoundException e)
-                {
-                    e.printStackTrace();
-                } catch (DatabaseConnectionException e)
-                {
-                    e.printStackTrace();
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
+                        GUIVS.getGroup_messages().get(m.getGroup().getName()).add(m);
+                        break;
+                    case UPDATE:
+
+                        //Ersetze das Messageobjekt durch das neue Objekt (MessageID = unique)
+                        GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
+                        {
+                            @Override
+                            public boolean test(Message message)
+                            {
+                                if (message.getID()== m.getID())
+                                {
+                                    return true;
+                                } else
+                                {
+                                    return false;
+                                }
+                            }
+                        }).set(0, m);
+                        GUIVS.getGroup_messages().get(m.getGroup().getName()).filtered(new Predicate<Message>()
+                    {
+                        @Override
+                        public boolean test(Message message)
+                        {
+                            if (message.getID()== m.getID())
+                            {
+                                return true;
+                            } else
+                            {
+                                return false;
+                            }
+                        }
+                    }).set(0, m);
+                        break;
+                    case DELETE:
+                        GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
+                        {
+                            @Override
+                            public boolean test(Message message)
+                            {
+                                if (message.getID() == m.getID())
+                                {
+                                    return true;
+                                } else
+                                {
+                                    return false;
+                                }
+                            }
+                        }).remove(0);
+                        GUIVS.getGroup_messages().get(m.getGroup().getName()).filtered(new Predicate<Message>()
+                    {
+                        @Override
+                        public boolean test(Message message)
+                        {
+                            if (message.getID() == m.getID())
+                            {
+                                return true;
+                            } else
+                            {
+                                return false;
+                            }
+                        }
+                    }).remove(0);
+                        break;
+                    default:
+                        System.out.println("Fehler in Update_user");
+                        break;
                 }
             }
         });
