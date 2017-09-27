@@ -6,10 +6,13 @@
 package main.formulare;
 
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,11 +21,14 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import main.classes.Control;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
 import main.database.ObjectFactory;
+import main.database.exceptions.DatabaseConnectionException;
 import main.database.exceptions.DatabaseObjectNotFoundException;
+import main.objects.Group;
 import main.objects.User;
 
 /**
@@ -34,6 +40,9 @@ public class UserVerwaltenFXMLController implements Initializable
 {
 
     private PopUpMessage pm;
+
+    private ObservableList<User> user;
+
 
    @FXML
    private Button bSpeichern;
@@ -65,12 +74,12 @@ public class UserVerwaltenFXMLController implements Initializable
    private void deleteUser()
    {
        try {
-           User user = GUIVS.instance.getControl().getC().getUserByName(cbUserwahl.getSelectionModel().getSelectedItem().toString());
-           boolean auswahl = pm.showDialog("Möchten Sie den User " + cbUserwahl.getSelectionModel().getSelectedItem().toString() + " wirklich löschen?");
+           User user = (User) cbUserwahl.getSelectionModel().getSelectedItem();
+           boolean auswahl = pm.showDialog("Möchten Sie den User " + ((User)cbUserwahl.getSelectionModel().getSelectedItem()).getName() + " wirklich löschen?");
            if(auswahl) {
                GUIVS.instance.getControl().getC().deleteUser(user);
                pm.showInformation("Information", "Der User wurde gelöscht.");
-               cbUserwahl.getItems().clear();
+               this.user.clear();
                initGUI();
            }
            else
@@ -107,7 +116,7 @@ public class UserVerwaltenFXMLController implements Initializable
 
         try
         {
-            User neuerUser = GUIVS.instance.getControl().getC().getUserByName(cbUserwahl.getSelectionModel().getSelectedItem().toString());
+            User neuerUser = (User) cbUserwahl.getSelectionModel().getSelectedItem();
             neuerUser.setPassword(tfPasswort.getText());
             neuerUser.setLevel(level);
 
@@ -124,16 +133,27 @@ public class UserVerwaltenFXMLController implements Initializable
     {
         try
         {
-            for (User u : GUIVS.instance.getControl().getC().getUsers())
+            if(user != null)
             {
-                cbUserwahl.getItems().add(u.getName());
+                user.clear();
             }
+            for(User u: GUIVS.instance.getControl().getC().getUsers())
+            {
+                user.add(u);
+            }
+            cbUserwahl.setItems(user);
             cbUserwahl.getSelectionModel().selectFirst();
-
-        } catch (Exception e)
+        } catch (DatabaseConnectionException e)
+        {
+            e.printStackTrace();
+        } catch (RemoteException e)
+        {
+            e.printStackTrace();
+        } catch (DatabaseObjectNotFoundException e)
         {
             e.printStackTrace();
         }
+
     }
 
     @FXML
@@ -142,8 +162,7 @@ public class UserVerwaltenFXMLController implements Initializable
         try
         {
             if(cbUserwahl.getSelectionModel().getSelectedItem() != null) {
-                User u = GUIVS.instance.getControl().getC().getUserByName(cbUserwahl.getSelectionModel().getSelectedItem().toString());
-
+                User u = (User) cbUserwahl.getSelectionModel().getSelectedItem();
                 if (u != null) {
                     tfUsername.setText(u.getName());
                     tfPasswort.setText(u.getPassword());
@@ -158,9 +177,11 @@ public class UserVerwaltenFXMLController implements Initializable
                 } else {
                     //TODO
                 }
+            }else
+            {
+                cbUserwahl.getSelectionModel().selectFirst();
             }
         }
-        catch(DatabaseObjectNotFoundException de){}
         catch (Exception e)
         {
             e.printStackTrace();
@@ -173,9 +194,25 @@ public class UserVerwaltenFXMLController implements Initializable
     public void initialize(URL url, ResourceBundle rb)
     {
         pm = new PopUpMessage();
+        user = FXCollections.observableArrayList();
         rbUser.setToggleGroup(berechtigung);
         rbAdmin.setToggleGroup(berechtigung);
 
+        cbUserwahl.setConverter(new StringConverter()
+        {
+            @Override
+            public String toString(Object object)
+            {
+                return ((User) object).getName();
+            }
+
+            @Override
+            public Object fromString(String string)
+            {
+                return null;
+            }
+        });
+        cbUserwahl.setItems(user);
         Platform.runLater(new Runnable()
         {
             @Override
@@ -184,6 +221,8 @@ public class UserVerwaltenFXMLController implements Initializable
                 initGUI();
             }
         });
+
+
         // TODO
     }    
     

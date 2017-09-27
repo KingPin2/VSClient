@@ -25,6 +25,12 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
 
     private Registry registry;
     private Functions rmi;
+
+    public String getClientID()
+    {
+        return clientID;
+    }
+
     private String clientID = "NONE";
 
     
@@ -152,6 +158,7 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
     }
 
 
+
     public Client(String host) throws RemoteException {
         super();
         try {
@@ -167,11 +174,11 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();
         }
-    }
+}
 
     @Override
     public void onUpdateGroup() throws RemoteException {
-System.out.println("onUpdateGroup");
+        System.out.println("onUpdateGroup");
     }
 
     @Override

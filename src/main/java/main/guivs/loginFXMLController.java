@@ -13,6 +13,7 @@ import main.exceptions.IllegalCharacterException;
 import main.exceptions.*;
 import main.exceptions.NoUserFoundException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +22,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.objects.*;
+import main.rmiinterface.NotifyUpdate;
 
 /**
  *
@@ -56,7 +58,7 @@ public class loginFXMLController implements Initializable {
             {
                 throw new NoUserFoundException();
             }
-            
+
             if(GUIVS.instance.getMe().getLevel() == 1)
             {
                 for(Group g: GUIVS.instance.getControl().getC().getGroups())
@@ -71,21 +73,18 @@ public class loginFXMLController implements Initializable {
                 {
                     Stage stage = (Stage) bLogin.getScene().getWindow();
                     stage.close();
-                   //GUIVS.instance.getControl().getC().registerClient();
                     GUIVS.adminAnsicht();
                 }
                 else
                 {
                     Stage stage = (Stage) bLogin.getScene().getWindow();
                     stage.close();
-                  // GUIVS.instance.getControl().getC().registerClient();
                     GUIVS.userAnsicht();
                 }
             }
             else if(GUIVS.instance.getMe().getLevel() == 2)
             {
                 //TODO: öffne Adminansicht
-              //  GUIVS.instance.getControl().getC().registerClient();
                 Stage stage = (Stage) bLogin.getScene().getWindow();
                 stage.close();
                 GUIVS.adminAnsicht();

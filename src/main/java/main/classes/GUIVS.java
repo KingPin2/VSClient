@@ -277,7 +277,7 @@ public class GUIVS extends Application {
                         if (GUIVS.instance.getControl().getC().getMessagesByGroup(g) != null)
                         {
                             group_messages.get(g.getName()).addAll(GUIVS.instance.getControl().getC().getMessagesByGroup(g));
-                        }//TODO warum springt der hier raus und durchläuft schlöeife nicht erneut?
+                        }//TODO warum springt der hier raus und durchläuft schleife nicht erneut?
                     }
                 }
 
