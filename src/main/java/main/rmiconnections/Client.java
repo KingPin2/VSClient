@@ -175,6 +175,13 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
             @Override
             public void run()
             {
+                try
+                {
+                    Thread.sleep(200);
+                } catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
                     switch (type)
                     {
                         case SAVE:
@@ -233,6 +240,13 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
             @Override
             public void run()
             {
+                try
+                {
+                    Thread.sleep(200);
+                } catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
                 switch (type)
                 {
                     case SAVE:
