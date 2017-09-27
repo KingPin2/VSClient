@@ -40,65 +40,58 @@ public class UserVerwaltenFXMLController implements Initializable
 {
 
     private PopUpMessage pm;
-
     private ObservableList<User> user;
+    private final ToggleGroup berechtigung = new ToggleGroup();
+
+    @FXML
+    private Button bSpeichern;
+    @FXML
+    private Button bDelete;
+    @FXML
+    private Button bAbbrechen;
+    @FXML
+    private RadioButton rbUser;
+    @FXML
+    private RadioButton rbAdmin;
+    @FXML
+    private ComboBox cbUserwahl;
+    @FXML
+    private TextField tfUsername;
+    @FXML
+    private TextField tfPasswort;
 
 
-   @FXML
-   private Button bSpeichern;
+    @FXML
+    private void deleteUser()
+    {
+        try
+        {
+            User user = (User) cbUserwahl.getSelectionModel().getSelectedItem();
+            boolean auswahl = pm.showDialog("Möchten Sie den User " + ((User) cbUserwahl.getSelectionModel().getSelectedItem()).getName() + " wirklich löschen?");
+            if (auswahl)
+            {
+                GUIVS.instance.getControl().getC().deleteUser(user);
+                pm.showInformation("Information", "Der User wurde gelöscht.");
+                this.user.clear();
+                initGUI();
+            } else
+            {
+                pm.showInformation("Information", "Der User wurde nicht gelöscht.");
+            }
 
-   @FXML
-   private Button bDelete;
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
-   @FXML
-   private Button bAbbrechen;
-    
-   @FXML
-   private RadioButton rbUser;
-   
-   @FXML
-   private RadioButton rbAdmin;
-   
-   @FXML
-   private ComboBox cbUserwahl;
-   
-   @FXML
-   private TextField tfUsername;
-   
-   @FXML
-   private TextField tfPasswort;
+    }
 
-   private final ToggleGroup berechtigung = new ToggleGroup();
-
-   @FXML
-   private void deleteUser()
-   {
-       try {
-           User user = (User) cbUserwahl.getSelectionModel().getSelectedItem();
-           boolean auswahl = pm.showDialog("Möchten Sie den User " + ((User)cbUserwahl.getSelectionModel().getSelectedItem()).getName() + " wirklich löschen?");
-           if(auswahl) {
-               GUIVS.instance.getControl().getC().deleteUser(user);
-               pm.showInformation("Information", "Der User wurde gelöscht.");
-               this.user.clear();
-               initGUI();
-           }
-           else
-           {
-               pm.showInformation("Information", "Der User wurde nicht gelöscht.");
-           }
-
-       } catch (Exception e) {
-           e.printStackTrace();
-       }
-
-   }
-   
     @FXML
     private void close()
     {
         Stage stage = (Stage) bAbbrechen.getScene().getWindow();
         stage.close();
-        
+
     }
 
     @FXML
@@ -129,15 +122,15 @@ public class UserVerwaltenFXMLController implements Initializable
         }
     }
 
-    private void initGUI ()
+    private void initGUI()
     {
         try
         {
-            if(user != null)
+            if (user != null)
             {
                 user.clear();
             }
-            for(User u: GUIVS.instance.getControl().getC().getUsers())
+            for (User u : GUIVS.instance.getControl().getC().getUsers())
             {
                 user.add(u);
             }
@@ -161,12 +154,15 @@ public class UserVerwaltenFXMLController implements Initializable
     {
         try
         {
-            if(cbUserwahl.getSelectionModel().getSelectedItem() != null) {
+            if (cbUserwahl.getSelectionModel().getSelectedItem() != null)
+            {
                 User u = (User) cbUserwahl.getSelectionModel().getSelectedItem();
-                if (u != null) {
+                if (u != null)
+                {
                     tfUsername.setText(u.getName());
                     tfPasswort.setText(u.getPassword());
-                    switch (u.getLevel()) {
+                    switch (u.getLevel())
+                    {
                         case 1:
                             rbUser.setSelected(true);
                             break;
@@ -174,19 +170,20 @@ public class UserVerwaltenFXMLController implements Initializable
                             rbAdmin.setSelected(true);
                             break;
                     }
-                } else {
+                } else
+                {
                     //TODO
                 }
-            }else
+            } else
             {
                 cbUserwahl.getSelectionModel().selectFirst();
             }
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
     }
+
     /**
      * Initializes the controller class.
      */
@@ -224,6 +221,6 @@ public class UserVerwaltenFXMLController implements Initializable
 
 
         // TODO
-    }    
-    
+    }
+
 }

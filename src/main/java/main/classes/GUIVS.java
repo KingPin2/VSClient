@@ -113,18 +113,19 @@ public class GUIVS extends Application {
         Parent root = loader.load();
         AnzeigetafelFXMLController ac = loader.<AnzeigetafelFXMLController>getController();
      //   ObservableList<Message> messages = group_messages.get(g.getName());
-        ac.setM(GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
-        {
-            @Override
-            public boolean test(Message message)
-            {
-                if(message.getGroup().getName().equals(g.getName()))
-                {
-                    return true;
-                }else
-                {return false;}
-            }
-        }));
+        ac.setM(GUIVS.group_messages.get(g.getName()));
+//        ac.setM(GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
+//        {
+//            @Override
+//            public boolean test(Message message)
+//            {
+//                if(message.getGroup().getName().equals(g.getName()))
+//                {
+//                    return true;
+//                }else
+//                {return false;}
+//            }
+//        }));
         ac.setGroup(g);
 
         Scene vtScene = new Scene(root);

@@ -12,9 +12,11 @@ import main.exceptions.EmptyStringException;
 import main.exceptions.IllegalCharacterException;
 import main.exceptions.*;
 import main.exceptions.NoUserFoundException;
+
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -25,101 +27,94 @@ import main.objects.*;
 import main.rmiinterface.NotifyUpdate;
 
 /**
- *
  * @author Laura
  */
-public class loginFXMLController implements Initializable {
-    
-    
+public class loginFXMLController implements Initializable
+{
+
+
     @FXML
     private TextField tfUsername;
-    
+
     @FXML
     private PasswordField pfPassword;
-    
+
     @FXML
     private Button bLogin;
-    
+
     @FXML
     private void login()
     {
-        
+
         PopUpMessage pm = new PopUpMessage();
         try
         {
             GUIVS.instance.setMe
-            (
-                GUIVS.instance.getControl().getC().loginUser(Control.isLegit(tfUsername.getText()),Control.isLegit(pfPassword.getText()))
-            );
-            
-            if(GUIVS.instance.getMe() == null)
+                    (
+                            GUIVS.instance.getControl().getC().loginUser(tfUsername.getText(), pfPassword.getText())
+                    );
+
+            if (GUIVS.instance.getMe() == null)
             {
                 throw new NoUserFoundException();
             }
 
-            if(GUIVS.instance.getMe().getLevel() == 1)
+            if (GUIVS.instance.getMe().getLevel() == 1)
             {
-                for(Group g: GUIVS.instance.getControl().getC().getGroups())
+                for (Group g : GUIVS.instance.getControl().getC().getGroups())
                 {
-                    if(g.getModerator().equals(GUIVS.instance.getMe()))
+                    if (g.getModerator().equals(GUIVS.instance.getMe()))
                     {
                         GUIVS.instance.setIsMod(true);
                         break;
                     }
                 }
-                if(GUIVS.instance.isMod())
+                if (GUIVS.instance.isMod())
                 {
                     Stage stage = (Stage) bLogin.getScene().getWindow();
                     stage.close();
                     GUIVS.adminAnsicht();
-                }
-                else
+                } else
                 {
                     Stage stage = (Stage) bLogin.getScene().getWindow();
                     stage.close();
                     GUIVS.userAnsicht();
                 }
-            }
-            else if(GUIVS.instance.getMe().getLevel() == 2)
+            } else if (GUIVS.instance.getMe().getLevel() == 2)
             {
                 //TODO: öffne Adminansicht
                 Stage stage = (Stage) bLogin.getScene().getWindow();
                 stage.close();
                 GUIVS.adminAnsicht();
-            }
-            else
+            } else
             {
                 throw new IllegalPermissionLevelException();
             }
 
-        }
-        catch(IllegalCharacterException icex)
+        } catch (IllegalCharacterException icex)
         {
             pm.showError("Error", "Eingaben dürfen weder ' noch ` enthalten");
-        }
-        catch(EmptyStringException esex)
+        } catch (EmptyStringException esex)
         {
             pm.showError("Error", "Eingaben dürfen nicht leer sein!");
-        }
-        catch(NoUserFoundException nufex)
+        } catch (NoUserFoundException nufex)
         {
             pm.showError("Error", "Username oder Passwort falsch!");
-        }
-        catch(Exception e)
+        } catch (Exception e)
         {
             pm.showError("Error", "Exception: " + e.toString());
             System.err.println(e.toString());
-        }
-        finally
+        } finally
         {
             pm = null;
         }
 
     }
-   
+
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb)
+    {
         // TODO
-    }    
-    
+    }
+
 }

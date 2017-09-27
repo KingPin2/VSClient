@@ -11,6 +11,7 @@ import main.database.exceptions.DatabaseObjectNotDeletedException;
 import main.database.exceptions.DatabaseObjectNotFoundException;
 import main.database.exceptions.DatabaseObjectNotSavedException;
 import main.exceptions.NoItemSelectedException;
+import main.guivs.AdminAnsichtFXMLController;
 import main.objects.Board;
 import main.objects.Group;
 import main.objects.Message;
@@ -178,7 +179,7 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                     {
                         case SAVE:
                             GUIVS.instance.getControl().getGroups().add(g);
-                            GUIVS.getGroup_messages().put(g.getName(), FXCollections.observableArrayList());
+//                            GUIVS.getGroup_messages().put(g.getName(), FXCollections.observableArrayList());
                             break;
                         case UPDATE:
 
@@ -290,46 +291,27 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
     {
         Thread t = new Thread(new Runnable()
         {
+
             @Override
             public void run()
             {
+                try
+                {
+                    Thread.sleep(200);
+                } catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
                 switch (type)
                 {
                     case SAVE:
                         GUIVS.instance.getControl().getMessages().add(m);
-                        GUIVS.getGroup_messages().get(m.getGroup().getName()).add(m);
                         break;
                     case UPDATE:
 
                         //Ersetze das Messageobjekt durch das neue Objekt (MessageID = unique)
-                        GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
-                        {
-                            @Override
-                            public boolean test(Message message)
-                            {
-                                if (message.getID()== m.getID())
-                                {
-                                    return true;
-                                } else
-                                {
-                                    return false;
-                                }
-                            }
-                        }).set(0, m);
-                        GUIVS.getGroup_messages().get(m.getGroup().getName()).filtered(new Predicate<Message>()
-                    {
-                        @Override
-                        public boolean test(Message message)
-                        {
-                            if (message.getID()== m.getID())
-                            {
-                                return true;
-                            } else
-                            {
-                                return false;
-                            }
-                        }
-                    }).set(0, m);
+                        GUIVS.instance.getControl().getMessages().set(GUIVS.instance.getControl().getMessages().indexOf(AdminAnsichtFXMLController.getSelectedMessage()),m);
+
                         break;
                     case DELETE:
                         GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
@@ -346,20 +328,6 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                                 }
                             }
                         }).remove(0);
-                        GUIVS.getGroup_messages().get(m.getGroup().getName()).filtered(new Predicate<Message>()
-                    {
-                        @Override
-                        public boolean test(Message message)
-                        {
-                            if (message.getID() == m.getID())
-                            {
-                                return true;
-                            } else
-                            {
-                                return false;
-                            }
-                        }
-                    }).remove(0);
                         break;
                     default:
                         System.out.println("Fehler in Update_user");

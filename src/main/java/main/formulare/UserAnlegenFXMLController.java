@@ -30,26 +30,21 @@ public class UserAnlegenFXMLController implements Initializable
 
     private PopUpMessage pm;
     private User neuerUser;
+    private final ToggleGroup berechtigung = new ToggleGroup();
+    ;
 
     @FXML
     private Button bSpeichern;
-
     @FXML
     private Button bAbbrechen;
-
     @FXML
     private RadioButton rbUser;
-
     @FXML
     private RadioButton rbAdmin;
-
     @FXML
     private TextField tfUsername;
-
     @FXML
     private PasswordField tfPasswort;
-
-    private final ToggleGroup berechtigung = new ToggleGroup();
 
     @FXML
     private void close()
@@ -73,22 +68,16 @@ public class UserAnlegenFXMLController implements Initializable
 
         try
         {
-            neuerUser = ObjectFactory.createUser(Control.isLegit(tfUsername.getText()), Control.isLegit(tfPasswort.getText()), level);
-
-
+            neuerUser = ObjectFactory.createUser(tfUsername.getText(), tfPasswort.getText(), level);
             GUIVS.instance.getControl().getC().saveUser(neuerUser);
             pm.showInformation("Information", "User erfolgreich angelegt!");
             close();
-
         } catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
 
-
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {

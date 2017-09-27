@@ -52,6 +52,13 @@ public class AdminAnsichtFXMLController implements Initializable
     private ObservableList<Message> nachrichten;
     private ObservableList<Group> groups;
 
+    public static Message getSelectedMessage()
+    {
+        return selectedMessage;
+    }
+
+    private static Message selectedMessage;
+
 
     // private ArrayList<ChoiceBox <KeyValuePair > > cbEntries;
     //Immer sichtbar in Navigation
@@ -252,7 +259,8 @@ public class AdminAnsichtFXMLController implements Initializable
     {
         try
         {
-            GUIVS.bearbeiteNachricht((Message) tTabelle.getSelectionModel().getSelectedItem());
+            selectedMessage= (Message) tTabelle.getSelectionModel().getSelectedItem();
+            GUIVS.bearbeiteNachricht(selectedMessage);
 
         } catch (Exception e)
         {
@@ -358,6 +366,7 @@ public class AdminAnsichtFXMLController implements Initializable
                     Message rowData = row.getItem();
                     try
                     {
+                        selectedMessage = rowData;
                         GUIVS.bearbeiteNachricht(rowData);
                     } catch (Exception e)
                     {

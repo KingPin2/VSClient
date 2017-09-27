@@ -33,7 +33,8 @@ public class Control {
         return c;
     }
 
-    public void setC(Client c) {
+    public void setC(Client c)
+    {
         this.c = c;
     }
 
@@ -45,12 +46,10 @@ public class Control {
     {
         return groups;
     }
-
     public ObservableList<User> getUsers()
     {
         return users;
     }
-
     public ObservableList<Message> getMessages()
     {
         return messages;
@@ -88,29 +87,9 @@ public class Control {
             {
                 e.printStackTrace();
             }
-
-
-
-
         } catch (RemoteException rm)
         {
             rm.printStackTrace();
-        }
-    }
-    
-    public static String isLegit(String probe) throws Exception
-    {
-        if(probe.contains("'") || probe.contains("`"))
-        {
-            throw new IllegalCharacterException();      
-        }
-        else if(probe.isEmpty())
-        {
-            throw new EmptyStringException();
-        }
-        else
-        {
-            return probe;
         }
     }
 }
