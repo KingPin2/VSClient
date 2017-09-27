@@ -145,8 +145,8 @@ public class GruppeVerwaltenFXMLController implements Initializable
     {
         try
         {
-            //getPossibleMods() benötigt
-          //  selectedMod = g
+            selectedMod = GUIVS.instance.getControl().getC().getUserByName(cbMod.getSelectionModel().getSelectedItem().toString());
+
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -282,33 +282,31 @@ public class GruppeVerwaltenFXMLController implements Initializable
             //Mögliche Mods sind:
 
             //Alle Mitglieder der Gruppe
-            ArrayList<User> members = selectedGroup.getMembers();
-            if(cbMod.getSelectionModel().getSelectedItem().toString().equals(selectedGroup.getModerator().getName()))
-            selectedMod = selectedGroup.getModerator();
-            if(members != null)
+            ArrayList<User> possibleMods = selectedGroup.getMembers();
+            ArrayList<User> admins = GUIVS.instance.getControl().getC().getUsersByLevel(2);
+            for(User u: admins)
             {
-                for (User u : members)
+                if(! possibleMods.contains(u))
                 {
-                    cbMod.getItems().add(u.getName());
-                    if(u.getName().equals(selectedMod.getName()))
+                    possibleMods.add(u);
+                }
+            }
+
+
+
+                if (possibleMods != null)
+                {
+                    for (User u : possibleMods)
                     {
-                       cbMod.getSelectionModel().select(selectedMod.getName());
+                        cbMod.getItems().add(u.getName());
+                        if (u.getName().equals(selectedGroup.getModerator().getName()))
+                        {
+                            selectedMod = selectedGroup.getModerator();
+                            cbMod.getSelectionModel().select(selectedMod.getName());
+                        }
                     }
                 }
-            }
-            //ohne den aktuellen Moderator
-         //   cbMod.getItems().remove(GUIVS.instance.getControl().getC().getUserById(GUIVS.instance.getControl().getC().getGroupByName(cbGruppe.getSelectionModel().getSelectedItem().toString()).getModerator().getID()).getName());
 
-            //+ Alle Administratoren
-            for(User u: GUIVS.instance.getControl().getC().getUsersByLevel(2))
-            {
-                //wenn sie nicht bereits Member der Gruppe sind
-                if(! cbMod.getItems().toString().contains(u.getName()))
-                {
-                    cbMod.getItems().add(u.getName());
-                }
-
-            }
         } catch (Exception e)
         {
             e.printStackTrace();

@@ -279,17 +279,21 @@ public class AdminAnsichtFXMLController implements Initializable
             // TODO
             pm = new PopUpMessage();
             nachrichten = FXCollections.observableArrayList() ;
-            try {
-                for(Message m: GUIVS.instance.getControl().getC().getMessages())
+            try
+            {
+                if (GUIVS.instance.getControl().getC().getMessages() != null)
                 {
-                    nachrichten.add(m);
+                    for (Message m : GUIVS.instance.getControl().getC().getMessages())
+                    {
+                        nachrichten.add(m);
 
+                    }
                 }
-            } catch (DatabaseConnectionException e) {
+                } catch(DatabaseConnectionException e){
                 e.printStackTrace();
-            } catch (RemoteException e) {
+            } catch(RemoteException e){
                 e.printStackTrace();
-            } catch (DatabaseObjectNotFoundException e) {
+            } catch(DatabaseObjectNotFoundException e){
                 e.printStackTrace();
             }
 
