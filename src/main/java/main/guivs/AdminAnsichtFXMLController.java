@@ -49,28 +49,9 @@ public class AdminAnsichtFXMLController implements Initializable
 {
     private PopUpMessage pm;
 
-    public ObservableList<Message> nachrichten;
+    private ObservableList<Message> nachrichten;
     private ObservableList<Group> groups;
-    private NotifyUpdate callback = new NotifyUpdate()
-    {
-        @Override
-        public void onUpdateGroup() throws RemoteException
-        {
 
-        }
-
-        @Override
-        public void onUpdateUser() throws RemoteException
-        {
-            //Nichts
-        }
-
-        @Override
-        public void onUpdateMessage() throws RemoteException
-        {
-
-        }
-    };
 
     // private ArrayList<ChoiceBox <KeyValuePair > > cbEntries;
     //Immer sichtbar in Navigation
@@ -262,6 +243,7 @@ public class AdminAnsichtFXMLController implements Initializable
             GUIVS.neueNachricht();
         } catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
 
@@ -270,9 +252,8 @@ public class AdminAnsichtFXMLController implements Initializable
     {
         try
         {
-            Message m = ObjectFactory.createMessage("Test, die Welt ist schön, es gibt ja threads", ObjectFactory.createUser("Merlin", "blubb", 2));
-            //GUIVS.bearbeiteNachricht((Message) tTabelle.getSelectionModel().getSelectedItem());
-            GUIVS.bearbeiteNachricht(m);
+            GUIVS.bearbeiteNachricht((Message) tTabelle.getSelectionModel().getSelectedItem());
+
         } catch (Exception e)
         {
         }
@@ -326,28 +307,28 @@ public class AdminAnsichtFXMLController implements Initializable
     {
         // TODO
         pm = new PopUpMessage();
-        nachrichten = FXCollections.observableArrayList();
-        groups = FXCollections.observableArrayList();
-        try
-        {
-            if (GUIVS.instance.getControl().getC().getMessages() != null)
-            {
-                for (Message m : GUIVS.instance.getControl().getC().getMessages())
-                {
-                    nachrichten.add(m);
-
-                }
-            }
-        } catch (DatabaseConnectionException e)
-        {
-            e.printStackTrace();
-        } catch (RemoteException e)
-        {
-            e.printStackTrace();
-        } catch (DatabaseObjectNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+        nachrichten = GUIVS.instance.getControl().getMessages();
+        groups = GUIVS.instance.getControl().getGroups();
+//        try
+//        {
+////            if (GUIVS.instance.getControl().getC().getMessages() != null)
+////            {
+////                for (Message m : GUIVS.instance.getControl().getC().getMessages())
+////                {
+////                    nachrichten.add(m);
+////
+////                }
+////            }
+//        } catch (DatabaseConnectionException e)
+//        {
+//            e.printStackTrace();
+//        } catch (RemoteException e)
+//        {
+//            e.printStackTrace();
+//        } catch (DatabaseObjectNotFoundException e)
+//        {
+//            e.printStackTrace();
+//        }
 
 
         //tcUser.setCellValueFactory(new PropertyValueFactory<User, String>("author");
@@ -391,22 +372,6 @@ public class AdminAnsichtFXMLController implements Initializable
             @Override
             public void run()
             {
-                try
-                {
-
-                    if (GUIVS.instance.getMe().getLevel() == 2)
-                    {
-                        for(Group g: GUIVS.instance.getControl().getC().getGroups())
-                        {
-                            groups.add(g);
-                        }
-                    } else
-                    {
-                        for(Group g: GUIVS.instance.getControl().getC().getGroupsByUser(GUIVS.instance.getMe()))
-                        {
-                            groups.add(g);
-                        }
-                    }
                     if (groups != null)
                     {
                         cbAnzeigetafel.setConverter(new StringConverter()
@@ -427,16 +392,6 @@ public class AdminAnsichtFXMLController implements Initializable
                     }
                     cbAnzeigetafel.getSelectionModel().selectFirst();
                     selectedGroup = (Group )cbAnzeigetafel.getSelectionModel().getSelectedItem();
-                } catch (DatabaseConnectionException e)
-                {
-                    e.printStackTrace();
-                } catch (RemoteException e)
-                {
-                    e.printStackTrace();
-                } catch (DatabaseObjectNotFoundException e)
-                {
-                    e.printStackTrace();
-                }
             }
         });
 

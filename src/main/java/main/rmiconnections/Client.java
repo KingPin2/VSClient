@@ -4,6 +4,7 @@ package main.rmiconnections;
  * Merlin, 16.08.2017
  */
 
+import main.classes.GUIVS;
 import main.database.exceptions.DatabaseConnectionException;
 import main.database.exceptions.DatabaseObjectNotDeletedException;
 import main.database.exceptions.DatabaseObjectNotFoundException;
@@ -90,22 +91,6 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
         return this.rmi.getUsersNotInGroup(group);
     }
 
-    /*
-    public ArrayList<User> getGroupMembers(int groupId) throws Exception {
-        return this.rmi.getGroupMembers(groupId);
-    }
-*/
-    /*
-    public void deleteGroupMembers(int groupId) throws Exception {
-        this.rmi.deleteGroupMembers(groupId);
-    }
-*/
-    /*
-    public void saveGroupMembers(int groupId, ArrayList<User> groupMembers) throws Exception {
-        this.rmi.saveGroupMembers(groupId, groupMembers);
-    }
-*/
-    
     public Message getMessageById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
         return this.rmi.getMessageById(id);
     }
@@ -177,27 +162,99 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
 }
 
     @Override
-    public void onUpdateGroup() throws RemoteException {
-        System.out.println("onUpdateGroup");
+    public void onUpdateGroup(Group g, UpdateType type) throws RemoteException {
+        Thread t = new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                GUIVS.instance.getControl().getGroups().clear();
+                try
+                {
+                    for(Group g: rmi.getGroups())
+                    {
+                        GUIVS.instance.getControl().getGroups().add(g);
+                    }
+                } catch (DatabaseObjectNotFoundException e)
+                {
+                    e.printStackTrace();
+                } catch (DatabaseConnectionException e)
+                {
+                    e.printStackTrace();
+                } catch (RemoteException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t.start();
     }
 
     @Override
-    public void onUpdateUser() throws RemoteException {
-        System.out.println("onUpdateUser");
-
+    public void onUpdateUser(User u, UpdateType type) throws RemoteException
+    {
+        Thread t = new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                GUIVS.instance.getControl().getUsers().clear();
+                try
+                {
+                    try
+                    {
+                        for (User u : rmi.getUsers())
+                        {
+                            GUIVS.instance.getControl().getUsers().add(u);
+                        }
+                    } catch (RemoteException e)
+                    {
+                        e.printStackTrace();
+                    }
+                } catch (DatabaseObjectNotFoundException e)
+                {
+                    e.printStackTrace();
+                } catch (DatabaseConnectionException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t.start();
     }
+
+
+
 
     @Override
-    public void onUpdateMessage() throws RemoteException {
-        System.out.println("onUpdateMessage");
-
+    public void onUpdateMessage(Message m, UpdateType type) throws RemoteException
+    {
+        Thread t = new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                System.out.println(m + type.toString());
+                GUIVS.instance.getControl().getMessages().clear();
+                try
+                {
+                    ArrayList<Message> temp = rmi.getMessages();
+                    for (Message m : temp)
+                    {
+                        GUIVS.instance.getControl().getMessages().add(m);
+                    }
+                } catch (DatabaseObjectNotFoundException e)
+                {
+                    e.printStackTrace();
+                } catch (DatabaseConnectionException e)
+                {
+                    e.printStackTrace();
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t.start();
     }
-
-
-    //Main zum Testen
-    //public static void main(String[] args)
-    // {
-    //   Client c = new Client((args.length < 1) ? null : args[0]);
-    //  System.out.println(c.addBoard("Küche", 42));
-    //}
 }

@@ -49,9 +49,7 @@ public class loginFXMLController implements Initializable {
         {
             GUIVS.instance.setMe
             (
-                    //TODO Client.login gibt userobjekt zurück
                 GUIVS.instance.getControl().getC().loginUser(Control.isLegit(tfUsername.getText()),Control.isLegit(pfPassword.getText()))
-                    
             );
             
             if(GUIVS.instance.getMe() == null)

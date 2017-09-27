@@ -7,6 +7,7 @@ package main.anzeigetafel;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import main.objects.Group;
 import main.objects.Message;
@@ -59,14 +60,16 @@ public class AnzeigetafelFXMLController implements Initializable {
     public void setM(ObservableList<Message> m) {
         this.m = m;
     }
-    
+    private  ObservableList<Nachrichtenbox> nb;
+
+
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                ObservableList<Nachrichtenbox> nb = FXCollections.observableArrayList();
+                nb = FXCollections.observableArrayList();
                 if(m != null) {
                     for (Message me : m) {
                         nb.add(new Nachrichtenbox(me));
@@ -78,14 +81,28 @@ public class AnzeigetafelFXMLController implements Initializable {
             }
         });
 
+        m.addListener(new ListChangeListener<Message>()
+        {
+            @Override
+            public void onChanged(Change<? extends Message> c)
+            {
+                nb.clear();
+                vbox.getChildren().clear();
+                if(m != null) {
+                    for (Message me : m) {
+                        nb.add(new Nachrichtenbox(me));
+                    }
+                }
+                vbox.getChildren().addAll(nb);
+            }
+        });
         
         scrollpane.setHbarPolicy(ScrollBarPolicy.NEVER);
         scrollpane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-        
         scrollpane.setFitToHeight(true);
         scrollpane.setFitToWidth(true);
         
         
-    }    
-    
+    }
+
 }
