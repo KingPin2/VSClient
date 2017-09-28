@@ -171,7 +171,7 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                         case UPDATE:
 
                             //Ersetze das Gruppenobjekt durch das neue Objekt (Groupname = unique)
-                            GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
+                            Group changedGroup = GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
                             {
                                 @Override
                                 public boolean test(Group group)
@@ -184,7 +184,8 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                                         return false;
                                     }
                                 }
-                            }).set(0, g);
+                            }).get(0);
+                            GUIVS.instance.getControl().getGroups().set(GUIVS.instance.getControl().getGroups().indexOf(changedGroup), g);
                             break;
                         case DELETE:
                             Group oldGroup = GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
@@ -236,7 +237,7 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                     case UPDATE:
 
                         //Ersetze das Userobjekt durch das neue Objekt (Username = unique)
-                        GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
+                        User changedUser = GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
                         {
                             @Override
                             public boolean test(User user)
@@ -249,7 +250,8 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                                     return false;
                                 }
                             }
-                        }).set(0, u);
+                        }).get(0);
+                        GUIVS.instance.getControl().getUsers().set(GUIVS.instance.getControl().getUsers().indexOf(changedUser), u);
                         break;
                     case DELETE:
                         User oldUser = GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()

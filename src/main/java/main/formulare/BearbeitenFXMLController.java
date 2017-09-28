@@ -10,8 +10,12 @@ import javafx.stage.Stage;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
 import main.database.ObjectFactory;
+import main.exceptions.DatabaseConnectionException;
+import main.exceptions.DatabaseObjectNotSavedException;
+import main.exceptions.UserAuthException;
 import main.objects.Message;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,6 +34,7 @@ public class BearbeitenFXMLController implements Initializable {
     @FXML private TextArea taNachricht;
     @FXML private Button bAbbrechen;
     @FXML private Button bSpeichern;
+    @FXML private Button bVeroeffentlichen;
     public Message m;
     private PopUpMessage pm;
 
@@ -43,6 +48,30 @@ public class BearbeitenFXMLController implements Initializable {
     }
     
 
+    @FXML
+    private void veroeffentlichen()
+    {
+        m.setMessage(taNachricht.getText());
+        m.setGroupId(1);
+        try
+        {
+            GUIVS.instance.getControl().getC().saveMessage(m);
+            pm.showInformation("Information", "Nachricht wurde veröffentlicht!");
+            abbrechen();
+        } catch (DatabaseObjectNotSavedException e)
+        {
+            e.printStackTrace();
+        } catch (RemoteException e)
+        {
+            e.printStackTrace();
+        } catch (DatabaseConnectionException e)
+        {
+            e.printStackTrace();
+        } catch (UserAuthException e)
+        {
+            e.printStackTrace();
+        }
+    }
     
     @FXML 
     private void speichern()
@@ -57,11 +86,8 @@ public class BearbeitenFXMLController implements Initializable {
         }
 
     }
-        
-    private void editLabelText()
-    {
-        
-    }
+
+
     @FXML private void abbrechen()
     {
 

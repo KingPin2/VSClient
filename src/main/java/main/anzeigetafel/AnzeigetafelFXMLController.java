@@ -84,10 +84,15 @@ public class AnzeigetafelFXMLController implements Initializable
                 nb = FXCollections.observableArrayList();
                 if (m != null)
                 {
-                    for (Message me : m)
+
+                    for(int i = 0; i <  m.size(); i++ )
                     {
-                        nb.add(new Nachrichtenbox(me));
+                        nb.add(new Nachrichtenbox(m.get(i)));
                     }
+//                    for (Message me : m)
+//                    {
+//                        nb.add(new Nachrichtenbox(me));
+//                    }
                 }
 
                 vbox.getChildren().addAll(nb);
@@ -113,14 +118,13 @@ public class AnzeigetafelFXMLController implements Initializable
                                 vbox.getChildren().clear();
                                 if (m != null)
                                 {
-                                    for (Message me : m)
+                                    for(int i = 0; i <  m.size(); i++ )
                                     {
-                                        nb.add(new Nachrichtenbox(me));
+                                        nb.add(new Nachrichtenbox(m.get(i)));
                                     }
                                 }
 
                                 vbox.getChildren().addAll(nb);
-                                lTafel.setText(group.getName());
                             }
                         });
 

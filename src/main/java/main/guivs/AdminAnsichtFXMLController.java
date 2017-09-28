@@ -348,7 +348,25 @@ public class AdminAnsichtFXMLController implements Initializable
                     }
                 });
         tTabelle.setItems(nachrichten);
+
+        tcZeitstempel.setComparator(tcZeitstempel.getComparator().reversed());
         tTabelle.getSortOrder().add(tcZeitstempel);
+
+        nachrichten.addListener(new ListChangeListener<Message>()
+        {
+            @Override
+            public void onChanged(Change<? extends Message> c)
+            {
+                Platform.runLater(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        tTabelle.sort();
+                    }
+                });
+            }
+        });
 
         tTabelle.setRowFactory(tv ->
         {
