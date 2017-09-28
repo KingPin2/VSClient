@@ -12,6 +12,7 @@ import main.classes.PopUpMessage;
 import main.database.ObjectFactory;
 import main.exceptions.DatabaseConnectionException;
 import main.exceptions.DatabaseObjectNotSavedException;
+import main.exceptions.EmptyStringException;
 import main.exceptions.UserAuthException;
 import main.objects.Message;
 import java.net.URL;
@@ -76,12 +77,21 @@ public class BearbeitenFXMLController implements Initializable {
     @FXML 
     private void speichern()
     {
-        m.setMessage(taNachricht.getText());
+
         try {
+            if(taNachricht.getText() == null || taNachricht.getText().equals(""))
+            {
+                throw new EmptyStringException();
+            }
+            m.setMessage(taNachricht.getText());
             GUIVS.instance.getControl().getC().saveMessage(m);
             pm.showInformation("Nachricht geändert", "Nachricht erfolgreich geändert!");
             abbrechen();
-        } catch (Exception e) {
+        }catch(EmptyStringException ese)
+        {
+            pm.showError("Fehler", "Nachricht darf nicht leer sein!");
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 

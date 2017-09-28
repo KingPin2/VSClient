@@ -7,6 +7,8 @@ package main.guivs;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -14,6 +16,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
@@ -32,6 +36,7 @@ import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Predicate;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -318,9 +323,11 @@ public class AdminAnsichtFXMLController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        // TODO
+
         pm = new PopUpMessage();
         nachrichten = GUIVS.instance.getControl().getMessages();
+
+
         groups = GUIVS.instance.getControl().getGroups();
 
         tcUser.setCellValueFactory(
@@ -347,26 +354,7 @@ public class AdminAnsichtFXMLController implements Initializable
                         return property;
                     }
                 });
-        tTabelle.setItems(nachrichten);
 
-        tcZeitstempel.setComparator(tcZeitstempel.getComparator().reversed());
-        tTabelle.getSortOrder().add(tcZeitstempel);
-
-        nachrichten.addListener(new ListChangeListener<Message>()
-        {
-            @Override
-            public void onChanged(Change<? extends Message> c)
-            {
-                Platform.runLater(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        tTabelle.sort();
-                    }
-                });
-            }
-        });
 
         tTabelle.setRowFactory(tv ->
         {
@@ -413,6 +401,39 @@ public class AdminAnsichtFXMLController implements Initializable
                     }
                     cbAnzeigetafel.getSelectionModel().selectFirst();
                     selectedGroup = (Group )cbAnzeigetafel.getSelectionModel().getSelectedItem();
+                ObjectProperty<Predicate<Message>> gruppenFilter = new SimpleObjectProperty<>();
+                gruppenFilter.bind(Bindings.createObjectBinding(() ->
+                                message -> ((Group) cbAnzeigetafel.getValue()).getName().equals(message.getGroup().getName()),
+                        cbAnzeigetafel.valueProperty()));
+                FilteredList<Message> gefilterteNachrichten = new FilteredList<Message>(nachrichten, p -> true);
+
+                gefilterteNachrichten.predicateProperty().bind(Bindings.createObjectBinding(
+                        () -> gruppenFilter.get(), gruppenFilter));
+
+                SortedList<Message> sortierteNachrichten = new SortedList<Message>(gefilterteNachrichten);
+                tTabelle.setItems(sortierteNachrichten);
+
+                sortierteNachrichten.comparatorProperty().bind(tTabelle.comparatorProperty());
+
+                tcZeitstempel.setComparator(tcZeitstempel.getComparator().reversed());
+                tTabelle.getSortOrder().add(tcZeitstempel);
+
+                gefilterteNachrichten.addListener(new ListChangeListener<Message>()
+                {
+                    @Override
+                    public void onChanged(Change<? extends Message> c)
+                    {
+                        Platform.runLater(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                tTabelle.sort();
+                            }
+                        });
+                    }
+                });
+
             }
         });
 

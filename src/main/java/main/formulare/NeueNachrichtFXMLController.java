@@ -21,10 +21,7 @@ import javafx.stage.Stage;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
 import main.database.ObjectFactory;
-import main.exceptions.DatabaseConnectionException;
-import main.exceptions.DatabaseObjectNotFoundException;
-import main.exceptions.DatabaseObjectNotSavedException;
-import main.exceptions.UserAuthException;
+import main.exceptions.*;
 import main.objects.Group;
 import main.objects.Message;
 
@@ -33,56 +30,72 @@ import main.objects.Message;
  *
  * @author Laura
  */
-public class NeueNachrichtFXMLController implements Initializable {
+public class NeueNachrichtFXMLController implements Initializable
+{
 
     private PopUpMessage pm;
-    @FXML private Label lAnzeigeTafel;
-    @FXML private TextArea taNachricht;
-    @FXML private Button bAbbrechen;
-    @FXML private Button bSenden;
-    @FXML private ChoiceBox cbGroup;
+    @FXML
+    private Label lAnzeigeTafel;
+    @FXML
+    private TextArea taNachricht;
+    @FXML
+    private Button bAbbrechen;
+    @FXML
+    private Button bSenden;
+    @FXML
+    private ChoiceBox cbGroup;
     private Group selectedGroup;
 
-    @FXML private void onGroupChange()
+    @FXML
+    private void onGroupChange()
     {
-        try {
-            selectedGroup = cbGroup.getSelectionModel().getSelectedItem().toString() != null?  GUIVS.instance.getControl().getC().getGroupByName( cbGroup.getSelectionModel().getSelectedItem().toString()) : selectedGroup;
-        } catch (DatabaseConnectionException e) {
+        try
+        {
+            selectedGroup = cbGroup.getSelectionModel().getSelectedItem().toString() != null ? GUIVS.instance.getControl().getC().getGroupByName(cbGroup.getSelectionModel().getSelectedItem().toString()) : selectedGroup;
+        } catch (DatabaseConnectionException e)
+        {
             e.printStackTrace();
-        } catch (RemoteException e) {
+        } catch (RemoteException e)
+        {
             e.printStackTrace();
-        } catch (DatabaseObjectNotFoundException e) {
+        } catch (DatabaseObjectNotFoundException e)
+        {
             e.printStackTrace();
         } catch (UserAuthException e)
         {
             e.printStackTrace();
         }
     }
-    
-    
-    @FXML 
+
+
+    @FXML
     private void abbrechen()
     {
         Stage stage = (Stage) bAbbrechen.getScene().getWindow();
         stage.close();
-    }        
+    }
 
     private void updateGroups()
     {
         cbGroup.getItems().clear();
-        try {
+        try
+        {
             ArrayList<Group> groups = GUIVS.instance.getControl().getC().getGroups();
-            if(groups != null)
+            if (groups != null)
             {
-                for(Group g: groups) {
+                for (Group g : groups)
+                {
                     cbGroup.getItems().add(g.getName());
                 }
             }
-        } catch (DatabaseConnectionException e) {
+        } catch (DatabaseConnectionException e)
+        {
             e.printStackTrace();
-        } catch (RemoteException e) {
+        } catch (RemoteException e)
+        {
             e.printStackTrace();
-        } catch (DatabaseObjectNotFoundException e) {
+        } catch (DatabaseObjectNotFoundException e)
+        {
             e.printStackTrace();
         } catch (UserAuthException e)
         {
@@ -90,48 +103,64 @@ public class NeueNachrichtFXMLController implements Initializable {
         }
     }
 
-    @FXML 
+    @FXML
     private void senden()
     {
-        Message m = ObjectFactory.createGroupMessage(taNachricht.getText(),GUIVS.instance.getMe(),selectedGroup);
 
-        try {
+
+        try
+        {
+            if (taNachricht.getText() == null || taNachricht.getText().equals(""))
+            {
+                throw new EmptyStringException();
+            }
+            Message m = ObjectFactory.createGroupMessage(taNachricht.getText(), GUIVS.instance.getMe(), selectedGroup);
             GUIVS.instance.getControl().getC().saveMessage(m);
-            pm.showInformation("Information","Ihre Nachricht wurde gespeichert!");
-        } catch (DatabaseObjectNotSavedException e) {
+            pm.showInformation("Information", "Ihre Nachricht wurde gespeichert!");
+        } catch (DatabaseObjectNotSavedException e)
+        {
             e.printStackTrace();
-        } catch (RemoteException e) {
+        } catch (RemoteException e)
+        {
             e.printStackTrace();
-        } catch (DatabaseConnectionException e) {
+        } catch (DatabaseConnectionException e)
+        {
             e.printStackTrace();
         } catch (UserAuthException e)
         {
             e.printStackTrace();
+        } catch (EmptyStringException e)
+        {
+            pm.showError("Fehler", "Nachricht darf nicht leer sein!");
         }
         abbrechen();
     }
-        
+
 
     private void initGUI()
     {
         updateGroups();
         cbGroup.getSelectionModel().selectFirst();
     }
+
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb)
+    {
         // TODO
         this.bAbbrechen.requestFocus();
-       pm = new PopUpMessage();
-        Platform.runLater(new Runnable() {
+        pm = new PopUpMessage();
+        Platform.runLater(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 initGUI();
             }
         });
 
-    }    
-    
+    }
+
 }

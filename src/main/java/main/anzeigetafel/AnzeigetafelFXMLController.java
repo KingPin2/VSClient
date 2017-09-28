@@ -85,7 +85,7 @@ public class AnzeigetafelFXMLController implements Initializable
                 if (m != null)
                 {
 
-                    for(int i = 0; i <  m.size(); i++ )
+                    for(int i = m.size() -1; i >= 0; i-- )
                     {
                         nb.add(new Nachrichtenbox(m.get(i)));
                     }
@@ -118,7 +118,7 @@ public class AnzeigetafelFXMLController implements Initializable
                                 vbox.getChildren().clear();
                                 if (m != null)
                                 {
-                                    for(int i = 0; i <  m.size(); i++ )
+                                    for(int i = m.size()-1; i >= 0; i-- )
                                     {
                                         nb.add(new Nachrichtenbox(m.get(i)));
                                     }

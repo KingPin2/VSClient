@@ -28,13 +28,6 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Datei">
                   <items>
-                    <MenuItem fx:id="miAktualisieren" mnemonicParsing="false" text="Aktualisieren" />
-                    <Menu fx:id="mAnzeigetafel" mnemonicParsing="false" onAction="#anzeigetafel" text="Anzeigetafel öffnen">
-                        <items>
-                        
-                        </items>
-                    </Menu>
-                    <SeparatorMenuItem />
                     <MenuItem fx:id="miAbmelden" mnemonicParsing="false" onAction="#abmelden" text="Abmelden" />
                     <MenuItem fx:id="miSchliessen" mnemonicParsing="false" onAction="#schliessen" text="Schließen" />
                   </items>
@@ -50,9 +43,6 @@
                     <SeparatorMenuItem />
                     <MenuItem fx:id="miNeueGruppe" mnemonicParsing="false" onAction="#gruppeAnlegen" text="Gruppe anlegen" />
                     <MenuItem fx:id="miGruppeBearbeiten" mnemonicParsing="false" onAction="#gruppeBearbeiten" text="Gruppe bearbeiten" />
-                    <SeparatorMenuItem />
-                    <MenuItem fx:id="miNeueAnzeigetafel" mnemonicParsing="false" text="Anzeigetafel anlegen" />
-                    <MenuItem fx:id="miAnzeigetafelBearbeiten" mnemonicParsing="false" text="Anzeigetafel bearbeiten" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Hilfe">
@@ -135,23 +125,6 @@
                                                                </VBox.margin>
                                                             </Button>
                                                             <Button fx:id="bGruppeBearbeiten" mnemonicParsing="false" onAction="#gruppeBearbeiten" prefWidth="110.0" text="bearbeiten">
-                                                               <VBox.margin>
-                                                                  <Insets bottom="4.0" left="4.0" top="4.0" />
-                                                               </VBox.margin>
-                                                            </Button>
-                                                         </children>
-                                                      </VBox>
-                                                   </content></TitledPane>
-                                              <TitledPane animated="false" text="Anzeigetafeln">
-                                                   <content>
-                                                      <VBox prefHeight="200.0" prefWidth="100.0">
-                                                         <children>
-                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="anlegen">
-                                                               <VBox.margin>
-                                                                  <Insets bottom="4.0" left="4.0" top="4.0" />
-                                                               </VBox.margin>
-                                                            </Button>
-                                                            <Button mnemonicParsing="false" prefWidth="110.0" text="bearbeiten">
                                                                <VBox.margin>
                                                                   <Insets bottom="4.0" left="4.0" top="4.0" />
                                                                </VBox.margin>
