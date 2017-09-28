@@ -83,23 +83,23 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
     }
 
     public Message getMessageById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getMessageById(id);
+        return this.rmi.getMessageById(id, rmi);
     }
 
     public ArrayList<Message> getMessagesByUser(User u) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getMessagesByUser(u);
+        return this.rmi.getMessagesByUser(u, rmi);
     }
 
     public ArrayList<Message> getMessages() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getMessages();
+        return this.rmi.getMessages(rmi);
     }
 
     public ArrayList<Message> getMessagesByGroup(Group g) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getMessagesByGroup(g);
+        return this.rmi.getMessagesByGroup(g,rmi);
     }
 
     public void saveMessage(Message message) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException {
-        this.rmi.saveMessage(message);
+        this.rmi.saveMessage(message,rmi);
     }
 
     public User loginUser(String username, String password) throws RemoteException {
@@ -118,11 +118,11 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
     }
 
     public void deleteUser(User u) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, DatabaseUserIsModException {
-        this.rmi.deleteUser(u);
+        this.rmi.deleteUser(u, rmi);
     }
 
     public void deleteGroup(Group g) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException {
-        this.rmi.deleteGroup(g);
+        this.rmi.deleteGroup(g, rmi);
     }
 
     public void disconnect() throws RemoteException {

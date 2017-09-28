@@ -1,5 +1,7 @@
 package main.objects;
 
+import main.rmiinterface.Functions;
+
 import java.io.Serializable;
 
 /**
@@ -9,9 +11,10 @@ public class Message implements Serializable{
 
     private int id;
     private String message;
-    private User author;
-    private Group group;
+    private int authorId;
+    private int groupId;
     private long timestamp;
+    private Functions rmi;
 
     /**
      * Create message (with given ID -> Update message in main.database)
@@ -20,12 +23,13 @@ public class Message implements Serializable{
      * @param group
      * @param author
      */
-    public Message(int id, String message, Group group, User author, Long timestamp) {
+    public Message(int id, String message, Group group, User author, Long timestamp, Functions rmi) {
         setID(id);
-        setMessage(message);
         setAuthor(author);
         setGroup(group);
+        setMessage(message);
         this.timestamp = timestamp;
+        this.rmi = rmi;
     }
 
 
@@ -35,7 +39,7 @@ public class Message implements Serializable{
      * @param author
      */
     public Message(String message, User author){
-        this(-1, message,null, author, System.currentTimeMillis());
+        this(-1, message,null, author, System.currentTimeMillis(), null);
     }
 
     /**
@@ -45,7 +49,7 @@ public class Message implements Serializable{
      * @param group
      */
     public Message(String message, User author, Group group){
-        this(-1, message, group, author, System.currentTimeMillis());
+        this(-1, message, group, author, System.currentTimeMillis(), null);
     }
 
     /**
@@ -94,7 +98,11 @@ public class Message implements Serializable{
      * @return author
      */
     public User getAuthor(){
-        return this.author;
+        try {
+            return rmi.getUserById(this.authorId);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -104,12 +112,12 @@ public class Message implements Serializable{
         if (author != null) {
             if (author.getID() != -1) {
                 timestamp = System.currentTimeMillis();
-                this.author = author;
+                this.authorId = author.getID();
             } else {
                 throw new IllegalArgumentException("Save user first in database!");
             }
         } else {
-            this.author = null;
+            this.authorId = -1;
         }
     }
 
@@ -118,7 +126,11 @@ public class Message implements Serializable{
      * @return group
      */
     public Group getGroup(){
-        return this.group;
+        try {
+            return rmi.getGroupById(this.groupId);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -128,12 +140,12 @@ public class Message implements Serializable{
         if (group != null) {
             if (group.getID() != -1) {
                 timestamp = System.currentTimeMillis();
-                this.group = group;
+                this.groupId = group.getID();
             } else {
                 throw new IllegalArgumentException("Save group first in database!");
             }
         } else {
-            this.group = null;
+            this.groupId = -1;
         }
     }
 
@@ -145,14 +157,30 @@ public class Message implements Serializable{
         return timestamp;
     }
 
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
+    }
+
 
     @Override
     public String toString() {
         return "Message{" +
                 "id=" + id +
                 ", message='" + message + '\'' +
-                ", author=" + author +
-                ", group=" + group +
+                ", authorId=" + authorId +
+                ", groupId=" + groupId +
                 ", timestamp=" + timestamp +
                 '}';
     }

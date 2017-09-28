@@ -9,8 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by Dominik on 18.08.2017.
  */
-public class ObjectFactory
-{
+public class ObjectFactory {
 
     /**
      * Create user
