@@ -136,7 +136,7 @@ public class GUIVS extends Application {
            }
        });
         SortedList<Message> sortedData = new SortedList<Message>(groupFilteredData);
-        ac.setM(groupFilteredData);
+        ac.setM(sortedData);
 //        ac.setM(GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
 //        {
 //            @Override

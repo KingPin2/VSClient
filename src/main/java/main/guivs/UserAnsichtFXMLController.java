@@ -5,19 +5,48 @@
  */
 package main.guivs;
 
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 import main.classes.GUIVS;
+import main.classes.IconButtonFXMLController;
 import main.classes.PopUpMessage;
+import main.database.ObjectFactory;
+import main.exceptions.DatabaseConnectionException;
+import main.exceptions.DatabaseObjectNotFoundException;
+import main.exceptions.UserAuthException;
+import main.objects.Group;
 import main.objects.Message;
+
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.function.Predicate;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
+import main.objects.User;
+import main.rmiinterface.NotifyUpdate;
 
 /**
  * FXML Controller class
@@ -27,107 +56,267 @@ import javafx.stage.Stage;
 public class UserAnsichtFXMLController implements Initializable
 {
     private PopUpMessage pm;
-   
-    
-    
+
+    private ObservableList<Message> nachrichten;
+    private ObservableList<Group> groups;
+
+    public static Message getSelectedMessage()
+    {
+        return selectedMessage;
+    }
+
+    private static Message selectedMessage;
+
     @FXML
-    private Button bNeueNachricht;
-    
-    @FXML
-    private Button bBearbeiten;
-    
-    @FXML
-    private Button bLoeschen;
-    
-    @FXML
-    private Button bAnzeigetafel;
-    
+    private ChoiceBox cbAnzeigetafel;
+
+
+    //Tabelle
     @FXML
     private TableView<Message> tTabelle;
-    
     @FXML
     private TableColumn tcNachrichten;
-    
     @FXML
-    private MenuItem miAktualisieren;
-    
-    @FXML
-    private MenuItem miAnzeigetafel;
+    private TableColumn tcZeitstempel;
+
+
+
+    private Group selectedGroup;
 
     @FXML
-    private MenuItem miAbmelden;
- 
-    @FXML
-    private MenuItem miSchliessen;
- 
-    @FXML
-    private MenuItem miNeueNachricht;
-   
-    @FXML
-    private MenuItem miBearbeiten;
+    private void onBoardChange()
+    {
+
+        selectedGroup = cbAnzeigetafel.getSelectionModel().getSelectedItem() != null ? (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem() : selectedGroup;
+
+    }
+
 
     @FXML
-    private MenuItem miLoeschen;
+    private void anzeigetafel()
+    {
+        try
+        {
+            GUIVS.oeffneAnzeigetafel(selectedGroup);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     @FXML
-    private MenuItem miAbout;
- 
+    private void abmelden()
+    {
+        GUIVS.instance.setMe(null);
+        GUIVS.setPreviousStage(null);
+        try
+        {
+            GUIVS.instance.getControl().getC().disconnect();
+        } catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+        schliessen();
+        Stage stage = new Stage();
+        GUIVS.login(stage);
+
+    }
+
+
+
+
     @FXML
     private void neueNachricht()
     {
-        try{
-          GUIVS.neueNachricht(); 
+        try
+        {
+            GUIVS.neueNachricht();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-        catch( Exception e){}
     }
-    
-    @FXML 
+
+    @FXML
     private void bearbeiteNachricht()
     {
         try
         {
-            GUIVS.bearbeiteNachricht((Message) tTabelle.getSelectionModel().getSelectedItem());
+            selectedMessage= (Message) tTabelle.getSelectionModel().getSelectedItem();
+            GUIVS.bearbeiteNachricht(selectedMessage);
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-        catch(Exception e){} 
     }
-    
+
     @FXML
     private void schliessen()
     {
+        try
+        {
+            GUIVS.instance.getControl().getC().disconnect();
+        } catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+
         Stage stage = (Stage) tTabelle.getScene().getWindow();
         stage.close();
     }
-    
+
     @FXML
     private void loeschen()
     {
-        pm.showDialog("Die ausgewählte Nachricht wird unwiderruflich gelöscht!");
+
+
+        boolean b = pm.showDialog("Die ausgewählte Nachricht wird unwiderruflich gelöscht!");
+        if (b == true)
+        {
+            if (tTabelle.getSelectionModel().getSelectedItem() != null)
+            {
+                try
+                {
+                    GUIVS.instance.getControl().getC().deleteMessage(tTabelle.getSelectionModel().getSelectedItem());
+                } catch (Exception e)
+                {
+                    pm.showError("Error", "Die Tabelle ist leer!");
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
-    
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        // TODO
+
         pm = new PopUpMessage();
-        //Row-Listener
-        tTabelle.setRowFactory( tv -> {
-        TableRow<Message> row = new TableRow<>();
-        row.setOnMouseClicked(event -> {
-        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-            Message rowData = row.getItem();
-            try{
-                GUIVS.bearbeiteNachricht(rowData);
-            }catch(Exception e)
-            {
-                pm.showError("Exception", e.toString());
-            }
+        try
+        {
+            nachrichten = FXCollections.observableArrayList( GUIVS.instance.getControl().getC().getMessagesByUser(GUIVS.instance.getMe()));
+        } catch (DatabaseConnectionException e)
+        {
+            e.printStackTrace();
+        } catch (RemoteException e)
+        {
+            e.printStackTrace();
+        } catch (DatabaseObjectNotFoundException e)
+        {
+            e.printStackTrace();
+        } catch (UserAuthException e)
+        {
+            e.printStackTrace();
         }
+        groups = GUIVS.instance.getControl().getGroups();
+
+
+
+
+        tcNachrichten.setCellValueFactory(new PropertyValueFactory<Message, String>("message"));
+        tcZeitstempel.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>() {
+                    @Override
+                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Message, String> message) {
+                        SimpleStringProperty property = new SimpleStringProperty();
+                        DateFormat dateFormat = new SimpleDateFormat("<dd.MM> HH:mm");
+                        property.setValue(dateFormat.format(message.getValue().getTimestamp()));
+                        return property;
+                    }
+                });
+
+
+        tTabelle.setRowFactory(tv ->
+        {
+            TableRow<Message> row = new TableRow<>();
+            row.setOnMouseClicked(event ->
+            {
+                if (event.getClickCount() == 2 && (!row.isEmpty()))
+                {
+                    Message rowData = row.getItem();
+                    try
+                    {
+                        selectedMessage = rowData;
+                        GUIVS.bearbeiteNachricht(rowData);
+                    } catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            return row;
         });
-        return row ;
-});
-    }    
-    
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (groups != null)
+                {
+                    cbAnzeigetafel.setConverter(new StringConverter()
+                    {
+                        @Override
+                        public String toString(Object object)
+                        {
+                            return ((Group) object).getName();
+                        }
+
+                        @Override
+                        public Object fromString(String string)
+                        {
+                            return null;
+                        }
+                    });
+                    cbAnzeigetafel.setItems(groups);
+                }
+                cbAnzeigetafel.getSelectionModel().selectFirst();
+                selectedGroup = (Group )cbAnzeigetafel.getSelectionModel().getSelectedItem();
+                ObjectProperty<Predicate<Message>> gruppenFilter = new SimpleObjectProperty<>();
+                gruppenFilter.bind(Bindings.createObjectBinding(() ->
+                                message -> ((Group) cbAnzeigetafel.getValue()).getName().equals(message.getGroup().getName()),
+                        cbAnzeigetafel.valueProperty()));
+                FilteredList<Message> gefilterteNachrichten = new FilteredList<Message>(nachrichten, p -> true);
+
+                gefilterteNachrichten.predicateProperty().bind(Bindings.createObjectBinding(
+                        () -> gruppenFilter.get(), gruppenFilter));
+
+                SortedList<Message> sortierteNachrichten = new SortedList<Message>(gefilterteNachrichten);
+                tTabelle.setItems(sortierteNachrichten);
+
+                sortierteNachrichten.comparatorProperty().bind(tTabelle.comparatorProperty());
+
+                tcZeitstempel.setComparator(tcZeitstempel.getComparator().reversed());
+                tTabelle.getSortOrder().add(tcZeitstempel);
+
+                gefilterteNachrichten.addListener(new ListChangeListener<Message>()
+                {
+                    @Override
+                    public void onChanged(Change<? extends Message> c)
+                    {
+                        Platform.runLater(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                tTabelle.sort();
+                            }
+                        });
+                    }
+                });
+
+            }
+        });
+
+
+    }
 }
+
+

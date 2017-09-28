@@ -155,55 +155,58 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
             @Override
             public void run()
             {
-//                try
-//                {
-//                    Thread.sleep(200);
-//                } catch (InterruptedException e)
-//                {
-//                    e.printStackTrace();
-//                }
+                User me = GUIVS.instance.getMe();
                     switch (type)
                     {
                         case SAVE:
-                            GUIVS.instance.getControl().getGroups().add(g);
-//                            GUIVS.getGroup_messages().put(g.getName(), FXCollections.observableArrayList());
+                            //Wenn ich Admin bin, oder Member der Gruppe
+                            if(me.getLevel()==2 || me.getLevel() == 1 && (g.getMembers().contains(me)))
+                            {
+                                GUIVS.instance.getControl().getGroups().add(g);
+                            }
                             break;
                         case UPDATE:
 
                             //Ersetze das Gruppenobjekt durch das neue Objekt (Groupname = unique)
-                            Group changedGroup = GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
+                            if(me.getLevel()==2 || me.getLevel() == 1 && (g.getMembers().contains(me)))
                             {
-                                @Override
-                                public boolean test(Group group)
+                                Group changedGroup = GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
                                 {
-                                    if (group.getName().equals(g.getName()))
+                                    @Override
+                                    public boolean test(Group group)
                                     {
-                                        return true;
-                                    } else
-                                    {
-                                        return false;
+                                        if (group.getName().equals(g.getName()))
+                                        {
+                                            return true;
+                                        } else
+                                        {
+                                            return false;
+                                        }
                                     }
-                                }
-                            }).get(0);
-                            GUIVS.instance.getControl().getGroups().set(GUIVS.instance.getControl().getGroups().indexOf(changedGroup), g);
+                                }).get(0);
+                                GUIVS.instance.getControl().getGroups().set(GUIVS.instance.getControl().getGroups().indexOf(changedGroup), g);
+                            }
                             break;
                         case DELETE:
-                            Group oldGroup = GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
+                            if(me.getLevel()==2 || me.getLevel() == 1 && (g.getMembers().contains(me)))
                             {
-                                @Override
-                                public boolean test(Group group)
+                                Group oldGroup = GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
                                 {
-                                    if (group.getName().equals(g.getName()))
+                                    @Override
+                                    public boolean test(Group group)
                                     {
-                                        return true;
-                                    } else
-                                    {
-                                        return false;
+                                        if (group.getName().equals(g.getName()))
+                                        {
+                                            return true;
+                                        } else
+                                        {
+                                            return false;
+                                        }
                                     }
-                                }
-                            }).get(0);
-                            GUIVS.instance.getControl().getGroups().remove(oldGroup);
-                            GUIVS.getGroup_messages().remove(g.getName());
+                                }).get(0);
+                                GUIVS.instance.getControl().getGroups().remove(oldGroup);
+                                GUIVS.getGroup_messages().remove(g.getName());
+                            }
                             break;
                         default:
                             System.out.println("Fehler in Update_group");
@@ -219,56 +222,59 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
     {
         Thread t = new Thread(new Runnable()
         {
+            User me = GUIVS.instance.getMe();
             @Override
             public void run()
             {
-//                try
-//                {
-//                    Thread.sleep(200);
-//                } catch (InterruptedException e)
-//                {
-//                    e.printStackTrace();
-//                }
                 switch (type)
                 {
                     case SAVE:
-                        GUIVS.instance.getControl().getUsers().add(u);
+                        if(me.getLevel()==2)
+                        {
+                            GUIVS.instance.getControl().getUsers().add(u);
+                        }
                         break;
                     case UPDATE:
 
                         //Ersetze das Userobjekt durch das neue Objekt (Username = unique)
-                        User changedUser = GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
+                        if(me.getLevel()==2 || me.getLevel()==1 && u.getID() == me.getID())
                         {
-                            @Override
-                            public boolean test(User user)
+                            User changedUser = GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
                             {
-                                if (user.getName().equals(u.getName()))
+                                @Override
+                                public boolean test(User user)
                                 {
-                                    return true;
-                                } else
-                                {
-                                    return false;
+                                    if (user.getName().equals(u.getName()))
+                                    {
+                                        return true;
+                                    } else
+                                    {
+                                        return false;
+                                    }
                                 }
-                            }
-                        }).get(0);
-                        GUIVS.instance.getControl().getUsers().set(GUIVS.instance.getControl().getUsers().indexOf(changedUser), u);
+                            }).get(0);
+                            GUIVS.instance.getControl().getUsers().set(GUIVS.instance.getControl().getUsers().indexOf(changedUser), u);
+                        }
                         break;
                     case DELETE:
-                        User oldUser = GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
+                        if(me.getLevel()==2)
                         {
-                            @Override
-                            public boolean test(User user)
+                            User oldUser = GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
                             {
-                                if (user.getName().equals(u.getName()))
+                                @Override
+                                public boolean test(User user)
                                 {
-                                    return true;
-                                } else
-                                {
-                                    return false;
+                                    if (user.getName().equals(u.getName()))
+                                    {
+                                        return true;
+                                    } else
+                                    {
+                                        return false;
+                                    }
                                 }
-                            }
-                        }).get(0);
-                        GUIVS.instance.getControl().getUsers().remove(oldUser);
+                            }).get(0);
+                            GUIVS.instance.getControl().getUsers().remove(oldUser);
+                        }
                         break;
                     default:
                         System.out.println("Fehler in Update_user");
@@ -293,40 +299,42 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
             @Override
             public void run()
             {
-//                try
-//                {
-//                    Thread.sleep(200);
-//                } catch (InterruptedException e)
-//                {
-//                    e.printStackTrace();
-//                }
+                User me = GUIVS.instance.getMe();
                 switch (type)
                 {
                     case SAVE:
-                        GUIVS.instance.getControl().getMessages().add(m);
+                        if(me.getLevel()==2 || GUIVS.instance.getControl().getGroups().contains(m.getGroup()) && me.getLevel() == 1)
+                        {
+                            GUIVS.instance.getControl().getMessages().add(m);
+                        }
                         break;
                     case UPDATE:
 
                         //Ersetze das Messageobjekt durch das neue Objekt (MessageID = unique)
-                        GUIVS.instance.getControl().getMessages().set(GUIVS.instance.getControl().getMessages().indexOf(AdminAnsichtFXMLController.getSelectedMessage()),m);
-
+                        if(me.getLevel()==2 || GUIVS.instance.getControl().getGroups().contains(m.getGroup()) && me.getLevel() == 1)
+                        {
+                            GUIVS.instance.getControl().getMessages().set(GUIVS.instance.getControl().getMessages().indexOf(AdminAnsichtFXMLController.getSelectedMessage()), m);
+                        }
                         break;
                     case DELETE:
-                        Message oldMessage = GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
+                        if(me.getLevel()==2 || GUIVS.instance.getControl().getGroups().contains(m.getGroup()) && me.getLevel() == 1)
                         {
-                            @Override
-                            public boolean test(Message message)
+                            Message oldMessage = GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
                             {
-                                if (message.getID() == m.getID())
+                                @Override
+                                public boolean test(Message message)
                                 {
-                                    return true;
-                                } else
-                                {
-                                    return false;
+                                    if (message.getID() == m.getID())
+                                    {
+                                        return true;
+                                    } else
+                                    {
+                                        return false;
+                                    }
                                 }
-                            }
-                        }).get(0);
-                        GUIVS.instance.getControl().getMessages().remove(oldMessage);
+                            }).get(0);
+                            GUIVS.instance.getControl().getMessages().remove(oldMessage);
+                        }
                         break;
                     default:
                         System.out.println("Fehler in Update_user");

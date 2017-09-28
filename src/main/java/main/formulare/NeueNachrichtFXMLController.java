@@ -78,9 +78,8 @@ public class NeueNachrichtFXMLController implements Initializable
     private void updateGroups()
     {
         cbGroup.getItems().clear();
-        try
-        {
-            ArrayList<Group> groups = GUIVS.instance.getControl().getC().getGroups();
+            ArrayList<Group> groups =  new ArrayList<>();
+            groups.addAll(GUIVS.instance.getControl().getGroups());
             if (groups != null)
             {
                 for (Group g : groups)
@@ -88,19 +87,7 @@ public class NeueNachrichtFXMLController implements Initializable
                     cbGroup.getItems().add(g.getName());
                 }
             }
-        } catch (DatabaseConnectionException e)
-        {
-            e.printStackTrace();
-        } catch (RemoteException e)
-        {
-            e.printStackTrace();
-        } catch (DatabaseObjectNotFoundException e)
-        {
-            e.printStackTrace();
-        } catch (UserAuthException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @FXML

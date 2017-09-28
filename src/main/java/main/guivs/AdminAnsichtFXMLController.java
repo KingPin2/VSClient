@@ -326,8 +326,6 @@ public class AdminAnsichtFXMLController implements Initializable
 
         pm = new PopUpMessage();
         nachrichten = GUIVS.instance.getControl().getMessages();
-
-
         groups = GUIVS.instance.getControl().getGroups();
 
         tcUser.setCellValueFactory(
