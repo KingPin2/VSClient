@@ -56,6 +56,36 @@ public class Control {
     }
 
 
+    public void getData()
+    {
+        groups = FXCollections.observableArrayList();
+        users = FXCollections.observableArrayList();
+        messages = FXCollections.observableArrayList();
+        try
+        {
+            for (Group g : c.getGroups())
+            {
+                groups.add(g);
+            }
+            for (User u : c.getUsers())
+            {
+                users.add(u);
+            }
+            for (Message m : c.getMessages())
+            {
+                messages.add(m);
+            }
+        } catch (DatabaseConnectionException e)
+        {
+            e.printStackTrace();
+        } catch (DatabaseObjectNotFoundException e)
+        {
+            e.printStackTrace();
+        } catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
 
     
@@ -63,30 +93,6 @@ public class Control {
     {
         try {
             c = new Client("localhost");
-            groups = FXCollections.observableArrayList();
-            users = FXCollections.observableArrayList();
-            messages = FXCollections.observableArrayList();
-            try
-            {
-                for (Group g : c.getGroups())
-                {
-                    groups.add(g);
-                }
-                for (User u : c.getUsers())
-                {
-                    users.add(u);
-                }
-                for (Message m : c.getMessages())
-                {
-                    messages.add(m);
-                }
-            } catch (DatabaseConnectionException e)
-            {
-                e.printStackTrace();
-            } catch (DatabaseObjectNotFoundException e)
-            {
-                e.printStackTrace();
-            }
         } catch (RemoteException rm)
         {
             rm.printStackTrace();

@@ -31,6 +31,7 @@ public class BearbeitenFXMLController implements Initializable {
     @FXML private Button bAbbrechen;
     @FXML private Button bSpeichern;
     public Message m;
+    private PopUpMessage pm;
 
 
     public Message getM() {
@@ -49,8 +50,8 @@ public class BearbeitenFXMLController implements Initializable {
         m.setMessage(taNachricht.getText());
         try {
             GUIVS.instance.getControl().getC().saveMessage(m);
-            PopUpMessage pm = new PopUpMessage();
             pm.showInformation("Nachricht geändert", "Nachricht erfolgreich geändert!");
+            abbrechen();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,16 +73,19 @@ public class BearbeitenFXMLController implements Initializable {
      */
     private void ladeNachricht()
     {
-        if(this.m == null)
-        {
-            this.m = ObjectFactory.createMessage("Nachricht konnte nicht geladen werden", GUIVS.instance.getMe());
+        try{
+            taNachricht.setText(this.m.getMessage());
         }
-        //bAbbrechen.setCancelButton(true);
-        taNachricht.setText(this.m.getMessage());
+        catch (NullPointerException e)
+        {
+            pm.showError("Fehler", "Keine Nachricht ausgewählt oder Nachricht konnte nicht geladen werden!");
+            abbrechen();
+        }
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        pm = new PopUpMessage();
         Platform.runLater(new Runnable(){@Override public void run(){ladeNachricht();}});
 
     }    

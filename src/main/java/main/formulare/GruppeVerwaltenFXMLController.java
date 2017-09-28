@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
 import main.database.exceptions.DatabaseObjectNotFoundException;
@@ -65,64 +66,55 @@ public class GruppeVerwaltenFXMLController implements Initializable
         stage.close();
     }
 
-    @FXML private void invite()
+    @FXML
+    private void invite()
     {
-        if(cbUser.getSelectionModel().getSelectedItem() != null) {
-            try {
 
-                selectedGroup.addMember(selectedUser);
-                GUIVS.instance.getControl().getC().saveGroup(selectedGroup);
-                pm.showInformation("Einladung", "User " + selectedUser.getName() + " wurde zur Gruppe hinzugefügt");
-                updateGroupMembers();
-                updateUsers();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }else
+        try
         {
-            pm.showError("Fehler", "Keine User ausgwählt!");
+            selectedGroup.addMember(selectedUser);
+            GUIVS.instance.getControl().getC().saveGroup(selectedGroup);
+            pm.showInformation("Einladung", "User " + selectedUser.getName() + " wurde zur Gruppe hinzugefügt");
+            updateGroupMembers();
+            updateUsers();
+        } catch (Exception e)
+        {
+            pm.showError("Fehler", "Keine User ausgewählt!");
         }
-
     }
 
-    @FXML private void kick()
+    @FXML
+    private void kick()
     {
-        if(cbMember.getSelectionModel().getSelectedItem() != null && !(cbMember.getSelectionModel().getSelectedItem().equals(selectedGroup.getModerator().getName()))) {
+        if (cbMember.getSelectionModel().getSelectedItem() != null && !(cbMember.getSelectionModel().getSelectedItem().equals(selectedGroup.getModerator().getName())))
+        {
             selectedGroup.removeMember(selectedMember);
-            try {
+            try
+            {
+                selectedGroup.removeMember(selectedMember);
                 GUIVS.instance.getControl().getC().saveGroup(selectedGroup);
                 updateUsers();
                 updateGroupMembers();
                 pm.showInformation("Information", "der User wurde aus der Gruppe " + selectedGroup.getName() + " entfernt.");
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 e.printStackTrace();
+                pm.showError("Fehler", "Kein Member ausgewählt!");
             }
         }
-        else if(cbMember.getSelectionModel().getSelectedItem() != null && cbMember.getSelectionModel().getSelectedItem().equals(selectedGroup.getModerator().getName()))
-        {
-            pm.showError("Fehler", "Um dieses Mitglied der Gruppe zu entfernen, müssen Sie vorher einen anderen Moderator festlegen!!");
-        }
-        else
-        {
-            pm.showError("Fehler", "Kein Member ausgewählt!");
-        }
-
     }
 
     @FXML
     private void deleteGroup()
     {
-        try {
-            if(selectedGroup != null) {
+        try
+        {
                 GUIVS.instance.getControl().getC().deleteGroup(selectedGroup);
                 pm.showInformation("Information","Gruppe gelöscht!!");
                 updateGroups();
-            }
-            else
-            {
-                pm.showInformation("Information","Keine Gruppe ausgewählt!");
-            }
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
+            pm.showInformation("Information","Keine Gruppe ausgewählt!");
             e.printStackTrace();
         }
     }
@@ -151,7 +143,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
     {
         try
         {
-            //selectedMod = GUIVS.getcbMod.getSelectionModel().getSelectedItem());
+            selectedMod = (User) cbMod.getSelectionModel().getSelectedItem();
 
         } catch (Exception e)
         {
@@ -163,16 +155,21 @@ public class GruppeVerwaltenFXMLController implements Initializable
         try
         {
 
-            if(cbMember.getSelectionModel().getSelectedItem() != null)
-            {
-                selectedMember = GUIVS.instance.getControl().getC().getUserByName(cbMember.getSelectionModel().getSelectedItem().toString());
-            }else
-            {
-                cbMember.getSelectionModel().selectFirst();
-            }
+            selectedMember = (User) cbMember.getSelectionModel().getSelectedItem();
+
         } catch (Exception e)
         {
-            e.printStackTrace();
+            try
+            {
+
+
+                cbMember.getSelectionModel().selectFirst();
+                selectedMember = (User) cbMember.getSelectionModel().getSelectedItem();
+            }catch(Exception e2)
+            {
+                pm.showError("Error", "Keine Member in Gruppe!");
+                close();
+            }
         }
     }
 
@@ -180,26 +177,30 @@ public class GruppeVerwaltenFXMLController implements Initializable
     {
         try
         {
-            if( cbUser.getSelectionModel().getSelectedItem() != null)
-            {
-                selectedUser = GUIVS.instance.getControl().getC().getUserByName(cbUser.getSelectionModel().getSelectedItem().toString());
-            }
-            else
-            {
-                cbUser.getSelectionModel().selectFirst();
-            }
+
+            selectedUser = (User) cbUser.getSelectionModel().getSelectedItem();
+
         } catch (Exception e)
         {
-            e.printStackTrace();
-        }
+            try
+            {
 
+
+                cbUser.getSelectionModel().selectFirst();
+                selectedUser = (User) cbUser.getSelectionModel().getSelectedItem();
+            }catch(Exception e2)
+            {
+                pm.showError("Error", "Keine User gefunden!");
+                close();
+            }
+        }
     }
 
     @FXML private void onChangeGroup()
     {
         try
         {
-            selectedGroup = GUIVS.instance.getControl().getC().getGroupByName( cbGruppe.getSelectionModel().getSelectedItem().toString());
+            selectedGroup = (Group) cbGruppe.getSelectionModel().getSelectedItem();
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -208,110 +209,61 @@ public class GruppeVerwaltenFXMLController implements Initializable
         updateUsers();
         updateMods();
     }
+
     private void updateGroups()
     {
+
         try
         {
-            if(GUIVS.instance.getControl().getC().getGroups() != null) {
-                for (Group g : GUIVS.instance.getControl().getC().getGroups()) {
-                    cbGruppe.getItems().add(g.getName());
-                }
-
-                cbGruppe.getSelectionModel().selectFirst();
-                selectedGroup = GUIVS.instance.getControl().getC().getGroupByName(cbGruppe.getSelectionModel().getSelectedItem().toString());
-                selectedMod = selectedGroup.getModerator();
-                updateGroupMembers();
-                updateUsers();
-                updateMods();
-            }else
+            cbGruppe.getItems().addAll(GUIVS.instance.getControl().getGroups());
+            cbGruppe.getSelectionModel().selectFirst();
+            selectedGroup = (Group) cbGruppe.getSelectionModel().getSelectedItem();
+            selectedMod = selectedGroup.getModerator();
+            updateGroupMembers();
+            updateUsers();
+            updateMods();
+        } catch (NullPointerException e)
             {
-                pm.showError("Error","Keine Gruppen angelegt!");
-                close();
-            }
-
-        }
-        catch (DatabaseObjectNotFoundException e)
-        {
-            pm.showError("Error","Keine Gruppen angelegt!");
+            pm.showError("Error", "Keine Gruppen angelegt!");
             close();
+        }
 
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
     private void updateGroupMembers()
     {
         cbMember.getItems().clear();
-        try
-        {
-            if(selectedGroup.getMembers() != null)
-            {
-                for (User u : selectedGroup.getMembers())
-                {
-                    if (u != null)
-                    {
-                         cbMember.getItems().add(u.getName());
-                    }
-                }
-            }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
+        cbMember.getItems().addAll(selectedGroup.getMembers());
     }
     private void updateUsers()
     {
         cbUser.getItems().clear();
-        try
-        {
-            ArrayList<User> notInGroup = GUIVS.instance.getControl().getC().getUsersNotInGroup(selectedGroup);
-                    if(notInGroup != null) {
-                        for (User u : notInGroup) {
-                            cbUser.getItems().add(u.getName());
-                        }
-                    }
-
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        cbUser.getItems().addAll(GUIVS.instance.getControl().getUsers());
+        cbUser.getItems().removeAll(((Group) cbGruppe.getSelectionModel().getSelectedItem()).getMembers());
     }
     private void updateMods()
     {
         try
         {
             cbMod.getItems().clear();
-            //Mögliche Mods sind:
-
-            //Alle Mitglieder der Gruppe
-            ArrayList<User> possibleMods = selectedGroup.getMembers();
-            ArrayList<User> admins = GUIVS.instance.getControl().getC().getUsersByLevel(2);
-            for(User u: admins)
+            cbMod.getItems().addAll(GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
             {
-                if(! possibleMods.contains(u))
+                @Override
+                public boolean test(User user)
                 {
-                    possibleMods.add(u);
-                }
-            }
-
-
-
-                if (possibleMods != null)
-                {
-                    for (User u : possibleMods)
+                    if(user.getLevel() == 2)
                     {
-                        cbMod.getItems().add(u.getName());
-                        if (u.getName().equals(selectedGroup.getModerator().getName()))
-                        {
-                            selectedMod = selectedGroup.getModerator();
-                            cbMod.getSelectionModel().select(selectedMod.getName());
-                        }
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
+            }));
+            cbMod.getSelectionModel().select(selectedGroup.getModerator());
+            selectedMod = (User) cbMod.getSelectionModel().getSelectedItem();
+
 
         } catch (Exception e)
         {
@@ -333,6 +285,63 @@ public class GruppeVerwaltenFXMLController implements Initializable
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+
+                    cbGruppe.setConverter(new StringConverter()
+                    {
+                        @Override
+                        public String toString(Object object)
+                        {
+                            return ((Group) object).getName();
+                        }
+
+                        @Override
+                        public Object fromString(String string)
+                        {
+                            return null;
+                        }
+                    });
+                    cbMember.setConverter(new StringConverter()
+                    {
+                        @Override
+                        public String toString(Object object)
+                        {
+                            return ((User) object).getName();
+                        }
+
+                        @Override
+                        public Object fromString(String string)
+                        {
+                            return null;
+                        }
+                    });
+                    cbUser.setConverter(new StringConverter()
+                    {
+                        @Override
+                        public String toString(Object object)
+                        {
+                            return ((User) object).getName();
+                        }
+
+                        @Override
+                        public Object fromString(String string)
+                        {
+                            return null;
+                        }
+                    });
+                    cbMod.setConverter(new StringConverter()
+                    {
+                        @Override
+                        public String toString(Object object)
+                        {
+                            return ((User) object).getName();
+                        }
+
+                        @Override
+                        public Object fromString(String string)
+                        {
+                            return null;
+                        }
+                    });
                     initGUI();
                 }
             });

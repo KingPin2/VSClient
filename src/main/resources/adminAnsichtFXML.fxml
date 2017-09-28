@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
@@ -16,7 +20,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.guivs.AdminAnsichtFXMLController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.guivs.AdminAnsichtFXMLController">
    <children>
       <VBox layoutX="201.0" layoutY="30.0" prefHeight="600.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -165,10 +169,11 @@
                         </Accordion>
                      </children>
                   </VBox>
-                  <TableView fx:id="tTabelle" prefHeight="382.0" prefWidth="900.0" >
+                  <TableView fx:id="tTabelle" prefHeight="382.0" prefWidth="900.0">
                     <columns>
-                        <TableColumn fx:id="tcUser" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" resizable="false" text="User" />
-                      <TableColumn fx:id="tcNachrichten" maxWidth="636.0" minWidth="636.0" prefWidth="636.0" resizable="false" text="Nachrichten" />
+                        <TableColumn fx:id="tcZeitstempel" maxWidth="100.0" minWidth="64.0" prefWidth="64.0" resizable="false" text="Zeit" />
+                        <TableColumn fx:id="tcUser" maxWidth="148.0" minWidth="95.0" prefWidth="112.0" resizable="false" text="User" />
+                      <TableColumn fx:id="tcNachrichten" maxWidth="636.0" minWidth="400.0" prefWidth="576.0" resizable="false" text="Nachrichten" />
                     </columns>
                   </TableView>
                </children>

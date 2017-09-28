@@ -97,30 +97,40 @@ public class AnzeigetafelFXMLController implements Initializable
                 scrollpane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
                 scrollpane.setFitToHeight(true);
                 scrollpane.setFitToWidth(true);
+
+                m.addListener(new ListChangeListener<Message>()
+                {
+
+                    @Override
+                    public void onChanged(Change<? extends Message> c)
+                    {
+                        Platform.runLater(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                nb.clear();
+                                vbox.getChildren().clear();
+                                if (m != null)
+                                {
+                                    for (Message me : m)
+                                    {
+                                        nb.add(new Nachrichtenbox(me));
+                                    }
+                                }
+
+                                vbox.getChildren().addAll(nb);
+                                lTafel.setText(group.getName());
+                            }
+                        });
+                        System.out.println("Update");
+
+                    }
+                });
             }
         });
 
-//        m.addListener(new ListChangeListener<Message>()
-//        {
-//
-//            @Override
-//            public void onChanged(Change<? extends Message> c)
-//            {
-//
-//                nb.clear();
-//                vbox.getChildren().clear();
-//                if (m != null)
-//                {
-//                    for (Message me : m)
-//                    {
-//                        nb.add(new Nachrichtenbox(me));
-//                    }
-//                }
-//
-//                vbox.getChildren().addAll(nb);
-//                lTafel.setText(group.getName());
-//            }
-//        });
+
 
     }
 

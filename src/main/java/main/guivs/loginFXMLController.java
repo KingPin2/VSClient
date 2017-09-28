@@ -71,18 +71,20 @@ public class loginFXMLController implements Initializable
                 }
                 if (GUIVS.instance.isMod())
                 {
+                    GUIVS.instance.getControl().getData();
                     Stage stage = (Stage) bLogin.getScene().getWindow();
                     stage.close();
                     GUIVS.adminAnsicht();
                 } else
                 {
+                    GUIVS.instance.getControl().getData();
                     Stage stage = (Stage) bLogin.getScene().getWindow();
                     stage.close();
                     GUIVS.userAnsicht();
                 }
             } else if (GUIVS.instance.getMe().getLevel() == 2)
             {
-                //TODO: öffne Adminansicht
+                GUIVS.instance.getControl().getData();
                 Stage stage = (Stage) bLogin.getScene().getWindow();
                 stage.close();
                 GUIVS.adminAnsicht();
@@ -90,6 +92,7 @@ public class loginFXMLController implements Initializable
             {
                 throw new IllegalPermissionLevelException();
             }
+
 
         } catch (IllegalCharacterException icex)
         {

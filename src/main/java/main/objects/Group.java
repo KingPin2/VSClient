@@ -91,7 +91,15 @@ public class Group implements Serializable{
      * @param moderator
      */
     public void setModerator(User moderator) {
-        this.moderator = moderator;
+        if (moderator != null) {
+            if (moderator.getID() != -1) {
+                this.moderator = moderator;
+            } else {
+                throw new IllegalArgumentException("Save user first in database!");
+            }
+        } else {
+            this.moderator = null;
+        }
     }
 
     /**
@@ -166,5 +174,20 @@ public class Group implements Serializable{
                 ", moderator=" + moderator +
                 ", members=" + members +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Group group = (Group) o;
+
+        return id == group.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }

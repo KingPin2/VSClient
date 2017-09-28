@@ -80,6 +80,10 @@ public class AdminAnsichtFXMLController implements Initializable
     private TableColumn tcNachrichten;
     @FXML
     private TableColumn tcUser;
+    @FXML
+    private TableColumn tcGruppe;
+    @FXML
+    private TableColumn tcZeitstempel;
 
     //MenuBar
 
@@ -264,6 +268,7 @@ public class AdminAnsichtFXMLController implements Initializable
 
         } catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
 
@@ -277,6 +282,7 @@ public class AdminAnsichtFXMLController implements Initializable
         {
             e.printStackTrace();
         }
+
         Stage stage = (Stage) tTabelle.getScene().getWindow();
         stage.close();
     }
@@ -284,26 +290,23 @@ public class AdminAnsichtFXMLController implements Initializable
     @FXML
     private void loeschen()
     {
-        if (tcNachrichten.getColumns().isEmpty())
-        {
-            pm.showInformation("Meldung", "Die Tabelle ist leer");
-        } else
-        {
+
+
             boolean b = pm.showDialog("Die ausgewählte Nachricht wird unwiderruflich gelöscht!");
             if (b == true)
             {
-                if (!tTabelle.getSelectionModel().getSelectedItem().equals(null))
+                if (tTabelle.getSelectionModel().getSelectedItem() != null)
                 {
                     try
                     {
                         GUIVS.instance.getControl().getC().deleteMessage(tTabelle.getSelectionModel().getSelectedItem());
                     } catch (Exception e)
                     {
+                        pm.showError("Error", "Die Tabelle ist leer!");
                         e.printStackTrace();
                     }
                 }
             }
-        }
 
     }
 
@@ -317,29 +320,7 @@ public class AdminAnsichtFXMLController implements Initializable
         pm = new PopUpMessage();
         nachrichten = GUIVS.instance.getControl().getMessages();
         groups = GUIVS.instance.getControl().getGroups();
-//        try
-//        {
-////            if (GUIVS.instance.getControl().getC().getMessages() != null)
-////            {
-////                for (Message m : GUIVS.instance.getControl().getC().getMessages())
-////                {
-////                    nachrichten.add(m);
-////
-////                }
-////            }
-//        } catch (DatabaseConnectionException e)
-//        {
-//            e.printStackTrace();
-//        } catch (RemoteException e)
-//        {
-//            e.printStackTrace();
-//        } catch (DatabaseObjectNotFoundException e)
-//        {
-//            e.printStackTrace();
-//        }
 
-
-        //tcUser.setCellValueFactory(new PropertyValueFactory<User, String>("author");
         tcUser.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>()
                 {

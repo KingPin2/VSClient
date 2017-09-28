@@ -7,8 +7,10 @@ package main.classes;
 
 
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -113,7 +115,25 @@ public class GUIVS extends Application {
         Parent root = loader.load();
         AnzeigetafelFXMLController ac = loader.<AnzeigetafelFXMLController>getController();
      //   ObservableList<Message> messages = group_messages.get(g.getName());
-        ac.setM(GUIVS.group_messages.get(g.getName()));
+
+        FilteredList<Message> groupFilteredData = new FilteredList<>(GUIVS.instance.getControl().getMessages(), p -> true);
+       groupFilteredData.setPredicate(new Predicate<Message>()
+       {
+           @Override
+           public boolean test(Message message)
+           {
+               if(message.getGroup().getName().equals(g.getName()))
+               {
+                   return true;
+               }
+               else
+               {
+                   return false;
+               }
+
+           }
+       });
+        ac.setM(groupFilteredData);
 //        ac.setM(GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
 //        {
 //            @Override

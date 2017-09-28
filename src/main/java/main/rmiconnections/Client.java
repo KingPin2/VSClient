@@ -6,13 +6,9 @@ package main.rmiconnections;
 
 import javafx.collections.FXCollections;
 import main.classes.GUIVS;
-import main.database.exceptions.DatabaseConnectionException;
-import main.database.exceptions.DatabaseObjectNotDeletedException;
-import main.database.exceptions.DatabaseObjectNotFoundException;
-import main.database.exceptions.DatabaseObjectNotSavedException;
+import main.database.exceptions.*;
 import main.exceptions.NoItemSelectedException;
 import main.guivs.AdminAnsichtFXMLController;
-import main.objects.Board;
 import main.objects.Group;
 import main.objects.Message;
 import main.objects.User;
@@ -60,18 +56,6 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
 
     public void saveUser(User user) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException {
         this.rmi.saveUser(user);
-    }
-
-    public Board getBoardById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getBoardById(id);
-    }
-
-    public ArrayList<Board> getBoards() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getBoards();
-    }
-
-    public void saveBoard(Board board) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException {
-        this.rmi.saveBoard(board);
     }
 
     public Group getGroupById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
@@ -133,12 +117,8 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
          this.rmi.deleteMessage(m);
     }
 
-    public void deleteUser(User u) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException {
+    public void deleteUser(User u) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, DatabaseUserIsModException {
         this.rmi.deleteUser(u);
-    }
-
-    public void deleteBoard(Board b) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException {
-        this.rmi.deleteBoard(b);
     }
 
     public void deleteGroup(Group g) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException {
@@ -175,13 +155,13 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
             @Override
             public void run()
             {
-                try
-                {
-                    Thread.sleep(200);
-                } catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
+//                try
+//                {
+//                    Thread.sleep(200);
+//                } catch (InterruptedException e)
+//                {
+//                    e.printStackTrace();
+//                }
                     switch (type)
                     {
                         case SAVE:
@@ -207,7 +187,7 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                             }).set(0, g);
                             break;
                         case DELETE:
-                            GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
+                            Group oldGroup = GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
                             {
                                 @Override
                                 public boolean test(Group group)
@@ -220,7 +200,8 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                                         return false;
                                     }
                                 }
-                            }).remove(0);
+                            }).get(0);
+                            GUIVS.instance.getControl().getGroups().remove(oldGroup);
                             GUIVS.getGroup_messages().remove(g.getName());
                             break;
                         default:
@@ -240,13 +221,13 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
             @Override
             public void run()
             {
-                try
-                {
-                    Thread.sleep(200);
-                } catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
+//                try
+//                {
+//                    Thread.sleep(200);
+//                } catch (InterruptedException e)
+//                {
+//                    e.printStackTrace();
+//                }
                 switch (type)
                 {
                     case SAVE:
@@ -271,7 +252,7 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                         }).set(0, u);
                         break;
                     case DELETE:
-                        GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
+                        User oldUser = GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
                         {
                             @Override
                             public boolean test(User user)
@@ -284,7 +265,8 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                                     return false;
                                 }
                             }
-                        }).remove(0);
+                        }).get(0);
+                        GUIVS.instance.getControl().getUsers().remove(oldUser);
                         break;
                     default:
                         System.out.println("Fehler in Update_user");
@@ -309,13 +291,13 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
             @Override
             public void run()
             {
-                try
-                {
-                    Thread.sleep(200);
-                } catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
+//                try
+//                {
+//                    Thread.sleep(200);
+//                } catch (InterruptedException e)
+//                {
+//                    e.printStackTrace();
+//                }
                 switch (type)
                 {
                     case SAVE:
@@ -328,7 +310,7 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
 
                         break;
                     case DELETE:
-                        GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
+                        Message oldMessage = GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
                         {
                             @Override
                             public boolean test(Message message)
@@ -341,7 +323,8 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                                     return false;
                                 }
                             }
-                        }).remove(0);
+                        }).get(0);
+                        GUIVS.instance.getControl().getMessages().remove(oldMessage);
                         break;
                     default:
                         System.out.println("Fehler in Update_user");
