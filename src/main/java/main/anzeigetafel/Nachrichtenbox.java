@@ -12,6 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 /**
  *
  * @author Laura
@@ -22,7 +25,10 @@ public class Nachrichtenbox extends HBox
     @FXML
     private Label user;
     @FXML
+    private Label zeit;
+    @FXML
     private TextArea message;
+    private static final DateFormat dateFormat = new SimpleDateFormat("<dd.MM> HH:mm");
     
     public Nachrichtenbox()
     {
@@ -43,7 +49,7 @@ public class Nachrichtenbox extends HBox
         this.messagedaten = null;
         this.user.setText("testuser");
         this.message.setText("hallowelt. die welt ist schön. java ist auch ganz ok. vs nervt allerdings sehr. vor allem wenn man swing benutzt. nicht böse gement, yannik. muss nur testen, ob der text zeilenumbrüche macht. deswegen so viel nonsense. fertig. aus. micky maus.");
-   
+        this.zeit.setText("<--.--> --:--");
         
     }
     /*
@@ -68,6 +74,7 @@ public class Nachrichtenbox extends HBox
         this.messagedaten = messagedaten;
         this.user.setText(this.messagedaten.getAuthor().getName());
         this.message.setText(this.messagedaten.getMessage());
+        this.zeit.setText(dateFormat.format(messagedaten.getTimestamp()));
    
     }
     

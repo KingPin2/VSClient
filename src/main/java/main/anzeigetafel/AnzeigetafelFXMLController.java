@@ -123,7 +123,6 @@ public class AnzeigetafelFXMLController implements Initializable
                                 lTafel.setText(group.getName());
                             }
                         });
-                        System.out.println("Update");
 
                     }
                 });

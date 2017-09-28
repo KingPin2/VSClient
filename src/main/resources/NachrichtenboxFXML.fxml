@@ -12,11 +12,15 @@
     <VBox.margin>
         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
     </VBox.margin>
+    <VBox>
     <Label fx:id="user" minWidth="80.0" HBox.hgrow="ALWAYS">
         <font>
             <Font name="Arial Black" size="12.0"/>
         </font>
     </Label>
+        <Label fx:id="zeit"  minWidth="80.0" HBox.hgrow="ALWAYS">
+        </Label>
+    </VBox>
     <TextArea fx:id="message" editable="false" wrapText="true" minWidth="220.0" prefHeight="30.0" HBox.hgrow="ALWAYS">
         <font>
             <Font name="Arial" size="12.0"/>

@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
-import main.database.exceptions.DatabaseObjectNotFoundException;
+import main.exceptions.DatabaseObjectNotFoundException;
 import main.objects.Group;
 import main.objects.User;
 

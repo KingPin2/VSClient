@@ -6,7 +6,7 @@ package main.rmiconnections;
 
 import javafx.collections.FXCollections;
 import main.classes.GUIVS;
-import main.database.exceptions.*;
+import main.exceptions.*;
 import main.exceptions.NoItemSelectedException;
 import main.guivs.AdminAnsichtFXMLController;
 import main.objects.Group;
@@ -38,35 +38,35 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
     private String clientID = "NONE";
 
     
-    public User getUserById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getUserById(id);
+    public User getUserById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+        return this.rmi.getUserById(clientID,id);
     }
 
-    public User getUserByName(String username) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getUserByName(username);
+    public User getUserByName(String username) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException , UserAuthException{
+        return this.rmi.getUserByName(clientID,username);
     }
 
-    public ArrayList<User> getUsers() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getUsers();
+    public ArrayList<User> getUsers() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+        return this.rmi.getUsers(clientID);
     }
 
-    public ArrayList<User> getUsersByLevel(int level) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getUsersByLevel(level);
+    public ArrayList<User> getUsersByLevel(int level) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+        return this.rmi.getUsersByLevel(clientID,level);
     }
 
-    public void saveUser(User user) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException {
-        this.rmi.saveUser(user);
+    public void saveUser(User user) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException, UserAuthException {
+        this.rmi.saveUser(clientID,user);
     }
 
-    public Group getGroupById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getGroupById(id);
+    public Group getGroupById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+        return this.rmi.getGroupById(clientID,id);
     }
-    public ArrayList<Group> getGroups() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getGroups();
+    public ArrayList<Group> getGroups() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+        return this.rmi.getGroups(clientID);
     }
 
-    public ArrayList<Group> getGroupsByUser(User u) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getGroupsByUser(u);
+    public ArrayList<Group> getGroupsByUser(User u) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+        return this.rmi.getGroupsByUser(clientID,u);
     }
 
     public ArrayList<Group> getGroupsByModerator(User u)
@@ -74,55 +74,55 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
         return null;
     }
 
-    public void saveGroup(Group group) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException {
-        this.rmi.saveGroup(group);
+    public void saveGroup(Group group) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException, UserAuthException {
+        this.rmi.saveGroup(clientID,group);
     }
 
-    public ArrayList<User> getUsersNotInGroup(Group group) throws RemoteException {
-        return this.rmi.getUsersNotInGroup(group);
+    public ArrayList<User> getUsersNotInGroup(Group group) throws RemoteException, UserAuthException {
+        return this.rmi.getUsersNotInGroup(clientID,group);
     }
 
-    public Message getMessageById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getMessageById(id, rmi);
+    public Message getMessageById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+        return this.rmi.getMessageById(clientID,id, rmi);
     }
 
-    public ArrayList<Message> getMessagesByUser(User u) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getMessagesByUser(u, rmi);
+    public ArrayList<Message> getMessagesByUser(User u) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+        return this.rmi.getMessagesByUser(clientID,u, rmi);
     }
 
-    public ArrayList<Message> getMessages() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getMessages(rmi);
+    public ArrayList<Message> getMessages() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+        return this.rmi.getMessages(clientID,rmi);
     }
 
-    public ArrayList<Message> getMessagesByGroup(Group g) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getMessagesByGroup(g,rmi);
+    public ArrayList<Message> getMessagesByGroup(Group g) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+        return this.rmi.getMessagesByGroup(clientID,g,rmi);
     }
 
-    public void saveMessage(Message message) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException {
-        this.rmi.saveMessage(message,rmi);
+    public void saveMessage(Message message) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException, UserAuthException {
+        this.rmi.saveMessage(clientID,message,rmi);
     }
 
     public User loginUser(String username, String password) throws RemoteException {
-        return this.rmi.loginUser(username, password);
+        return this.rmi.login(clientID,username, password);
     }
     public String test(int testID) throws RemoteException {
         return this.rmi.test(42);
     }
 
-    public Group getGroupByName(String name) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException {
-        return this.rmi.getGroupByName(name);
+    public Group getGroupByName(String name) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+        return this.rmi.getGroupByName(clientID,name);
     }
 
-    public void deleteMessage(Message m) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException {
-         this.rmi.deleteMessage(m);
+    public void deleteMessage(Message m) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, UserAuthException {
+         this.rmi.deleteMessage(clientID,m);
     }
 
-    public void deleteUser(User u) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, DatabaseUserIsModException {
-        this.rmi.deleteUser(u, rmi);
+    public void deleteUser(User u) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, DatabaseUserIsModException, UserAuthException {
+        this.rmi.deleteUser(clientID,u, rmi);
     }
 
-    public void deleteGroup(Group g) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException {
-        this.rmi.deleteGroup(g, rmi);
+    public void deleteGroup(Group g) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, UserAuthException {
+        this.rmi.deleteGroup(clientID,g, rmi);
     }
 
     public void disconnect() throws RemoteException {

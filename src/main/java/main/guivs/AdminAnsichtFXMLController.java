@@ -22,13 +22,15 @@ import main.classes.GUIVS;
 import main.classes.IconButtonFXMLController;
 import main.classes.PopUpMessage;
 import main.database.ObjectFactory;
-import main.database.exceptions.DatabaseConnectionException;
-import main.database.exceptions.DatabaseObjectNotFoundException;
+import main.exceptions.DatabaseConnectionException;
+import main.exceptions.DatabaseObjectNotFoundException;
 import main.objects.Group;
 import main.objects.Message;
 
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javafx.event.ActionEvent;
@@ -335,7 +337,18 @@ public class AdminAnsichtFXMLController implements Initializable
 
 
         tcNachrichten.setCellValueFactory(new PropertyValueFactory<Message, String>("message"));
+        tcZeitstempel.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>() {
+                    @Override
+                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Message, String> message) {
+                        SimpleStringProperty property = new SimpleStringProperty();
+                        DateFormat dateFormat = new SimpleDateFormat("<dd.MM> HH:mm");
+                        property.setValue(dateFormat.format(message.getValue().getTimestamp()));
+                        return property;
+                    }
+                });
         tTabelle.setItems(nachrichten);
+        tTabelle.getSortOrder().add(tcZeitstempel);
 
         tTabelle.setRowFactory(tv ->
         {

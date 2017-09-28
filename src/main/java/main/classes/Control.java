@@ -7,10 +7,7 @@ package main.classes;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.database.exceptions.DatabaseConnectionException;
-import main.database.exceptions.DatabaseObjectNotFoundException;
-import main.exceptions.EmptyStringException;
-import main.exceptions.IllegalCharacterException;
+import main.exceptions.*;
 import main.objects.Group;
 import main.objects.Message;
 import main.objects.User;
@@ -82,6 +79,9 @@ public class Control {
         {
             e.printStackTrace();
         } catch (RemoteException e)
+        {
+            e.printStackTrace();
+        } catch (UserAuthException e)
         {
             e.printStackTrace();
         }

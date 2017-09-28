@@ -16,8 +16,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import main.database.exceptions.DatabaseConnectionException;
-import main.database.exceptions.DatabaseObjectNotFoundException;
+import main.exceptions.DatabaseConnectionException;
+import main.exceptions.DatabaseObjectNotFoundException;
+import main.exceptions.UserAuthException;
 import main.objects.*;
 
 import java.io.IOException;
@@ -247,7 +248,7 @@ public class GUIVS extends Application {
     
     public static void userAnsicht() throws Exception
     {
-        fillgroups();
+        //fillgroups();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(GUIVS.class.getResource("/userAnsichtFXML.fxml"));
         Parent p = loader.load();
@@ -264,7 +265,7 @@ public class GUIVS extends Application {
 
         public static void adminAnsicht() throws Exception
     {
-        fillgroups();
+        //fillgroups();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(GUIVS.class.getResource("/adminAnsichtFXML.fxml"));
         Parent p = loader.load();
@@ -298,6 +299,9 @@ public class GUIVS extends Application {
                 e.printStackTrace();
             } catch (DatabaseObjectNotFoundException e) {
                 e.printStackTrace();
+            } catch (UserAuthException e)
+            {
+                e.printStackTrace();
             }
 
         }
@@ -326,6 +330,9 @@ public class GUIVS extends Application {
                 e.printStackTrace();
             } catch (DatabaseObjectNotFoundException e) {
                 //e.printStackTrace();
+            } catch (UserAuthException e)
+            {
+                e.printStackTrace();
             }
         }
     }

@@ -21,9 +21,10 @@ import javafx.stage.Stage;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
 import main.database.ObjectFactory;
-import main.database.exceptions.DatabaseConnectionException;
-import main.database.exceptions.DatabaseObjectNotFoundException;
-import main.database.exceptions.DatabaseObjectNotSavedException;
+import main.exceptions.DatabaseConnectionException;
+import main.exceptions.DatabaseObjectNotFoundException;
+import main.exceptions.DatabaseObjectNotSavedException;
+import main.exceptions.UserAuthException;
 import main.objects.Group;
 import main.objects.Message;
 
@@ -51,6 +52,9 @@ public class NeueNachrichtFXMLController implements Initializable {
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (DatabaseObjectNotFoundException e) {
+            e.printStackTrace();
+        } catch (UserAuthException e)
+        {
             e.printStackTrace();
         }
     }
@@ -80,6 +84,9 @@ public class NeueNachrichtFXMLController implements Initializable {
             e.printStackTrace();
         } catch (DatabaseObjectNotFoundException e) {
             e.printStackTrace();
+        } catch (UserAuthException e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -96,6 +103,9 @@ public class NeueNachrichtFXMLController implements Initializable {
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (DatabaseConnectionException e) {
+            e.printStackTrace();
+        } catch (UserAuthException e)
+        {
             e.printStackTrace();
         }
         abbrechen();

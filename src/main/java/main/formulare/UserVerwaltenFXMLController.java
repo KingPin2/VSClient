@@ -26,8 +26,9 @@ import main.classes.Control;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
 import main.database.ObjectFactory;
-import main.database.exceptions.DatabaseConnectionException;
-import main.database.exceptions.DatabaseObjectNotFoundException;
+import main.exceptions.DatabaseConnectionException;
+import main.exceptions.DatabaseObjectNotFoundException;
+import main.exceptions.UserAuthException;
 import main.objects.Group;
 import main.objects.User;
 
@@ -143,6 +144,9 @@ public class UserVerwaltenFXMLController implements Initializable
         {
             e.printStackTrace();
         } catch (DatabaseObjectNotFoundException e)
+        {
+            e.printStackTrace();
+        } catch (UserAuthException e)
         {
             e.printStackTrace();
         }
