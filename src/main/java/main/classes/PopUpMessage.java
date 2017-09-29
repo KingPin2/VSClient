@@ -5,18 +5,21 @@
  */
 package main.classes;
 
-import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
+import java.util.Optional;
+
 /**
- *
- * @author Laura
+ * @author Jan-Merlin Geuskens , 3580970
+ * @author Laura-Ann Schiestel, 3686779
+ * @author Yannick Peter Neumann, 3690024
  */
-public class PopUpMessage {
-    
-    
+public class PopUpMessage
+{
+
+
     public void showInformation(String title, String text)
     {
         Alert alert;
@@ -27,8 +30,8 @@ public class PopUpMessage {
         alert.setContentText(text);
         alert.showAndWait();
     }
-    
-      public void showError(String title, String text)
+
+    public void showError(String title, String text)
     {
         Alert alert;
         alert = new Alert(Alert.AlertType.ERROR);
@@ -38,16 +41,16 @@ public class PopUpMessage {
         alert.setContentText(text);
         alert.showAndWait();
     }
-      
-      public boolean showDialog(String question)
-      {
+
+    public boolean showDialog(String question)
+    {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Achtung!");
         alert.setHeaderText("");
         alert.setContentText(question);
 
         Optional<ButtonType> result = alert.showAndWait();
-        return result.get() == ButtonType.OK; 
+        return result.get() == ButtonType.OK;
 
-      }
+    }
 }

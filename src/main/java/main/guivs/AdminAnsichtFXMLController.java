@@ -6,52 +6,36 @@
 package main.guivs;
 
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import main.classes.GUIVS;
-import main.classes.IconButtonFXMLController;
 import main.classes.PopUpMessage;
-import main.database.ObjectFactory;
-import main.exceptions.DatabaseConnectionException;
-import main.exceptions.DatabaseObjectNotFoundException;
 import main.objects.Group;
 import main.objects.Message;
-
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.function.Predicate;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.stage.Stage;
-import javafx.scene.image.Image;
-import main.objects.User;
-import main.rmiinterface.NotifyUpdate;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
  *
- * @author Laura
+ * @author Jan-Merlin Geuskens , 3580970
+ * @author Laura-Ann Schiestel, 3686779
+ * @author Yannick Peter Neumann, 3690024
  */
 public class AdminAnsichtFXMLController implements Initializable
 {
@@ -64,22 +48,13 @@ public class AdminAnsichtFXMLController implements Initializable
     {
         return selectedMessage;
     }
-
     private static Message selectedMessage;
 
 
     // private ArrayList<ChoiceBox <KeyValuePair > > cbEntries;
     //Immer sichtbar in Navigation
     @FXML
-    private Button bNeueNachricht;
-    @FXML
-    private Button bBearbeiten;
-    @FXML
-    private Button bLoeschen;
-    @FXML
     private ChoiceBox cbAnzeigetafel;
-    @FXML
-    private Button bAnzeigetafel;
 
     //Tabelle
     @FXML
@@ -89,88 +64,13 @@ public class AdminAnsichtFXMLController implements Initializable
     @FXML
     private TableColumn tcUser;
     @FXML
-    private TableColumn tcGruppe;
-    @FXML
     private TableColumn tcZeitstempel;
-
-    //MenuBar
-
-    //Datei...
-    @FXML
-    private MenuItem miAktualisieren;
-    @FXML
-    private Menu mAnzeigetafel;
-
-    //Seperator...
-    @FXML
-    private MenuItem miAbmelden;
-    @FXML
-    private MenuItem miSchliessen;
-
-
-    //Bearbeiten...
-    @FXML
-    private MenuItem miNeueNachricht;
-    @FXML
-    private MenuItem miBearbeiten;
-    @FXML
-    private MenuItem miLoeschen;
-
-    //Seperator...
-    @FXML
-    private MenuItem miNeuerUser;
-    @FXML
-    private MenuItem miUserBearbeiten;
-
-    //Seperator...
-    @FXML
-    private MenuItem miNeueGruppe;
-    @FXML
-    private MenuItem miGruppeBearbeiten;
-
-    //Seperator...
-    @FXML
-    private MenuItem miNeueAnzeigetafel;
-    @FXML
-    private MenuItem miAnzeigetafelBearbeiten;
-
-
-    //Hilfe...
-    @FXML
-    private MenuItem miAbout;
-
-    @FXML
-    private ToolBar menubar;
-
-    //Acchordion
-    //User...
-    @FXML
-    private Button bUserAnlegen;
-    @FXML
-    private Button bUserBearbeiten;
-
-    //Gruppe...
-    @FXML
-    private Button bGruppeAnlegen;
-    @FXML
-    private Button bGruppeBearbeiten;
-
-    //Anzeigetafel...
-    @FXML
-    private Button bAnzeigetafelAnlegen;
-    @FXML
-    private Button bAnzeigetafelBearbeiten;
-
     private Group selectedGroup;
-
     @FXML
     private void onBoardChange()
     {
-
-            selectedGroup = cbAnzeigetafel.getSelectionModel().getSelectedItem() != null ? (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem() : selectedGroup;
-
+        selectedGroup = cbAnzeigetafel.getSelectionModel().getSelectedItem() != null ? (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem() : selectedGroup;
     }
-
 
     @FXML
     private void anzeigetafel()
@@ -183,8 +83,6 @@ public class AdminAnsichtFXMLController implements Initializable
             e.printStackTrace();
         }
     }
-
-
     @FXML
     private void gruppeAnlegen()
     {
@@ -197,7 +95,6 @@ public class AdminAnsichtFXMLController implements Initializable
         }
 
     }
-
     @FXML
     private void abmelden()
     {
@@ -272,7 +169,7 @@ public class AdminAnsichtFXMLController implements Initializable
     {
         try
         {
-            selectedMessage= (Message) tTabelle.getSelectionModel().getSelectedItem();
+            selectedMessage = (Message) tTabelle.getSelectionModel().getSelectedItem();
             GUIVS.bearbeiteNachricht(selectedMessage);
 
         } catch (Exception e)
@@ -302,21 +199,21 @@ public class AdminAnsichtFXMLController implements Initializable
     {
 
 
-            boolean b = pm.showDialog("Die ausgewählte Nachricht wird unwiderruflich gelöscht!");
-            if (b == true)
+        boolean b = pm.showDialog("Die ausgewählte Nachricht wird unwiderruflich gelöscht!");
+        if (b == true)
+        {
+            if (tTabelle.getSelectionModel().getSelectedItem() != null)
             {
-                if (tTabelle.getSelectionModel().getSelectedItem() != null)
+                try
                 {
-                    try
-                    {
-                        GUIVS.instance.getControl().getC().deleteMessage(tTabelle.getSelectionModel().getSelectedItem());
-                    } catch (Exception e)
-                    {
-                        pm.showError("Error", "Die Tabelle ist leer!");
-                        e.printStackTrace();
-                    }
+                    GUIVS.instance.getControl().getC().deleteMessage(tTabelle.getSelectionModel().getSelectedItem());
+                } catch (Exception e)
+                {
+                    pm.showError("Error", "Die Tabelle ist leer!");
+                    e.printStackTrace();
                 }
             }
+        }
 
     }
 
@@ -346,9 +243,11 @@ public class AdminAnsichtFXMLController implements Initializable
 
         tcNachrichten.setCellValueFactory(new PropertyValueFactory<Message, String>("message"));
         tcZeitstempel.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>() {
+                new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>()
+                {
                     @Override
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Message, String> message) {
+                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Message, String> message)
+                    {
                         SimpleStringProperty property = new SimpleStringProperty();
                         DateFormat dateFormat = new SimpleDateFormat("<dd.MM> HH:mm");
                         property.setValue(dateFormat.format(message.getValue().getTimestamp()));
@@ -382,36 +281,35 @@ public class AdminAnsichtFXMLController implements Initializable
             @Override
             public void run()
             {
-                    if (groups != null)
+                if (groups != null)
+                {
+                    cbAnzeigetafel.setConverter(new StringConverter()
                     {
-                        cbAnzeigetafel.setConverter(new StringConverter()
+                        @Override
+                        public String toString(Object object)
                         {
-                            @Override
-                            public String toString(Object object)
-                            {
-                                return ((Group) object).getName();
-                            }
+                            return ((Group) object).getName();
+                        }
 
-                            @Override
-                            public Object fromString(String string)
-                            {
-                                return null;
-                            }
-                        });
-                        cbAnzeigetafel.setItems(groups);
-                    }
-                    cbAnzeigetafel.getSelectionModel().selectFirst();
-                    selectedGroup = (Group )cbAnzeigetafel.getSelectionModel().getSelectedItem();
+                        @Override
+                        public Object fromString(String string)
+                        {
+                            return null;
+                        }
+                    });
+                    cbAnzeigetafel.setItems(groups);
+                }
+                cbAnzeigetafel.getSelectionModel().selectFirst();
+                selectedGroup = (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem();
 
                 GUIVS.gruppenFilter.bind(Bindings.createObjectBinding(() ->
                         {
-                            return message -> message != null && message.getGroup() != null && cbAnzeigetafel != null && cbAnzeigetafel.getValue() instanceof Group && ((Group) cbAnzeigetafel.getValue()) != null ? ((Group) cbAnzeigetafel.getValue()).getID() == message.getGroup().getID() : false;
+                            return (message -> message != null &&  message.getGroup() != null && cbAnzeigetafel != null && cbAnzeigetafel.getValue() instanceof Group && ((Group) cbAnzeigetafel.getValue()) != null ? ((Group) cbAnzeigetafel.getValue()).getID() == message.getGroup().getID() : false);
 
                         },
                         cbAnzeigetafel.valueProperty()));
                 FilteredList<Message> gefilterteNachrichten = new FilteredList<Message>(nachrichten, p -> true);
-                    gefilterteNachrichten.predicateProperty().bind(Bindings.createObjectBinding(
-                            () -> GUIVS.gruppenFilter.get(), GUIVS.gruppenFilter));
+                gefilterteNachrichten.predicateProperty().bind(Bindings.createObjectBinding(() -> GUIVS.gruppenFilter.get(), GUIVS.gruppenFilter));
 
 
                 SortedList<Message> sortierteNachrichten = new SortedList<Message>(gefilterteNachrichten);

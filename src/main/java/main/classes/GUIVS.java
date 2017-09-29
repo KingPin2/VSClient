@@ -10,7 +10,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -23,9 +22,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import main.anzeigetafel.AnzeigetafelFXMLController;
-import main.exceptions.DatabaseConnectionException;
-import main.exceptions.DatabaseObjectNotFoundException;
-import main.exceptions.UserAuthException;
 import main.formulare.BearbeitenFXMLController;
 import main.objects.Group;
 import main.objects.Message;
@@ -33,79 +29,101 @@ import main.objects.User;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Predicate;
 
 import static java.lang.System.exit;
 
 /**
- *
- * @author Jan-Merlin Geuskens, 3580970
+ * @author Jan-Merlin Geuskens , 3580970
+ * @author Laura-Ann Schiestel, 3686779
+ * @author Yannick Peter Neumann, 3690024
  */
-public class GUIVS extends Application {
-    
+public class GUIVS extends Application
+{
+
     public static GUIVS instance;
     private Control control;
+
+    public static ObjectProperty<Predicate<Message>> gruppenFilter = new SimpleObjectProperty<>();
+    private static HashMap<String, ObservableList<Message>> group_messages = new HashMap<String, ObservableList<Message>>();
 
     public static HashMap<String, ObservableList<Message>> getGroup_messages()
     {
         return group_messages;
     }
-    public static final ObjectProperty<Predicate<Message>> gruppenFilter = new SimpleObjectProperty<>();
-    private static HashMap<String, ObservableList<Message>> group_messages = new HashMap<String, ObservableList<Message>>();
-    public Control getControl() {
+
+    public Control getControl()
+    {
         return control;
     }
+
     public GUIVS()
     {
-            instance = this;
-            control = new Control();
-            
+        instance = this;
+        control = new Control();
+
     }
+
     private User me = null;
-//    private boolean isMod = false;
-//    public boolean isMod() {
-//        return isMod;
-//    }
-//
-//
-//    public void setIsMod(boolean isMod) {
-//        this.isMod = isMod;
-//    }
-    
+
     public void setMe(User me)
     {
         this.me = me;
     }
+
     public User getMe()
     {
         return this.me;
     }
-    
+
     private static Stage previousStage;
+
     public static void setPreviousStage(Stage stage)
     {
         instance.previousStage = stage;
     }
-    
-    public static Stage getPreviousStage()
-    {
-        return instance.previousStage;
-    }
+
     public static void setIcon(Stage stage)
     {
         stage.getIcons().add(new Image("pt_logo_x24.png"));
     }
 
 
-    public static void neueNachricht() throws Exception
+    private static Parent loadFXML(String path) throws Exception
     {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(GUIVS.class.getResource("/neueNachrichtFXML.fxml"));
-        Parent p = loader.load();
+        loader.setLocation(GUIVS.class.getResource(path));
+        return loader.load();
+    }
 
-        Scene vtScene = new Scene(p);
+    public static void defaultClose(Stage stage)
+    {
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>()
+        {
+            @Override
+            public void handle(WindowEvent t)
+            {
+                try
+                {
+                    GUIVS.instance.getControl().getC().disconnect();
+                } catch (RemoteException e)
+                {
+                    e.printStackTrace();
+                }
+                Platform.exit();
+                exit(0);
+            }
+        });
+    }
+
+    public static void neueNachricht() throws Exception
+    {
+//        FXMLLoader loader = new FXMLLoader();
+//        loader.setLocation(GUIVS.class.getResource("/neueNachrichtFXML.fxml"));
+//        Parent p = loader.load();
+
+        Scene vtScene = new Scene(loadFXML("/neueNachrichtFXML.fxml"));
         Stage vtStage = new Stage();
         vtStage.setTitle("Neue Nachricht");
         setIcon(vtStage);
@@ -122,51 +140,34 @@ public class GUIVS extends Application {
         loader.setLocation(GUIVS.class.getResource("/Anzeigetafel.fxml"));
         Parent root = loader.load();
         AnzeigetafelFXMLController ac = loader.<AnzeigetafelFXMLController>getController();
-     //   ObservableList<Message> messages = group_messages.get(g.getName());
 
+        //Gruppenfilter auf Messages initalisieren
         FilteredList<Message> groupFilteredData = new FilteredList<>(GUIVS.instance.getControl().getMessages(), p -> true);
-       groupFilteredData.setPredicate(new Predicate<Message>()
-       {
-           @Override
-           public boolean test(Message message)
-           {
-               if(message.getGroup().getID() == g.getID())
-               {
-                   return true;
-               }
-               else
-               {
-                   return false;
-               }
+        groupFilteredData.setPredicate(new Predicate<Message>()
+        {
+            @Override
+            public boolean test(Message message)
+            {
+                if (message.getGroup().getID() == g.getID())
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
 
-           }
-       });
+            }
+        });
         SortedList<Message> sortedData = new SortedList<Message>(groupFilteredData);
         sortedData.setComparator((a, b) -> a.getTimestamp() < b.getTimestamp() ? -1 : a.getTimestamp() == b.getTimestamp() ? 0 : 1);
-
-
         ac.setM(sortedData);
-
         ac.setGroup(g);
-
         Scene vtScene = new Scene(root);
         Stage vtStage = new Stage();
         vtStage.setTitle("Anzeigetafel der Gruppe " + g.getName());
-        if(GUIVS.instance.getMe().getLevel() == 0 )
+        if (GUIVS.instance.getMe().getLevel() == 0)
         {
-            vtStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override public void handle(WindowEvent t) {
-                    try
-                    {
-                        GUIVS.instance.getControl().getC().disconnect();
-                    } catch (RemoteException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    Platform.exit();
-                    exit(0);
-                }
-            });
+            defaultClose(vtStage);
         }
         setIcon(vtStage);
         vtStage.setScene(vtScene);
@@ -175,11 +176,7 @@ public class GUIVS extends Application {
 
     public static void neuerUser() throws Exception
     {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(GUIVS.class.getResource("/userAnlegenFXML.fxml"));
-        Parent p = loader.load();
-
-        Scene vtScene = new Scene(p);
+        Scene vtScene = new Scene(loadFXML("/userAnlegenFXML.fxml"));
         Stage vtStage = new Stage();
         vtStage.setTitle("Neuer User");
         setIcon(vtStage);
@@ -192,11 +189,7 @@ public class GUIVS extends Application {
 
     public static void userVerwalten() throws Exception
     {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(GUIVS.class.getResource("/userVerwaltenFXML.fxml"));
-        Parent p = loader.load();
-
-        Scene vtScene = new Scene(p);
+        Scene vtScene = new Scene(loadFXML("/userVerwaltenFXML.fxml"));
         Stage vtStage = new Stage();
         vtStage.setTitle("User Verwalten");
         setIcon(vtStage);
@@ -209,11 +202,7 @@ public class GUIVS extends Application {
 
     public static void gruppeAnlegen() throws Exception
     {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(GUIVS.class.getResource("/neueGruppeFXML.fxml"));
-        Parent p = loader.load();
-
-        Scene vtScene = new Scene(p);
+        Scene vtScene = new Scene(loadFXML("/neueGruppeFXML.fxml"));
         Stage vtStage = new Stage();
         vtStage.setTitle("Gruppe anlegen");
         setIcon(vtStage);
@@ -226,11 +215,7 @@ public class GUIVS extends Application {
 
     public static void gruppeVerwalten() throws Exception
     {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(GUIVS.class.getResource("/gruppeVerwaltenFXML.fxml"));
-        Parent p = loader.load();
-
-        Scene vtScene = new Scene(p);
+        Scene vtScene = new Scene(loadFXML("/gruppeVerwaltenFXML.fxml"));
         Stage vtStage = new Stage();
         vtStage.setTitle("Gruppen verwalten");
         setIcon(vtStage);
@@ -240,16 +225,14 @@ public class GUIVS extends Application {
         vtStage.setResizable(false);
         vtStage.showAndWait();
     }
-    
-     public static void bearbeiteNachricht(Message m) throws Exception
+
+    public static void bearbeiteNachricht(Message m) throws Exception
     {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(GUIVS.class.getResource("/bearbeitenFXML.fxml"));
         Parent p = loader.load();
         BearbeitenFXMLController mc = loader.<BearbeitenFXMLController>getController();
         mc.setM(m);
-
-        
         Scene vtScene = new Scene(p);
         Stage vtStage = new Stage();
         vtStage.setTitle("Nachricht bearbeiten");
@@ -260,151 +243,40 @@ public class GUIVS extends Application {
         vtStage.setResizable(false);
         vtStage.showAndWait();
     }
-    
-    
+
+
     public static void userAnsicht() throws Exception
     {
-        //fillgroups();
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(GUIVS.class.getResource("/userAnsichtFXML.fxml"));
-        Parent p = loader.load();
-        
-        Scene vtScene = new Scene(p);
+        Scene vtScene = new Scene(loadFXML("/userAnsichtFXML.fxml"));
         Stage vtStage = new Stage();
         setPreviousStage(vtStage);
         vtStage.setTitle("Ansicht für User");
-        vtStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override public void handle(WindowEvent t) {
-                try
-                {
-                    GUIVS.instance.getControl().getC().disconnect();
-                } catch (RemoteException e)
-                {
-                    e.printStackTrace();
-                }
-                Platform.exit();
-                exit(0);
-        }
-        });
+        defaultClose(vtStage);
         setIcon(vtStage);
         vtStage.setScene(vtScene);
         vtStage.setResizable(false);
         vtStage.showAndWait();
     }
 
-        public static void adminAnsicht() throws Exception
+    public static void adminAnsicht() throws Exception
     {
         //fillgroups();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(GUIVS.class.getResource("/adminAnsichtFXML.fxml"));
         Parent p = loader.load();
-        
+
         Scene vtScene = new Scene(p);
         Stage vtStage = new Stage();
         setPreviousStage(vtStage);
         vtStage.setTitle("Ansicht für Administratoren");
-
-
-            vtStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override public void handle(WindowEvent t) {
-                    try
-                    {
-                        GUIVS.instance.getControl().getC().disconnect();
-                    } catch (RemoteException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    Platform.exit();
-                    exit(0);
-                }
-            });
-
+        defaultClose(vtStage);
         setIcon(vtStage);
         vtStage.setScene(vtScene);
         vtStage.setResizable(false);
         vtStage.showAndWait();
     }
 
-    private static void fillgroups()
-    {
-        ArrayList<Group> groups;
 
-        if(GUIVS.instance.getMe().getLevel() == 1) {
-            try {
-                groups = GUIVS.instance.getControl().getC().getGroupsByUser(GUIVS.instance.getMe());
-                if(groups != null) {
-                    for (Group g : groups) {
-                        group_messages.put(g.getName(), FXCollections.observableArrayList());
-                    }
-                }
-
-            } catch (DatabaseConnectionException e) {
-                e.printStackTrace();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            } catch (DatabaseObjectNotFoundException e) {
-                e.printStackTrace();
-            } catch (UserAuthException e)
-            {
-                e.printStackTrace();
-            }
-
-        }
-        else if( GUIVS.instance.getMe().getLevel() == 2)
-        {
-            try
-            {
-                groups = GUIVS.instance.getControl().getC().getGroups();
-                if (groups != null)
-                {
-                    for (Group g : groups)
-                    {
-                        group_messages.put(g.getName(), FXCollections.observableArrayList());
-
-                        if (GUIVS.instance.getControl().getC().getMessagesByGroup(g) != null)
-                        {
-                            group_messages.get(g.getName()).addAll(GUIVS.instance.getControl().getC().getMessagesByGroup(g));
-                        }//TODO warum springt der hier raus und durchläuft schleife nicht erneut?
-                    }
-                }
-
-            }
-            catch (DatabaseConnectionException e) {
-                e.printStackTrace();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            } catch (DatabaseObjectNotFoundException e) {
-                //e.printStackTrace();
-            } catch (UserAuthException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-    /*
-        public static void oeffneAnzeigetafel(Map.Entry<Group, ObservableList<Message>> me) throws Exception
-        {
-            me.getValue().addAll(GUIVS.instance.getControl().getC().getMessagesByGroup(me.getKey()));
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(GUIVS.class.getResource("/Anzeigetafel.fxml"));
-        
-        Parent p = loader.load();
-        
-        //Übergeben von ArrayList<Messages> an Anzeigetafel
-        AnzeigetafelFXMLController mc = loader.<AnzeigetafelFXMLController>getController();
-        mc.setM(me.getValue());
-        
-
-        Scene vtScene = new Scene(p);
-        Stage vtStage = new Stage();
-        
-        vtStage.setTitle("Anzeigetafel: " + g.getName());
-        setIcon(vtStage);
-        
-        vtStage.setScene(vtScene);
-        vtStage.showAndWait();
-        }
-*/
     public static void login(Stage stage)
     {
         FXMLLoader loader = new FXMLLoader();
@@ -428,17 +300,16 @@ public class GUIVS extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-
+    public void start(Stage stage) throws Exception
+    {
         GUIVS.login(stage);
-
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         launch(args);
     }
-    
 }

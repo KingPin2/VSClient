@@ -7,18 +7,22 @@ package main.classes;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.exceptions.*;
+import main.exceptions.DatabaseConnectionException;
+import main.exceptions.DatabaseObjectNotFoundException;
+import main.exceptions.UserAuthException;
 import main.objects.Group;
 import main.objects.Message;
 import main.objects.User;
-import main.rmiconnections.*;
+import main.rmiconnections.Client;
 import main.rmiinterface.NotifyUpdate;
 
 import java.rmi.RemoteException;
 
 
 /**
- * @author  Jan-Merlin Geuskens, 3580970
+ * @author Jan-Merlin Geuskens , 3580970
+ * @author Laura-Ann Schiestel, 3686779
+ * @author Yannick Peter Neumann, 3690024
  */
 public class Control
 {
@@ -32,6 +36,7 @@ public class Control
     {
         return c;
     }
+
     public void setC(Client c)
     {
         this.c = c;
@@ -41,10 +46,12 @@ public class Control
     {
         return groups;
     }
+
     public ObservableList<User> getUsers()
     {
         return users;
     }
+
     public ObservableList<Message> getMessages()
     {
         return messages;
@@ -52,7 +59,7 @@ public class Control
 
 
     /**
-     * @author  Jan-Merlin Geuskens, 3580970
+     * @author Jan-Merlin Geuskens, 3580970
      * Initialen Datensatz vom Server laden
      */
     public void getData()
@@ -139,6 +146,25 @@ public class Control
             groups = FXCollections.observableArrayList();
             users = FXCollections.observableArrayList();
             messages = FXCollections.observableArrayList();
+
+            try
+            {
+                groups.addAll(GUIVS.instance.getControl().getC().getGroupByName(GUIVS.instance.getMe().getName()));
+                messages.addAll(GUIVS.instance.getControl().getC().getMessagesByGroup(GUIVS.instance.getControl().getC().getGroupByName(GUIVS.instance.getMe().getName())));
+            } catch (DatabaseConnectionException e)
+            {
+                e.printStackTrace();
+            } catch (RemoteException e)
+            {
+                e.printStackTrace();
+            } catch (DatabaseObjectNotFoundException e)
+            {
+                e.printStackTrace();
+            } catch (UserAuthException e)
+            {
+                e.printStackTrace();
+            }
+
 
         }
     }

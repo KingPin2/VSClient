@@ -5,24 +5,24 @@
  */
 package main.formulare;
 
-import javafx.scene.control.*;
-import main.classes.Control;
-import main.exceptions.EmptyStringException;
-import main.objects.*;
-import main.database.*;
-import main.classes.*;
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import main.classes.GUIVS;
+import main.classes.PopUpMessage;
+import main.database.ObjectFactory;
+import main.exceptions.EmptyStringException;
+import main.objects.User;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
  *
- * @author Laura
+ * @author Jan-Merlin Geuskens , 3580970
+ * @author Laura-Ann Schiestel, 3686779
+ * @author Yannick Peter Neumann, 3690024
  */
 
 
@@ -57,7 +57,7 @@ public class UserAnlegenFXMLController implements Initializable
     @FXML
     private void speichereUser()
     {
-        int level = 0;
+        int level;
         if (rbUser.isSelected())
         {
 
@@ -69,7 +69,7 @@ public class UserAnlegenFXMLController implements Initializable
 
         try
         {
-            if(tfUsername.getText().equals("") || tfPasswort.getText().equals(""))
+            if (tfUsername.getText().equals("") || tfPasswort.getText().equals(""))
             {
                 throw new EmptyStringException();
             }
@@ -77,11 +77,10 @@ public class UserAnlegenFXMLController implements Initializable
             GUIVS.instance.getControl().getC().saveUser(neuerUser);
             pm.showInformation("Information", "User erfolgreich angelegt!");
             close();
-        }catch(EmptyStringException es)
+        } catch (EmptyStringException es)
         {
-            pm.showError("Fehler","Username und Passwort dürfen nicht leer sein!");
-        }
-        catch (Exception e)
+            pm.showError("Fehler", "Username und Passwort dürfen nicht leer sein!");
+        } catch (Exception e)
         {
             e.printStackTrace();
         }

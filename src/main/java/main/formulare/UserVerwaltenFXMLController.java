@@ -5,37 +5,30 @@
  */
 package main.formulare;
 
-import java.net.URL;
-import java.rmi.RemoteException;
-import java.util.ResourceBundle;
-
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import main.classes.Control;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
-import main.database.ObjectFactory;
 import main.exceptions.DatabaseConnectionException;
 import main.exceptions.DatabaseObjectNotFoundException;
 import main.exceptions.UserAuthException;
-import main.objects.Group;
 import main.objects.User;
+import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
  *
- * @author Laura
+ * @author Jan-Merlin Geuskens , 3580970
+ * @author Laura-Ann Schiestel, 3686779
+ * @author Yannick Peter Neumann, 3690024
  */
 public class UserVerwaltenFXMLController implements Initializable
 {

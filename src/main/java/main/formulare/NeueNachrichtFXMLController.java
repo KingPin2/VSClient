@@ -28,7 +28,9 @@ import main.objects.Message;
 /**
  * FXML Controller class
  *
- * @author Laura
+ * @author Jan-Merlin Geuskens , 3580970
+ * @author Laura-Ann Schiestel, 3686779
+ * @author Yannick Peter Neumann, 3690024
  */
 public class NeueNachrichtFXMLController implements Initializable
 {

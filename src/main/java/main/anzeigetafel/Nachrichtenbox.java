@@ -16,7 +16,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * @author Jan-Merlin Geuskens, 3580970
+ * @author Jan-Merlin Geuskens , 3580970
+ * @author Laura-Ann Schiestel, 3686779
+ * @author Yannick Peter Neumann, 3690024
  */
 public class Nachrichtenbox extends HBox
 {

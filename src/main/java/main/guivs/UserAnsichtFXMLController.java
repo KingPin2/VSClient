@@ -6,47 +6,35 @@
 package main.guivs;
 
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.scene.control.*;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import main.classes.GUIVS;
-import main.classes.IconButtonFXMLController;
 import main.classes.PopUpMessage;
-import main.database.ObjectFactory;
-import main.exceptions.DatabaseConnectionException;
-import main.exceptions.DatabaseObjectNotFoundException;
-import main.exceptions.UserAuthException;
 import main.objects.Group;
 import main.objects.Message;
-
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ResourceBundle;
 import java.util.function.Predicate;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.stage.Stage;
-import javafx.scene.image.Image;
-import main.objects.User;
-import main.rmiinterface.NotifyUpdate;
 
 /**
  * FXML Controller class

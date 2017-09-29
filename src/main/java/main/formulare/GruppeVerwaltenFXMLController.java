@@ -5,31 +5,27 @@
  */
 package main.formulare;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-import java.util.function.Predicate;
-
 import javafx.application.Platform;
-import javafx.beans.binding.ObjectExpression;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
-import main.exceptions.DatabaseObjectNotFoundException;
 import main.objects.Group;
 import main.objects.User;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 /**
  * FXML Controller class
  *
- * @author Laura
+ * @author Jan-Merlin Geuskens , 3580970
+ * @author Laura-Ann Schiestel, 3686779
+ * @author Yannick Peter Neumann, 3690024
+ *
  */
 public class GruppeVerwaltenFXMLController implements Initializable
 {
@@ -39,28 +35,27 @@ public class GruppeVerwaltenFXMLController implements Initializable
      */
 
     private PopUpMessage pm;
-    @FXML private ComboBox cbGruppe;
-    @FXML private ComboBox cbMember;
-    @FXML private ComboBox cbUser;
-    @FXML private ComboBox cbMod;
+    @FXML
+    private ComboBox cbGruppe;
+    @FXML
+    private ComboBox cbMember;
+    @FXML
+    private ComboBox cbUser;
+    @FXML
+    private ComboBox cbMod;
 
-    @FXML private Button bKick;
-    @FXML private Button bInvite;
-    @FXML private Button bSave;
-    @FXML private Button bCancel;
-
+//    @FXML private Button bKick;
+//    @FXML private Button bInvite;
+//    @FXML private Button bSave;
+//    @FXML private Button bCancel;
 
     private Group selectedGroup;
     private User selectedUser;
     private User selectedMod;
     private User selectedMember;
 
-    ObservableList<Group> gruppen;
-    ObservableList<User> member;
-    ObservableList<User> users;
-
-
-    @FXML private void close()
+    @FXML
+    private void close()
     {
         Stage stage = (Stage) cbGruppe.getScene().getWindow();
         stage.close();
@@ -109,25 +104,26 @@ public class GruppeVerwaltenFXMLController implements Initializable
     {
         try
         {
-                GUIVS.instance.getControl().getC().deleteGroup(selectedGroup);
-                pm.showInformation("Information","Gruppe gelöscht!!");
-                updateGroups();
+            GUIVS.instance.getControl().getC().deleteGroup(selectedGroup);
+            pm.showInformation("Information", "Gruppe gelöscht!!");
+            updateGroups();
         } catch (Exception e)
         {
-            pm.showInformation("Information","Keine Gruppe ausgewählt!");
+            pm.showInformation("Information", "Keine Gruppe ausgewählt!");
             e.printStackTrace();
         }
     }
-    @FXML private void save()
+
+    @FXML
+    private void save()
     {
-        if( ! selectedMod.equals(selectedGroup.getModerator()))
+        if (!selectedMod.equals(selectedGroup.getModerator()))
         {
             selectedGroup.setModerator(selectedMod);
-            pm.showInformation("Information","Neuer Moderator gespeichert");
-        }
-        else
+            pm.showInformation("Information", "Neuer Moderator gespeichert");
+        } else
         {
-            pm.showInformation("Information","Moderator wurde nicht geändert");
+            pm.showInformation("Information", "Moderator wurde nicht geändert");
         }
 
         try
@@ -139,7 +135,8 @@ public class GruppeVerwaltenFXMLController implements Initializable
         }
     }
 
-    @FXML private void onChangeMod()
+    @FXML
+    private void onChangeMod()
     {
         try
         {
@@ -150,7 +147,9 @@ public class GruppeVerwaltenFXMLController implements Initializable
             e.printStackTrace();
         }
     }
-    @FXML private void onChangeMember()
+
+    @FXML
+    private void onChangeMember()
     {
         try
         {
@@ -165,7 +164,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
                 cbMember.getSelectionModel().selectFirst();
                 selectedMember = (User) cbMember.getSelectionModel().getSelectedItem();
-            }catch(Exception e2)
+            } catch (Exception e2)
             {
                 pm.showError("Error", "Keine Member in Gruppe!");
                 close();
@@ -173,7 +172,8 @@ public class GruppeVerwaltenFXMLController implements Initializable
         }
     }
 
-    @FXML private void onChangeUser()
+    @FXML
+    private void onChangeUser()
     {
         try
         {
@@ -188,7 +188,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
                 cbUser.getSelectionModel().selectFirst();
                 selectedUser = (User) cbUser.getSelectionModel().getSelectedItem();
-            }catch(Exception e2)
+            } catch (Exception e2)
             {
                 pm.showError("Error", "Keine User gefunden!");
                 close();
@@ -196,7 +196,8 @@ public class GruppeVerwaltenFXMLController implements Initializable
         }
     }
 
-    @FXML private void onChangeGroup()
+    @FXML
+    private void onChangeGroup()
     {
         try
         {
@@ -212,7 +213,6 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
     private void updateGroups()
     {
-
         try
         {
             cbGruppe.getItems().clear();
@@ -224,7 +224,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
             updateUsers();
             updateMods();
         } catch (NullPointerException e)
-            {
+        {
             pm.showError("Error", "Keine Gruppen angelegt!");
             close();
         }
@@ -236,6 +236,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
         cbMember.getItems().clear();
         cbMember.getItems().addAll(selectedGroup.getMembers());
     }
+
     private void updateUsers()
     {
         cbUser.getItems().clear();
@@ -244,18 +245,18 @@ public class GruppeVerwaltenFXMLController implements Initializable
             @Override
             public boolean test(User user)
             {
-                if(user.getLevel() > 0)
+                if (user.getLevel() > 0)
                 {
                     return true;
-                }
-                else
+                } else
                 {
-                   return false;
+                    return false;
                 }
             }
         }));
         cbUser.getItems().removeAll(((Group) cbGruppe.getSelectionModel().getSelectedItem()).getMembers());
     }
+
     private void updateMods()
     {
         try
@@ -266,11 +267,10 @@ public class GruppeVerwaltenFXMLController implements Initializable
                 @Override
                 public boolean test(User user)
                 {
-                    if(user.getLevel() == 2)
+                    if (user.getLevel() == 2)
                     {
                         return true;
-                    }
-                    else
+                    } else
                     {
                         return false;
                     }
@@ -289,78 +289,81 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
     private void initGUI()
     {
-            updateGroups();
+        updateGroups();
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb)
+    {
         // TODO
 
-            pm = new PopUpMessage();
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
+        pm = new PopUpMessage();
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
 
-                    cbGruppe.setConverter(new StringConverter()
+                cbGruppe.setConverter(new StringConverter()
+                {
+                    @Override
+                    public String toString(Object object)
                     {
-                        @Override
-                        public String toString(Object object)
-                        {
-                            return ((Group) object).getName();
-                        }
+                        return ((Group) object).getName();
+                    }
 
-                        @Override
-                        public Object fromString(String string)
-                        {
-                            return null;
-                        }
-                    });
-                    cbMember.setConverter(new StringConverter()
+                    @Override
+                    public Object fromString(String string)
                     {
-                        @Override
-                        public String toString(Object object)
-                        {
-                            return ((User) object).getName();
-                        }
-
-                        @Override
-                        public Object fromString(String string)
-                        {
-                            return null;
-                        }
-                    });
-                    cbUser.setConverter(new StringConverter()
+                        return null;
+                    }
+                });
+                cbMember.setConverter(new StringConverter()
+                {
+                    @Override
+                    public String toString(Object object)
                     {
-                        @Override
-                        public String toString(Object object)
-                        {
-                            return ((User) object).getName();
-                        }
+                        return ((User) object).getName();
+                    }
 
-                        @Override
-                        public Object fromString(String string)
-                        {
-                            return null;
-                        }
-                    });
-                    cbMod.setConverter(new StringConverter()
+                    @Override
+                    public Object fromString(String string)
                     {
-                        @Override
-                        public String toString(Object object)
-                        {
-                            return ((User) object).getName();
-                        }
+                        return null;
+                    }
+                });
+                cbUser.setConverter(new StringConverter()
+                {
+                    @Override
+                    public String toString(Object object)
+                    {
+                        return ((User) object).getName();
+                    }
 
-                        @Override
-                        public Object fromString(String string)
-                        {
-                            return null;
-                        }
-                    });
-                    initGUI();
-                }
-            });
+                    @Override
+                    public Object fromString(String string)
+                    {
+                        return null;
+                    }
+                });
+                cbMod.setConverter(new StringConverter()
+                {
+                    @Override
+                    public String toString(Object object)
+                    {
+                        return ((User) object).getName();
+                    }
 
-        }
+                    @Override
+                    public Object fromString(String string)
+                    {
+                        return null;
+                    }
+                });
+                initGUI();
+            }
+        });
+
     }
+}
 

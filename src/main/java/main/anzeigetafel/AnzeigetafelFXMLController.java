@@ -22,7 +22,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * @author Jan-Merlin Geuskens, 3580970
+ * @author Jan-Merlin Geuskens , 3580970
+ * @author Laura-Ann Schiestel, 3686779
+ * @author Yannick Peter Neumann, 3690024
  */
 public class AnzeigetafelFXMLController implements Initializable
 {
