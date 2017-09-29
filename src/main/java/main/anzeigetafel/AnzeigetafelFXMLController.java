@@ -9,39 +9,31 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import main.objects.Group;
-import main.objects.Message;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import main.objects.Group;
+import main.objects.Message;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
- * @author Laura
+ * @author Jan-Merlin Geuskens, 3580970
  */
 public class AnzeigetafelFXMLController implements Initializable
 {
-
     @FXML
     private VBox vbox;
-
-
     @FXML
     private ScrollPane scrollpane;
-
-    @FXML
-    private HBox hbox;
-
     @FXML
     private Label lTafel;
+    private Group group;
+    private ObservableList<Message> m;
 
     public Group getGroup()
     {
@@ -53,25 +45,12 @@ public class AnzeigetafelFXMLController implements Initializable
         this.group = group;
     }
 
-    private Group group;
-    private ObservableList<Message> m;
-
-    public ObservableList<Message> getM()
-    {
-        return m;
-    }
-
     public void setM(ObservableList<Message> m)
     {
         this.m = m;
     }
 
     private ObservableList<Nachrichtenbox> nb;
-
-    public void reset()
-    {
-
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -85,24 +64,17 @@ public class AnzeigetafelFXMLController implements Initializable
                 if (m != null)
                 {
 
-                    for(int i = m.size() -1; i >= 0; i-- )
+                    for (int i = m.size() - 1; i >= 0; i--)
                     {
                         nb.add(new Nachrichtenbox(m.get(i)));
                     }
-//                    for (Message me : m)
-//                    {
-//                        nb.add(new Nachrichtenbox(me));
-//                    }
                 }
-
                 vbox.getChildren().addAll(nb);
                 lTafel.setText(group.getName());
-
                 scrollpane.setHbarPolicy(ScrollBarPolicy.NEVER);
                 scrollpane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
                 scrollpane.setFitToHeight(true);
                 scrollpane.setFitToWidth(true);
-
                 m.addListener(new ListChangeListener<Message>()
                 {
 
@@ -118,12 +90,11 @@ public class AnzeigetafelFXMLController implements Initializable
                                 vbox.getChildren().clear();
                                 if (m != null)
                                 {
-                                    for(int i = m.size()-1; i >= 0; i-- )
+                                    for (int i = m.size() - 1; i >= 0; i--)
                                     {
                                         nb.add(new Nachrichtenbox(m.get(i)));
                                     }
                                 }
-
                                 vbox.getChildren().addAll(nb);
                             }
                         });
@@ -132,9 +103,5 @@ public class AnzeigetafelFXMLController implements Initializable
                 });
             }
         });
-
-
-
     }
-
 }

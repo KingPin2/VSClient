@@ -122,6 +122,10 @@ public class BearbeitenFXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         pm = new PopUpMessage();
+        if(GUIVS.instance.getMe().getLevel() != 2)
+        {
+            bVeroeffentlichen.setDisable(true);
+        }
         Platform.runLater(new Runnable(){@Override public void run(){ladeNachricht();}});
 
     }    

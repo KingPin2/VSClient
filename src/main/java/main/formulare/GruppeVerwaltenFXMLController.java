@@ -215,6 +215,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
         try
         {
+            cbGruppe.getItems().clear();
             cbGruppe.getItems().addAll(GUIVS.instance.getControl().getGroups());
             cbGruppe.getSelectionModel().selectFirst();
             selectedGroup = (Group) cbGruppe.getSelectionModel().getSelectedItem();
@@ -238,7 +239,21 @@ public class GruppeVerwaltenFXMLController implements Initializable
     private void updateUsers()
     {
         cbUser.getItems().clear();
-        cbUser.getItems().addAll(GUIVS.instance.getControl().getUsers());
+        cbUser.getItems().addAll(GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
+        {
+            @Override
+            public boolean test(User user)
+            {
+                if(user.getLevel() > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                   return false;
+                }
+            }
+        }));
         cbUser.getItems().removeAll(((Group) cbGruppe.getSelectionModel().getSelectedItem()).getMembers());
     }
     private void updateMods()

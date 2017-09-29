@@ -7,6 +7,7 @@ package main.formulare;
 
 import javafx.scene.control.*;
 import main.classes.Control;
+import main.exceptions.EmptyStringException;
 import main.objects.*;
 import main.database.*;
 import main.classes.*;
@@ -68,11 +69,19 @@ public class UserAnlegenFXMLController implements Initializable
 
         try
         {
+            if(tfUsername.getText().equals("") || tfPasswort.getText().equals(""))
+            {
+                throw new EmptyStringException();
+            }
             neuerUser = ObjectFactory.createUser(tfUsername.getText(), tfPasswort.getText(), level);
             GUIVS.instance.getControl().getC().saveUser(neuerUser);
             pm.showInformation("Information", "User erfolgreich angelegt!");
             close();
-        } catch (Exception e)
+        }catch(EmptyStringException es)
+        {
+            pm.showError("Fehler","Username und Passwort dürfen nicht leer sein!");
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }

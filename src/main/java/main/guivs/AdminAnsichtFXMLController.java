@@ -33,6 +33,7 @@ import main.objects.Message;
 
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -248,6 +249,7 @@ public class AdminAnsichtFXMLController implements Initializable
             GUIVS.neuerUser();
         } catch (Exception e)
         {
+            System.out.println("TEST4");
             e.printStackTrace();
         }
 
@@ -289,7 +291,8 @@ public class AdminAnsichtFXMLController implements Initializable
         {
             e.printStackTrace();
         }
-
+        GUIVS.instance.getControl().setC(null);
+        GUIVS.instance.setMe(null);
         Stage stage = (Stage) tTabelle.getScene().getWindow();
         stage.close();
     }
@@ -399,14 +402,17 @@ public class AdminAnsichtFXMLController implements Initializable
                     }
                     cbAnzeigetafel.getSelectionModel().selectFirst();
                     selectedGroup = (Group )cbAnzeigetafel.getSelectionModel().getSelectedItem();
-                ObjectProperty<Predicate<Message>> gruppenFilter = new SimpleObjectProperty<>();
-                gruppenFilter.bind(Bindings.createObjectBinding(() ->
-                                message -> ((Group) cbAnzeigetafel.getValue()).getName().equals(message.getGroup().getName()),
+
+                GUIVS.gruppenFilter.bind(Bindings.createObjectBinding(() ->
+                        {
+                            return message -> message != null && message.getGroup() != null && cbAnzeigetafel != null && cbAnzeigetafel.getValue() instanceof Group && ((Group) cbAnzeigetafel.getValue()) != null ? ((Group) cbAnzeigetafel.getValue()).getID() == message.getGroup().getID() : false;
+
+                        },
                         cbAnzeigetafel.valueProperty()));
                 FilteredList<Message> gefilterteNachrichten = new FilteredList<Message>(nachrichten, p -> true);
+                    gefilterteNachrichten.predicateProperty().bind(Bindings.createObjectBinding(
+                            () -> GUIVS.gruppenFilter.get(), GUIVS.gruppenFilter));
 
-                gefilterteNachrichten.predicateProperty().bind(Bindings.createObjectBinding(
-                        () -> gruppenFilter.get(), gruppenFilter));
 
                 SortedList<Message> sortierteNachrichten = new SortedList<Message>(gefilterteNachrichten);
                 tTabelle.setItems(sortierteNachrichten);

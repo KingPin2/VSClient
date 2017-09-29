@@ -18,33 +18,24 @@ import java.rmi.RemoteException;
 
 
 /**
- *
- * @author Laura
+ * @author  Jan-Merlin Geuskens, 3580970
  */
-public class Control {
- 
+public class Control
+{
     private Client c;
+    private ObservableList<Group> groups;
+    private ObservableList<User> users;
+    private ObservableList<Message> messages;
     private NotifyUpdate callback;
 
-    public Client getC() {
+    public Client getC()
+    {
         return c;
     }
-
     public void setC(Client c)
     {
         this.c = c;
     }
-
-    private ObservableList<Group> groups;
-    private ObservableList<User> users;
-    private ObservableList<Message> messages;
-
-    public ObservableList<Message> getMyMessages()
-    {
-        return myMessages;
-    }
-
-    private ObservableList<Message> myMessages;
 
     public ObservableList<Group> getGroups()
     {
@@ -60,9 +51,13 @@ public class Control {
     }
 
 
+    /**
+     * @author  Jan-Merlin Geuskens, 3580970
+     * Initialen Datensatz vom Server laden
+     */
     public void getData()
     {
-        if(GUIVS.instance.getMe().getLevel() == 2)
+        if (GUIVS.instance.getMe().getLevel() == 2)
         {
             groups = FXCollections.observableArrayList();
             users = FXCollections.observableArrayList();
@@ -88,6 +83,46 @@ public class Control {
             {
                 PopUpMessage pm = new PopUpMessage();
                 pm.showInformation("Information", "Sie haben noch keine Nachricht veröffentlicht!");
+            } catch (RemoteException e)
+            {
+
+            } catch (UserAuthException e)
+            {
+                e.printStackTrace();
+            }
+        } else if (GUIVS.instance.getMe().getLevel() == 1)
+        {
+            groups = FXCollections.observableArrayList();
+            users = FXCollections.observableArrayList();
+            messages = FXCollections.observableArrayList();
+            try
+            {
+                for (Group g : c.getGroupsByUser(GUIVS.instance.getMe()))
+                {
+                    groups.add(g);
+                }
+                boolean found = false;
+                for (Group g : groups)
+                {
+                    try
+                    {
+                        for (Message m : c.getMessagesByGroup(g))
+                        {
+                            messages.add(m);
+                        }
+                        found = true;
+                    } catch (DatabaseObjectNotFoundException de)
+                    {
+
+                    }
+                }
+                if (!found)
+                {
+                    PopUpMessage pm = new PopUpMessage();
+                    pm.showInformation("Information", "Sie haben noch keine Nachricht veröffentlicht!");
+                }
+            } catch (DatabaseConnectionException e)
+            {
                 e.printStackTrace();
             } catch (RemoteException e)
             {
@@ -95,60 +130,28 @@ public class Control {
             } catch (UserAuthException e)
             {
                 e.printStackTrace();
+            } catch (DatabaseObjectNotFoundException e)
+            {
+                e.printStackTrace();
             }
-        }if(GUIVS.instance.getMe().getLevel() == 1)
-    {
-        groups = FXCollections.observableArrayList();
-        users = FXCollections.observableArrayList();
-        messages = FXCollections.observableArrayList();
-        myMessages = FXCollections.observableArrayList();
-        try
+        } else if (GUIVS.instance.getMe().getLevel() == 0)
         {
-            for (Group g : c.getGroupsByUser(GUIVS.instance.getMe()))
-            {
-                groups.add(g);
-            }
-            boolean found = false;
-            for(Group g:groups)
-            {
-                try
-                {
-                    for (Message m : c.getMessagesByGroup(g))
-                    {
-                        messages.add(m);
-                    }
-                    found = true;
-                }catch(DatabaseObjectNotFoundException de)
-                {
+            groups = FXCollections.observableArrayList();
+            users = FXCollections.observableArrayList();
+            messages = FXCollections.observableArrayList();
 
-                }
-            }
-            if(!found)
-            {
-                PopUpMessage pm = new PopUpMessage();
-                pm.showInformation("Information", "Sie haben noch keine Nachricht veröffentlicht!");
-            }
-        } catch (DatabaseConnectionException e)
-        {
-            e.printStackTrace();
-        }  catch (RemoteException e)
-        {
-            e.printStackTrace();
-        } catch (UserAuthException e)
-        {
-            e.printStackTrace();
-        } catch (DatabaseObjectNotFoundException e)
-        {
-            e.printStackTrace();
         }
     }
-    }
 
 
-    
+    /**
+     * @author Jan-Merlin Geuskens, 3580970
+     * hält ein Client Objekt und stellt Schnittstelle zum server zur Verfügung
+     */
     public Control()
     {
-        try {
+        try
+        {
             c = new Client("localhost");
         } catch (RemoteException rm)
         {

@@ -173,6 +173,8 @@ public class UserVerwaltenFXMLController implements Initializable
                         case 2:
                             rbAdmin.setSelected(true);
                             break;
+                        default:
+                            rbUser.setSelected(true);
                     }
                 } else
                 {

@@ -7,35 +7,41 @@ package main.classes;
 
 
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import main.anzeigetafel.AnzeigetafelFXMLController;
 import main.exceptions.DatabaseConnectionException;
 import main.exceptions.DatabaseObjectNotFoundException;
 import main.exceptions.UserAuthException;
-import main.objects.*;
+import main.formulare.BearbeitenFXMLController;
+import main.objects.Group;
+import main.objects.Message;
+import main.objects.User;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Predicate;
 
-import javafx.stage.Modality;
-import main.anzeigetafel.*;
-import main.formulare.BearbeitenFXMLController;
+import static java.lang.System.exit;
 
 /**
  *
- * @author Laura
+ * @author Jan-Merlin Geuskens, 3580970
  */
 public class GUIVS extends Application {
     
@@ -46,7 +52,7 @@ public class GUIVS extends Application {
     {
         return group_messages;
     }
-
+    public static final ObjectProperty<Predicate<Message>> gruppenFilter = new SimpleObjectProperty<>();
     private static HashMap<String, ObservableList<Message>> group_messages = new HashMap<String, ObservableList<Message>>();
     public Control getControl() {
         return control;
@@ -58,15 +64,15 @@ public class GUIVS extends Application {
             
     }
     private User me = null;
-    private boolean isMod = false;
-
-    public boolean isMod() {
-        return isMod;
-    }
-
-    public void setIsMod(boolean isMod) {
-        this.isMod = isMod;
-    }
+//    private boolean isMod = false;
+//    public boolean isMod() {
+//        return isMod;
+//    }
+//
+//
+//    public void setIsMod(boolean isMod) {
+//        this.isMod = isMod;
+//    }
     
     public void setMe(User me)
     {
@@ -87,11 +93,11 @@ public class GUIVS extends Application {
     {
         return instance.previousStage;
     }
-
     public static void setIcon(Stage stage)
     {
         stage.getIcons().add(new Image("pt_logo_x24.png"));
     }
+
 
     public static void neueNachricht() throws Exception
     {
@@ -124,7 +130,7 @@ public class GUIVS extends Application {
            @Override
            public boolean test(Message message)
            {
-               if(message.getGroup().getName().equals(g.getName()))
+               if(message.getGroup().getID() == g.getID())
                {
                    return true;
                }
@@ -136,24 +142,32 @@ public class GUIVS extends Application {
            }
        });
         SortedList<Message> sortedData = new SortedList<Message>(groupFilteredData);
+        sortedData.setComparator((a, b) -> a.getTimestamp() < b.getTimestamp() ? -1 : a.getTimestamp() == b.getTimestamp() ? 0 : 1);
+
+
         ac.setM(sortedData);
-//        ac.setM(GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
-//        {
-//            @Override
-//            public boolean test(Message message)
-//            {
-//                if(message.getGroup().getName().equals(g.getName()))
-//                {
-//                    return true;
-//                }else
-//                {return false;}
-//            }
-//        }));
+
         ac.setGroup(g);
 
         Scene vtScene = new Scene(root);
         Stage vtStage = new Stage();
         vtStage.setTitle("Anzeigetafel der Gruppe " + g.getName());
+        if(GUIVS.instance.getMe().getLevel() == 0 )
+        {
+            vtStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override public void handle(WindowEvent t) {
+                    try
+                    {
+                        GUIVS.instance.getControl().getC().disconnect();
+                    } catch (RemoteException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    Platform.exit();
+                    exit(0);
+                }
+            });
+        }
         setIcon(vtStage);
         vtStage.setScene(vtScene);
         vtStage.showAndWait();
@@ -259,6 +273,19 @@ public class GUIVS extends Application {
         Stage vtStage = new Stage();
         setPreviousStage(vtStage);
         vtStage.setTitle("Ansicht für User");
+        vtStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override public void handle(WindowEvent t) {
+                try
+                {
+                    GUIVS.instance.getControl().getC().disconnect();
+                } catch (RemoteException e)
+                {
+                    e.printStackTrace();
+                }
+                Platform.exit();
+                exit(0);
+        }
+        });
         setIcon(vtStage);
         vtStage.setScene(vtScene);
         vtStage.setResizable(false);
@@ -276,6 +303,22 @@ public class GUIVS extends Application {
         Stage vtStage = new Stage();
         setPreviousStage(vtStage);
         vtStage.setTitle("Ansicht für Administratoren");
+
+
+            vtStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override public void handle(WindowEvent t) {
+                    try
+                    {
+                        GUIVS.instance.getControl().getC().disconnect();
+                    } catch (RemoteException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    Platform.exit();
+                    exit(0);
+                }
+            });
+
         setIcon(vtStage);
         vtStage.setScene(vtScene);
         vtStage.setResizable(false);

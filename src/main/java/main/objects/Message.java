@@ -1,6 +1,6 @@
 package main.objects;
 
-import main.rmiinterface.Functions;
+import main.rmiinterface.CachedFunctions;
 
 import java.io.Serializable;
 
@@ -17,17 +17,17 @@ public class Message implements Serializable {
     private Group group;
     private User author;
     private long timestamp;
-    private Functions rmi;
+    private CachedFunctions rmi;
 
     /**
      * Create message (with given ID -> Update message in main.database)
      *
-     * @param id
-     * @param message
-     * @param group
-     * @param author
+     * @param id      Id
+     * @param message Message
+     * @param group   Group
+     * @param author  Author
      */
-    public Message(int id, String message, Group group, User author, Long timestamp, Functions rmi) {
+    public Message(int id, String message, Group group, User author, Long timestamp, CachedFunctions rmi) {
         setID(id);
         setAuthor(author);
         setGroup(group);
@@ -43,8 +43,8 @@ public class Message implements Serializable {
     /**
      * Create  message (with ID -1 -> Save as new message in main.database)
      *
-     * @param message
-     * @param author
+     * @param message Message
+     * @param author  Author
      */
     public Message(String message, User author) {
         this(-1, message, null, author, System.currentTimeMillis(), null);
@@ -53,9 +53,9 @@ public class Message implements Serializable {
     /**
      * Create  group message (with ID -1 -> Save as new message in main.database)
      *
-     * @param message
-     * @param author
-     * @param group
+     * @param message Message
+     * @param author  Author
+     * @param group   Group
      */
     public Message(String message, User author, Group group) {
         this(-1, message, group, author, System.currentTimeMillis(), null);
@@ -74,7 +74,7 @@ public class Message implements Serializable {
      * Set Message id
      *
      * @param id Positive or -1
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException ID negative
      */
     private void setID(int id) throws IllegalArgumentException {
         if (id < -1) {
@@ -96,7 +96,7 @@ public class Message implements Serializable {
      * Set Message message
      *
      * @param message Not null or empty
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException Message null or empty
      */
     public void setMessage(String message) throws IllegalArgumentException {
         if (message == null || message.isEmpty()) {
@@ -115,7 +115,7 @@ public class Message implements Serializable {
         try {
             if (this.authorId != -1) {
                 if (author == null) {
-                    this.author = rmi.getUserById(key, this.authorId);
+                    this.author = rmi.getSimpleUserById(key, this.authorId);
                 }
                 return this.author;
             } else {
@@ -128,6 +128,8 @@ public class Message implements Serializable {
 
     /**
      * Set Message author
+     *
+     * @param author Author
      */
     public void setAuthor(User author) {
         if (author != null) {
@@ -164,6 +166,8 @@ public class Message implements Serializable {
 
     /**
      * Set Message group
+     *
+     * @param group Group
      */
     public void setGroup(Group group) {
         if (group != null) {
@@ -181,38 +185,71 @@ public class Message implements Serializable {
     /**
      * Get Message timestamp
      *
-     * @return
+     * @return Timestamp
      */
     public long getTimestamp() {
         return timestamp;
     }
 
+    /**
+     * Get authorId
+     *
+     * @return authorId
+     */
     public int getAuthorId() {
         return authorId;
     }
 
+    /**
+     * Get groupId
+     *
+     * @return groupId
+     */
     public int getGroupId() {
         return groupId;
     }
 
+    /**
+     * Set groupId
+     *
+     * @param groupId groupId
+     */
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
 
+    /**
+     * Set AuthorId
+     *
+     * @param authorId authorId
+     */
     public void setAuthorId(Integer authorId) {
         this.authorId = authorId;
     }
 
+    /**
+     * Set key
+     *
+     * @param key Key
+     */
     public void setKey(String key) {
         this.key = key;
     }
 
-    public void reset(){
+    /**
+     * Reset local cache
+     */
+    public void reset() {
         this.author = null;
         this.group = null;
     }
 
 
+    /**
+     * To String
+     *
+     * @return String
+     */
     @Override
     public String toString() {
         return "Message{" +
@@ -224,6 +261,12 @@ public class Message implements Serializable {
                 '}';
     }
 
+    /**
+     * Equals
+     *
+     * @param o Object
+     * @return This equals o
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -234,6 +277,11 @@ public class Message implements Serializable {
         return id == message.id;
     }
 
+    /**
+     * Hashcode
+     *
+     * @return Hashcode
+     */
     @Override
     public int hashCode() {
         return id;

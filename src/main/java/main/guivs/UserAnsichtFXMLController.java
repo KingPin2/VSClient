@@ -80,7 +80,6 @@ public class UserAnsichtFXMLController implements Initializable
     private TableColumn tcZeitstempel;
 
 
-
     private Group selectedGroup;
 
     @FXML
@@ -105,8 +104,6 @@ public class UserAnsichtFXMLController implements Initializable
     }
 
 
-
-
     @FXML
     private void abmelden()
     {
@@ -126,8 +123,6 @@ public class UserAnsichtFXMLController implements Initializable
     }
 
 
-
-
     @FXML
     private void neueNachricht()
     {
@@ -145,7 +140,7 @@ public class UserAnsichtFXMLController implements Initializable
     {
         try
         {
-            selectedMessage= (Message) tTabelle.getSelectionModel().getSelectedItem();
+            selectedMessage = (Message) tTabelle.getSelectionModel().getSelectedItem();
             GUIVS.bearbeiteNachricht(selectedMessage);
 
         } catch (Exception e)
@@ -165,6 +160,8 @@ public class UserAnsichtFXMLController implements Initializable
             e.printStackTrace();
         }
 
+        GUIVS.instance.getControl().setC(null);
+        GUIVS.instance.setMe(null);
         Stage stage = (Stage) tTabelle.getScene().getWindow();
         stage.close();
     }
@@ -200,32 +197,19 @@ public class UserAnsichtFXMLController implements Initializable
     {
 
         pm = new PopUpMessage();
-        try
-        {
-            nachrichten = FXCollections.observableArrayList( GUIVS.instance.getControl().getC().getMessagesByUser(GUIVS.instance.getMe()));
-        } catch (DatabaseConnectionException e)
-        {
-            e.printStackTrace();
-        } catch (RemoteException e)
-        {
-            e.printStackTrace();
-        } catch (DatabaseObjectNotFoundException e)
-        {
-            e.printStackTrace();
-        } catch (UserAuthException e)
-        {
-            e.printStackTrace();
-        }
+
+        nachrichten = GUIVS.instance.getControl().getMessages();
+
         groups = GUIVS.instance.getControl().getGroups();
-
-
 
 
         tcNachrichten.setCellValueFactory(new PropertyValueFactory<Message, String>("message"));
         tcZeitstempel.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>() {
+                new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>()
+                {
                     @Override
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Message, String> message) {
+                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Message, String> message)
+                    {
                         SimpleStringProperty property = new SimpleStringProperty();
                         DateFormat dateFormat = new SimpleDateFormat("<dd.MM> HH:mm");
                         property.setValue(dateFormat.format(message.getValue().getTimestamp()));
@@ -278,15 +262,21 @@ public class UserAnsichtFXMLController implements Initializable
                     cbAnzeigetafel.setItems(groups);
                 }
                 cbAnzeigetafel.getSelectionModel().selectFirst();
-                selectedGroup = (Group )cbAnzeigetafel.getSelectionModel().getSelectedItem();
-                ObjectProperty<Predicate<Message>> gruppenFilter = new SimpleObjectProperty<>();
-                gruppenFilter.bind(Bindings.createObjectBinding(() ->
-                                message -> ((Group) cbAnzeigetafel.getValue()).getName().equals(message.getGroup().getName()),
+                selectedGroup = (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem();
+
+                ObjectProperty<Predicate<Message>> userFilter = new SimpleObjectProperty<>();
+                GUIVS.gruppenFilter.bind(Bindings.createObjectBinding(() ->
+                                message -> ((Group) cbAnzeigetafel.getValue()).getID() == message.getGroup().getID(),
                         cbAnzeigetafel.valueProperty()));
+
+                userFilter.bind(Bindings.createObjectBinding(() ->
+                        message -> (GUIVS.instance.getMe().getID() == message.getAuthorId())
+                ));
+
                 FilteredList<Message> gefilterteNachrichten = new FilteredList<Message>(nachrichten, p -> true);
 
                 gefilterteNachrichten.predicateProperty().bind(Bindings.createObjectBinding(
-                        () -> gruppenFilter.get(), gruppenFilter));
+                        () -> GUIVS.gruppenFilter.get().and(userFilter.get()), GUIVS.gruppenFilter, userFilter));
 
                 SortedList<Message> sortierteNachrichten = new SortedList<Message>(gefilterteNachrichten);
                 tTabelle.setItems(sortierteNachrichten);

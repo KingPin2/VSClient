@@ -76,7 +76,10 @@ public class NeueGruppeFXMLController implements Initializable {
         {
             for (User u : GUIVS.instance.getControl().getC().getUsers())
             {
-                cbMod.getItems().add(u.getName());
+                if(u.getLevel() == 2)
+                {
+                    cbMod.getItems().add(u.getName());
+                }
             }
             cbMod.getSelectionModel().selectFirst();
 

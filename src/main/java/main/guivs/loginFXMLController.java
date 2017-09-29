@@ -27,25 +27,19 @@ import main.objects.*;
 import main.rmiinterface.NotifyUpdate;
 
 /**
- * @author Laura
+ * @author  Jan-Merlin Geuskens, 3580970
  */
 public class loginFXMLController implements Initializable
 {
-
-
     @FXML
     private TextField tfUsername;
-
     @FXML
     private PasswordField pfPassword;
-
     @FXML
     private Button bLogin;
-
     @FXML
     private void login()
     {
-
         PopUpMessage pm = new PopUpMessage();
         try
         {
@@ -81,8 +75,6 @@ public class loginFXMLController implements Initializable
                 {
                     throw new IllegalPermissionLevelException();
                 }
-
-
         } catch (IllegalCharacterException icex)
         {
             pm.showError("Error", "Eingaben dürfen weder ' noch ` enthalten");
@@ -96,17 +88,11 @@ public class loginFXMLController implements Initializable
         {
             pm.showError("Error", "Exception: " + e.toString());
             System.err.println(e.toString());
-        } finally
-        {
-            pm = null;
         }
-
     }
-
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        // TODO
     }
 
 }

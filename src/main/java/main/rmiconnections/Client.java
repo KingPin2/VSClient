@@ -4,6 +4,8 @@ package main.rmiconnections;
  * Merlin, 16.08.2017
  */
 
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import main.classes.GUIVS;
 import main.exceptions.*;
@@ -25,10 +27,12 @@ import java.util.function.UnaryOperator;
 
 import main.rmiinterface.*;
 
-public class Client extends UnicastRemoteObject implements NotifyUpdate{
+public class Client extends UnicastRemoteObject implements NotifyUpdate
+{
 
     private Registry registry;
     private Functions rmi;
+    private CachedFunctions cRMI;
 
     public String getClientID()
     {
@@ -37,36 +41,45 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
 
     private String clientID = "NONE";
 
-    
-    public User getUserById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
-        return this.rmi.getUserById(clientID,id);
+
+    public User getUserById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
+        return this.cRMI.getUserById(clientID, id);
     }
 
-    public User getUserByName(String username) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException , UserAuthException{
-        return this.rmi.getUserByName(clientID,username);
+    public User getUserByName(String username) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
+        return this.rmi.getUserByName(clientID, username);
     }
 
-    public ArrayList<User> getUsers() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+    public ArrayList<User> getUsers() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
         return this.rmi.getUsers(clientID);
     }
 
-    public ArrayList<User> getUsersByLevel(int level) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
-        return this.rmi.getUsersByLevel(clientID,level);
+    public ArrayList<User> getUsersByLevel(int level) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
+        return this.rmi.getUsersByLevel(clientID, level);
     }
 
-    public void saveUser(User user) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException, UserAuthException {
-        this.rmi.saveUser(clientID,user);
+    public void saveUser(User user) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException, UserAuthException
+    {
+        this.rmi.saveUser(clientID, user);
     }
 
-    public Group getGroupById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
-        return this.rmi.getGroupById(clientID,id);
+    public Group getGroupById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
+        return this.cRMI.getGroupById(clientID, id);
     }
-    public ArrayList<Group> getGroups() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
+
+    public ArrayList<Group> getGroups() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
         return this.rmi.getGroups(clientID);
     }
 
-    public ArrayList<Group> getGroupsByUser(User u) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
-        return this.rmi.getGroupsByUser(clientID,u);
+    public ArrayList<Group> getGroupsByUser(User u) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
+        return this.rmi.getGroupsByUser(clientID, u);
     }
 
     public ArrayList<Group> getGroupsByModerator(User u)
@@ -74,162 +87,189 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
         return null;
     }
 
-    public void saveGroup(Group group) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException, UserAuthException {
-        this.rmi.saveGroup(clientID,group);
+    public void saveGroup(Group group) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException, UserAuthException
+    {
+        this.rmi.saveGroup(clientID, group);
     }
 
-    public ArrayList<User> getUsersNotInGroup(Group group) throws RemoteException, UserAuthException {
-        return this.rmi.getUsersNotInGroup(clientID,group);
+    public ArrayList<User> getUsersNotInGroup(Group group) throws RemoteException, UserAuthException
+    {
+        return this.rmi.getUsersNotInGroup(clientID, group);
     }
 
-    public Message getMessageById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
-        return this.rmi.getMessageById(clientID,id, rmi);
+    public Message getMessageById(int id) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
+        return this.cRMI.getMessageById(clientID, id, cRMI);
     }
 
-    public ArrayList<Message> getMessagesByUser(User u) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
-        return this.rmi.getMessagesByUser(clientID,u, rmi);
+    public ArrayList<Message> getMessagesByUser(User u) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
+        return this.rmi.getMessagesByUser(clientID, u, cRMI);
     }
 
-    public ArrayList<Message> getMessages() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
-        return this.rmi.getMessages(clientID,rmi);
+    public ArrayList<Message> getMessages() throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
+        return this.rmi.getMessages(clientID, cRMI);
     }
 
-    public ArrayList<Message> getMessagesByGroup(Group g) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
-        return this.rmi.getMessagesByGroup(clientID,g,rmi);
+    public ArrayList<Message> getMessagesByGroup(Group g) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
+        return this.rmi.getMessagesByGroup(clientID, g, cRMI);
     }
 
-    public void saveMessage(Message message) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException, UserAuthException {
-        this.rmi.saveMessage(clientID,message,rmi);
+    public void saveMessage(Message message) throws DatabaseObjectNotSavedException, RemoteException, DatabaseConnectionException, UserAuthException
+    {
+        this.rmi.saveMessage(clientID, message, cRMI);
     }
 
-    public User loginUser(String username, String password) throws RemoteException {
-        return this.rmi.login(clientID,username, password);
-    }
-    public String test(int testID) throws RemoteException {
-        return this.rmi.test(42);
+    public User loginUser(String username, String password) throws RemoteException
+    {
+        return this.rmi.login(clientID, username, password);
     }
 
-    public Group getGroupByName(String name) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException {
-        return this.rmi.getGroupByName(clientID,name);
+
+    public Group getGroupByName(String name) throws DatabaseConnectionException, RemoteException, DatabaseObjectNotFoundException, UserAuthException
+    {
+        return this.rmi.getGroupByName(clientID, name);
     }
 
-    public void deleteMessage(Message m) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, UserAuthException {
-         this.rmi.deleteMessage(clientID,m);
+    public void deleteMessage(Message m) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, UserAuthException
+    {
+        this.rmi.deleteMessage(clientID, m);
     }
 
-    public void deleteUser(User u) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, DatabaseUserIsModException, UserAuthException {
-        this.rmi.deleteUser(clientID,u, rmi);
+    public void deleteUser(User u) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, DatabaseUserIsModException, UserAuthException
+    {
+        this.rmi.deleteUser(clientID, u, cRMI);
     }
 
-    public void deleteGroup(Group g) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, UserAuthException {
-        this.rmi.deleteGroup(clientID,g, rmi);
+    public void deleteGroup(Group g) throws RemoteException, DatabaseConnectionException, DatabaseObjectNotDeletedException, UserAuthException
+    {
+        this.rmi.deleteGroup(clientID, g, cRMI);
     }
 
-    public void disconnect() throws RemoteException {
+    public void disconnect() throws RemoteException
+    {
         this.rmi.disconnect(clientID);
     }
 
 
-
-    public Client(String host) throws RemoteException {
+    public Client(String host) throws RemoteException
+    {
         super();
-        try {
+        try
+        {
             /*
             if(System.getSecurityManager() == null) {
                 System.setSecurityManager(new RMISecurityManager());
             }*/
             this.registry = LocateRegistry.getRegistry(host);
             this.rmi = (Functions) registry.lookup("Functions");
+            this.cRMI = new CachedFunctions(rmi);
             clientID = rmi.connect(this);
-        }
-        catch (Exception e) {
+        } catch (Exception e)
+        {
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();
         }
-}
-
-    @Override
-    public void onUpdateGroup(Group g, UpdateType type) throws RemoteException {
-        Thread t = new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                User me = GUIVS.instance.getMe();
-                    switch (type)
-                    {
-                        case SAVE:
-                            //Wenn ich Admin bin, oder Member der Gruppe
-                            if(me.getLevel()==2 || me.getLevel() == 1 && (g.getMembers().contains(me)))
-                            {
-                                GUIVS.instance.getControl().getGroups().add(g);
-                            }
-                            break;
-                        case UPDATE:
-
-                            //Ersetze das Gruppenobjekt durch das neue Objekt (Groupname = unique)
-                            if(me.getLevel()==2 || me.getLevel() == 1 && (g.getMembers().contains(me)))
-                            {
-                                Group changedGroup = GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
-                                {
-                                    @Override
-                                    public boolean test(Group group)
-                                    {
-                                        if (group.getName().equals(g.getName()))
-                                        {
-                                            return true;
-                                        } else
-                                        {
-                                            return false;
-                                        }
-                                    }
-                                }).get(0);
-                                GUIVS.instance.getControl().getGroups().set(GUIVS.instance.getControl().getGroups().indexOf(changedGroup), g);
-                            }
-                            break;
-                        case DELETE:
-                            if(me.getLevel()==2 || me.getLevel() == 1 && (g.getMembers().contains(me)))
-                            {
-                                Group oldGroup = GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
-                                {
-                                    @Override
-                                    public boolean test(Group group)
-                                    {
-                                        if (group.getName().equals(g.getName()))
-                                        {
-                                            return true;
-                                        } else
-                                        {
-                                            return false;
-                                        }
-                                    }
-                                }).get(0);
-                                GUIVS.instance.getControl().getGroups().remove(oldGroup);
-                                GUIVS.getGroup_messages().remove(g.getName());
-                            }
-                            break;
-                        default:
-                            System.out.println("Fehler in Update_group");
-                            break;
-                    }
-                }
-        });
-        t.start();
     }
 
     @Override
-    public void onUpdateUser(User u, UpdateType type) throws RemoteException
+    public synchronized void onUpdateGroup(Group g, UpdateType type) throws RemoteException
     {
-        Thread t = new Thread(new Runnable()
+        Platform.runLater(new Runnable()
         {
-            User me = GUIVS.instance.getMe();
             @Override
             public void run()
             {
+                synchronized (GUIVS.instance.getControl().getGroups()){
+
+
+                User me = GUIVS.instance.getMe();
                 switch (type)
                 {
                     case SAVE:
-                        if(me.getLevel()==2)
+                        //Wenn ich Admin bin, oder Member der Gruppe
+                        if (me.getLevel() == 2 || (g.getMembers().contains(me)))
+                        {
+                            GUIVS.instance.getControl().getGroups().add(g);
+                        }
+                        break;
+                    case UPDATE:
+
+                        //Ersetze das Gruppenobjekt durch das neue Objekt (Groupname = unique)
+                        if (me.getLevel() == 2 || (g.getMembers().contains(me)))
+                        {
+                            Group changedGroup = GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
+                            {
+                                @Override
+                                public boolean test(Group group)
+                                {
+                                    if (group.getName().equals(g.getName()))
+                                    {
+                                        return true;
+                                    } else
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }).get(0);
+                            GUIVS.instance.getControl().getGroups().set(GUIVS.instance.getControl().getGroups().indexOf(changedGroup), g);
+                        }
+                        break;
+                    case DELETE:
+                        if (me.getLevel() == 2 || (g.getMembers().contains(me)))
+                        {
+                            Group oldGroup = GUIVS.instance.getControl().getGroups().filtered(new Predicate<Group>()
+                            {
+                                @Override
+                                public boolean test(Group group)
+                                {
+                                    if (group.getName().equals(g.getName()))
+                                    {
+                                        return true;
+                                    } else
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }).get(0);
+                            GUIVS.instance.getControl().getGroups().remove(oldGroup);
+                            GUIVS.getGroup_messages().remove(g.getName());
+                        }
+                        break;
+                    default:
+                        System.out.println("Fehler in Update_group");
+                        break;
+                }
+
+            }
+            }
+        });
+
+    }
+
+
+
+
+    @Override
+    public synchronized void onUpdateUser(User u, UpdateType type) throws RemoteException
+    {
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                synchronized (GUIVS.instance.getControl().getUsers()){
+                cRMI.onUpdateUser(u, type);
+
+                User me = GUIVS.instance.getMe();
+
+
+                switch (type)
+                {
+                    case SAVE:
+                        if (me.getLevel() == 2)
                         {
                             GUIVS.instance.getControl().getUsers().add(u);
                         }
@@ -237,7 +277,7 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                     case UPDATE:
 
                         //Ersetze das Userobjekt durch das neue Objekt (Username = unique)
-                        if(me.getLevel()==2 || me.getLevel()==1 && u.getID() == me.getID())
+                        if (me.getLevel() == 2 || u.getID() == me.getID())
                         {
                             User changedUser = GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
                             {
@@ -257,7 +297,7 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                         }
                         break;
                     case DELETE:
-                        if(me.getLevel()==2)
+                        if (me.getLevel() == 2)
                         {
                             User oldUser = GUIVS.instance.getControl().getUsers().filtered(new Predicate<User>()
                             {
@@ -281,67 +321,65 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate{
                         break;
                 }
             }
-
-
-        });
-        t.start();
-    }
-
-
-
-
-    @Override
-    public void onUpdateMessage(Message m, UpdateType type) throws RemoteException
-    {
-        Thread t = new Thread(new Runnable()
-        {
-
-            @Override
-            public void run()
-            {
-                User me = GUIVS.instance.getMe();
-                switch (type)
-                {
-                    case SAVE:
-                        if(me.getLevel()==2 || GUIVS.instance.getControl().getGroups().contains(m.getGroup()) && me.getLevel() == 1)
-                        {
-                            GUIVS.instance.getControl().getMessages().add(m);
-                        }
-                        break;
-                    case UPDATE:
-
-                        //Ersetze das Messageobjekt durch das neue Objekt (MessageID = unique)
-                        if(me.getLevel()==2 || GUIVS.instance.getControl().getGroups().contains(m.getGroup()) && me.getLevel() == 1)
-                        {
-                            GUIVS.instance.getControl().getMessages().set(GUIVS.instance.getControl().getMessages().indexOf(AdminAnsichtFXMLController.getSelectedMessage()), m);
-                        }
-                        break;
-                    case DELETE:
-                        if(me.getLevel()==2 || GUIVS.instance.getControl().getGroups().contains(m.getGroup()) && me.getLevel() == 1)
-                        {
-                            Message oldMessage = GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
-                            {
-                                @Override
-                                public boolean test(Message message)
-                                {
-                                    if (message.getID() == m.getID())
-                                    {
-                                        return true;
-                                    } else
-                                    {
-                                        return false;
-                                    }
-                                }
-                            }).get(0);
-                            GUIVS.instance.getControl().getMessages().remove(oldMessage);
-                        }
-                        break;
-                    default:
-                        System.out.println("Fehler in Update_user");
-                        break;
-                }
             }
+
         });
-        t.start();
+
     }
-}
+        @Override
+        public synchronized void onUpdateMessage (Message m, UpdateType type) throws RemoteException
+        {
+            Platform.runLater(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    cRMI.onUpdateMessage(m, type);
+
+
+                    User me = GUIVS.instance.getMe();
+                    switch (type)
+                    {
+                        case SAVE:
+                            if (me.getLevel() == 2 || GUIVS.instance.getControl().getGroups().contains(m.getGroup()))
+                            {
+                                GUIVS.instance.getControl().getMessages().add(m);
+                            }
+                            break;
+                        case UPDATE:
+
+                            //Ersetze das Messageobjekt durch das neue Objekt (MessageID = unique)
+                            if (me.getLevel() == 2 || GUIVS.instance.getControl().getGroups().contains(m.getGroup()))
+                            {
+                                GUIVS.instance.getControl().getMessages().set(GUIVS.instance.getControl().getMessages().indexOf(AdminAnsichtFXMLController.getSelectedMessage()), m);
+                            }
+                            break;
+                        case DELETE:
+                            if (me.getLevel() == 2 || GUIVS.instance.getControl().getGroups().contains(m.getGroup()))
+                            {
+                                Message oldMessage = GUIVS.instance.getControl().getMessages().filtered(new Predicate<Message>()
+                                {
+                                    @Override
+                                    public boolean test(Message message)
+                                    {
+                                        if (message.getID() == m.getID())
+                                        {
+                                            return true;
+                                        } else
+                                        {
+                                            return false;
+                                        }
+                                    }
+                                }).get(0);
+                                GUIVS.instance.getControl().getMessages().remove(oldMessage);
+                            }
+                            break;
+                        default:
+                            System.out.println("Fehler in Update_user");
+                            break;
+                    }
+                }
+            });
+        }
+    }
+
