@@ -38,58 +38,83 @@ import static java.lang.System.exit;
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
  * @author Yannick Peter Neumann, 3690024
+ *
+ * Hauptverwaltungsklasse,
+ * stellt static Methoden zum Öffnen der GUI-Fenster bereit
+ * sowie die Referenz auf sich selbst, um auf via Control-Instanz auf RMI-Methoden zuzugreifen
  */
 public class GUIVS extends Application
 {
 
+    //Referenz auf sich selbst
     public static GUIVS instance;
     private Control control;
 
+    //Filter für Tableview (wird bei User und Admin benötigt)
     public static ObjectProperty<Predicate<Message>> gruppenFilter = new SimpleObjectProperty<>();
+    //Hashmap, die Gruppennamen mit Nachrichtenlisten(der jeweiligen Gruppe) verknüpft
     private static HashMap<String, ObservableList<Message>> group_messages = new HashMap<String, ObservableList<Message>>();
 
     public static HashMap<String, ObservableList<Message>> getGroup_messages()
     {
         return group_messages;
     }
-
     public Control getControl()
     {
         return control;
     }
-
     public GUIVS()
     {
         instance = this;
         control = new Control();
-
     }
 
+    //eigenes User-Objekt wird lokal gespeichert
     private User me = null;
 
+    /**
+     *
+     * @param me das eigene Userobjekt
+     */
     public void setMe(User me)
     {
         this.me = me;
     }
-
     public User getMe()
     {
         return this.me;
     }
 
+    //Referenz auf das zuletzt geöffnete Fenster
     private static Stage previousStage;
 
+    /**
+     * Dient dazu, bei Formularen das Elternfenster festzulegen
+     //und Owner sowie Modality festzulegen
+     * @param stage
+     */
     public static void setPreviousStage(Stage stage)
     {
         instance.previousStage = stage;
     }
 
+    /**
+     * Setzt das Icon oben links für eine übergebene Stage
+     * @param stage
+     */
     public static void setIcon(Stage stage)
     {
         stage.getIcons().add(new Image("pt_logo_x24.png"));
     }
 
 
+    /**
+     * stellt FXML-Loader zur Verfügung
+     *
+     * @param path Pfad zum FXML File, das geladen werden soll
+     * @return Referenz auf FXMLLoaderobjekt, welches die .FXML läd
+     * @throws Exception
+     */
     private static Parent loadFXML(String path) throws Exception
     {
         FXMLLoader loader = new FXMLLoader();
@@ -97,6 +122,10 @@ public class GUIVS extends Application
         return loader.load();
     }
 
+    /**
+     * Beim Schließen der Hauptfenster wird die Verbindung zum Server getrennt
+     * @param stage übergebene Stage (Adminansicht, Useransicht und bei Anzeigetafellogin (zb. User Broadcast) auch bei der Anzeigetafel)
+     */
     public static void defaultClose(Stage stage)
     {
         stage.setOnCloseRequest(new EventHandler<WindowEvent>()
@@ -119,9 +148,6 @@ public class GUIVS extends Application
 
     public static void neueNachricht() throws Exception
     {
-//        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(GUIVS.class.getResource("/neueNachrichtFXML.fxml"));
-//        Parent p = loader.load();
 
         Scene vtScene = new Scene(loadFXML("/neueNachrichtFXML.fxml"));
         Stage vtStage = new Stage();

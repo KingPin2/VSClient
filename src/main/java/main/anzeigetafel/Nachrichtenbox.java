@@ -48,7 +48,7 @@ public class Nachrichtenbox extends HBox
             e.printStackTrace();
         }
         this.messagedaten = null;
-        this.user.setText("testuser");
+        this.user.setText("TestUser42");
         this.message.setText("Hallo Welt!");
         this.zeit.setText("<--.--> --:--");
     }

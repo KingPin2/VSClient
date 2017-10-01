@@ -23,6 +23,10 @@ import java.rmi.RemoteException;
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
  * @author Yannick Peter Neumann, 3690024
+ *
+ * Klasse dient dem halten eines Client-Objekts (RMI-Implementierung) sowie dem Speichern und bereitstellen
+ * von Objektlisten, die vom Server geladen wurden
+ *
  */
 public class Control
 {
@@ -36,22 +40,18 @@ public class Control
     {
         return c;
     }
-
     public void setC(Client c)
     {
         this.c = c;
     }
-
     public ObservableList<Group> getGroups()
     {
         return groups;
     }
-
     public ObservableList<User> getUsers()
     {
         return users;
     }
-
     public ObservableList<Message> getMessages()
     {
         return messages;
@@ -60,17 +60,24 @@ public class Control
 
     /**
      * @author Jan-Merlin Geuskens, 3580970
-     * Initialen Datensatz vom Server laden
+     * Initialen Datensatz vom Server laden, Fallunterscheidung je nach Permission-Level des Users
      */
+
+    private void initLists()
+    {
+        groups = FXCollections.observableArrayList();
+        users = FXCollections.observableArrayList();
+        messages = FXCollections.observableArrayList();
+    }
     public void getData()
     {
+        //Wenn Admin, dann...
         if (GUIVS.instance.getMe().getLevel() == 2)
         {
-            groups = FXCollections.observableArrayList();
-            users = FXCollections.observableArrayList();
-            messages = FXCollections.observableArrayList();
+            initLists();
             try
             {
+                //lade alle Daten
                 for (Group g : c.getGroups())
                 {
                     groups.add(g);
@@ -97,11 +104,12 @@ public class Control
             {
                 e.printStackTrace();
             }
+            //Wenn regulärer User, dann...
         } else if (GUIVS.instance.getMe().getLevel() == 1)
         {
-            groups = FXCollections.observableArrayList();
-            users = FXCollections.observableArrayList();
-            messages = FXCollections.observableArrayList();
+            initLists();
+            //lade nur die Daten der Gruppen, in denen der User Mitglied ist
+            //Userdaten werden nicht geladen
             try
             {
                 for (Group g : c.getGroupsByUser(GUIVS.instance.getMe()))
@@ -141,12 +149,11 @@ public class Control
             {
                 e.printStackTrace();
             }
+            //Wenn es sich um eine Anzeigetafel handelt, dann...
         } else if (GUIVS.instance.getMe().getLevel() == 0)
         {
-            groups = FXCollections.observableArrayList();
-            users = FXCollections.observableArrayList();
-            messages = FXCollections.observableArrayList();
-
+            initLists();
+            //Lade nur die Daten dieser einen Gruppe
             try
             {
                 groups.addAll(GUIVS.instance.getControl().getC().getGroupByName(GUIVS.instance.getMe().getName()));
@@ -164,15 +171,15 @@ public class Control
             {
                 e.printStackTrace();
             }
-
-
         }
     }
 
 
     /**
      * @author Jan-Merlin Geuskens, 3580970
-     * hält ein Client Objekt und stellt Schnittstelle zum server zur Verfügung
+     * hält ein Client Objekt und stellt Schnittstelle zum Server zur Verfügung
+     *
+     * IP-Adresse/Hostnamen des Servers hier an Client übergeben
      */
     public Control()
     {
