@@ -25,33 +25,46 @@ import java.util.ResourceBundle;
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
  * @author Yannick Peter Neumann, 3690024
+ *
+ * Verwaltet Anzeigetafel-GUI und kümmert sich um die Initialisierung und das
+ * Aktualisieren der NachrichtenBox-Elemente.
+ *
+ *
  */
 public class AnzeigetafelFXMLController implements Initializable
 {
+    /**
+     * Funktionsweise: Der AnzeigetafelFXMLController instanziiert für jedes
+     * MessageObjekt in einer Gruppe eine NachrichtenBox (selbst erstelles FX-Steuerelement).
+     * Um die Referenz auf die ObservableList m (kommt von aussen) zu übergeben, wird die Methode setM()
+     * noch vor Ausführen der initialize Methode in der Klasse GUIVS aufgerufen.
+     *
+     */
+
     @FXML
     private VBox vbox;
     @FXML
     private ScrollPane scrollpane;
     @FXML
     private Label lTafel;
+    //Privates GruppenObjekt, dient dem setzen des Labels
     private Group group;
     private ObservableList<Message> m;
-
-    public Group getGroup()
-    {
-        return group;
-    }
-
-    public void setGroup(Group group)
-    {
-        this.group = group;
-    }
 
     public void setM(ObservableList<Message> m)
     {
         this.m = m;
     }
+    public Group getGroup()
+    {
+        return group;
+    }
+    public void setGroup(Group group)
+    {
+        this.group = group;
+    }
 
+    //nb hält die NachrichtenBox Steuerelemente
     private ObservableList<Nachrichtenbox> nb;
 
     @Override
@@ -62,34 +75,52 @@ public class AnzeigetafelFXMLController implements Initializable
             @Override
             public void run()
             {
+                /**
+                 * Initialisiert die GUI der Anzeigetafel
+                 */
+
                 nb = FXCollections.observableArrayList();
+                //Wenn die übergebene Referenz nicht null ist bzw. die Liste nicht leer ist...
                 if (m != null)
                 {
-
+                    //...durchlaufe die Liste rückwärts (neuste Message zuerst)
                     for (int i = m.size() - 1; i >= 0; i--)
                     {
+                        //und instanziiere ein Nachrichtenboxelement für jede Nachricht
                         nb.add(new Nachrichtenbox(m.get(i)));
                     }
                 }
+                //Füge die Nachrichtenboxelemente zur VBox hinzu
                 vbox.getChildren().addAll(nb);
-                lTafel.setText(group.getName());
+                lTafel.setText("Anzeigetafel der Gruppe " + group.getName());
+
+                //scrollpane settings
                 scrollpane.setHbarPolicy(ScrollBarPolicy.NEVER);
                 scrollpane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
                 scrollpane.setFitToHeight(true);
                 scrollpane.setFitToWidth(true);
+
+                //Registriere Changelistener auf die Listenreferenz
+                //wird ausgeführt, sobald sich irgendetwas ändert (Nachricht gelöscht, bearbeitet, hinzugefügt)
                 m.addListener(new ListChangeListener<Message>()
                 {
 
                     @Override
                     public void onChanged(Change<? extends Message> c)
                     {
+                        /**
+                         * Update der GUI bei Änderung in der Message-Liste
+                         */
+                        //Platform.runLater ist notwendig, da Änderungen an der GUI nur FX-Threads gestattet sind.
                         Platform.runLater(new Runnable()
                         {
                             @Override
                             public void run()
                             {
+                                //entferne alle NachrichtenBoxen
                                 nb.clear();
                                 vbox.getChildren().clear();
+                                //Baue GUI neu auf
                                 if (m != null)
                                 {
                                     for (int i = m.size() - 1; i >= 0; i--)

@@ -19,6 +19,8 @@ import java.text.SimpleDateFormat;
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
  * @author Yannick Peter Neumann, 3690024
+ *
+ * FX-Controller für das Steuerelement Nachrichtenbox
  */
 public class Nachrichtenbox extends HBox
 {
@@ -31,6 +33,8 @@ public class Nachrichtenbox extends HBox
     private TextArea message;
     private static final DateFormat dateFormat = new SimpleDateFormat("<dd.MM> HH:mm");
 
+    //leerer Konstruktor, wurde nur zum testen benötigt
+    /*
     public Nachrichtenbox()
     {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/NachrichtenboxFXML.fxml"));
@@ -45,13 +49,18 @@ public class Nachrichtenbox extends HBox
         }
         this.messagedaten = null;
         this.user.setText("testuser");
-        this.message.setText("hallowelt. die welt ist schön. java ist auch ganz ok. vs nervt allerdings sehr. vor allem wenn man swing benutzt. nicht böse gement, yannik. muss nur testen, ob der text zeilenumbrüche macht. deswegen so viel nonsense. fertig. aus. micky maus.");
+        this.message.setText("Hallo Welt!");
         this.zeit.setText("<--.--> --:--");
     }
+*/
 
-    /*
-    
-    */
+    /**
+     *
+     * Konstruktor des Nachrichtenbox-objektes
+     * @author Jan-Merlin Geuskens, 3580970
+     * @param messagedaten einzelnes MessageObjekt
+     *
+     */
     public Nachrichtenbox(Message messagedaten)
     {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/NachrichtenboxFXML.fxml"));
@@ -64,6 +73,7 @@ public class Nachrichtenbox extends HBox
         {
             e.printStackTrace();
         }
+        //initialisiere GUI
         this.messagedaten = messagedaten;
         this.user.setText(this.messagedaten.getAuthor().getName());
         this.message.setText(this.messagedaten.getMessage());
