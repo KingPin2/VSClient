@@ -13,13 +13,18 @@ import java.util.Optional;
 
 /**
  * @author Jan-Merlin Geuskens , 3580970
- * @author Laura-Ann Schiestel, 3686779
- * @author Yannick Peter Neumann, 3690024
+ *
+ * dient dem Einfachen erzeugen von PopUp-Nachrichten/Dialogen
+ *
  */
 public class PopUpMessage
 {
 
-
+    /**
+     * erzeugt eine PopUp-Nachricht informativen Charakters
+     * @param title Fenstertitel der Nachricht
+     * @param text Informationstext der Nachricht
+     */
     public void showInformation(String title, String text)
     {
         Alert alert;
@@ -31,6 +36,11 @@ public class PopUpMessage
         alert.showAndWait();
     }
 
+    /**
+     * erzeugt eine PopUp-Nachricht, die einen Fehler signalisiert
+     * @param title Fenstertitel der Nachricht
+     * @param text Errortext, Fehlermeldunng
+     */
     public void showError(String title, String text)
     {
         Alert alert;
@@ -42,6 +52,11 @@ public class PopUpMessage
         alert.showAndWait();
     }
 
+    /**
+     * Erzeugt eine PopUp-Nachricht mit Dialogoption
+     * @param question Die Frage, die dem Nutzer gestellt wird
+     * @return die Antwort, die der Nutzer gegeben hat (JA=true,NEIN=False)
+     */
     public boolean showDialog(String question)
     {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

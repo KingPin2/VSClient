@@ -122,6 +122,16 @@ public class GUIVS extends Application
         return loader.load();
     }
 
+    private static void formularSettings(Stage vtStage, Scene vtScene)
+    {
+        setIcon(vtStage);
+        vtStage.initOwner(previousStage);
+        vtStage.initModality(Modality.WINDOW_MODAL);
+        vtStage.setScene(vtScene);
+        vtStage.setResizable(false);
+        vtStage.showAndWait();
+    }
+
     /**
      * Beim Schließen der Hauptfenster wird die Verbindung zum Server getrennt
      * @param stage übergebene Stage (Adminansicht, Useransicht und bei Anzeigetafellogin (zb. User Broadcast) auch bei der Anzeigetafel)
@@ -146,20 +156,24 @@ public class GUIVS extends Application
         });
     }
 
+    /**
+     * öffnet Formular "neue Nachricht"
+     * @throws Exception
+     */
     public static void neueNachricht() throws Exception
     {
 
         Scene vtScene = new Scene(loadFXML("/neueNachrichtFXML.fxml"));
         Stage vtStage = new Stage();
         vtStage.setTitle("Neue Nachricht");
-        setIcon(vtStage);
-        vtStage.initOwner(previousStage);
-        vtStage.initModality(Modality.WINDOW_MODAL);
-        vtStage.setScene(vtScene);
-        vtStage.setResizable(false);
-        vtStage.showAndWait();
+        formularSettings(vtStage,vtScene);
     }
 
+    /**
+     * Öffnet eine Anzeigetafel-Instanz
+     * @param g die Gruppe, deren Anzeigetafel geöffnet werden soll
+     * @throws Exception InvocationTargetException, NullpointerException möglich
+     */
     public static void oeffneAnzeigetafel(Group g) throws Exception
     {
         FXMLLoader loader = new FXMLLoader();
@@ -184,13 +198,19 @@ public class GUIVS extends Application
 
             }
         });
+        //wrappen der filteredList in einer SortedList
         SortedList<Message> sortedData = new SortedList<Message>(groupFilteredData);
+        //Sortierung via Lamba nach abfallendem Zeitstempel
         sortedData.setComparator((a, b) -> a.getTimestamp() < b.getTimestamp() ? -1 : a.getTimestamp() == b.getTimestamp() ? 0 : 1);
+
+        //Injection der Daten in den FXMLController der Anzeigetafel
         ac.setM(sortedData);
         ac.setGroup(g);
+
         Scene vtScene = new Scene(root);
         Stage vtStage = new Stage();
         vtStage.setTitle("Anzeigetafel der Gruppe " + g.getName());
+        //Wenn Level0-User, dann disconnect() beim Schließen der Anzeigetafel
         if (GUIVS.instance.getMe().getLevel() == 0)
         {
             defaultClose(vtStage);
@@ -200,77 +220,75 @@ public class GUIVS extends Application
         vtStage.showAndWait();
     }
 
+    /**
+     * Öffnet das Formular zum Anlegen eines neuen Users
+     * @throws Exception
+     */
     public static void neuerUser() throws Exception
     {
         Scene vtScene = new Scene(loadFXML("/userAnlegenFXML.fxml"));
         Stage vtStage = new Stage();
         vtStage.setTitle("Neuer User");
-        setIcon(vtStage);
-        vtStage.initOwner(previousStage);
-        vtStage.initModality(Modality.WINDOW_MODAL);
-        vtStage.setScene(vtScene);
-        vtStage.setResizable(false);
-        vtStage.showAndWait();
+        formularSettings(vtStage,vtScene);
     }
-
+    /**
+     * Öffnet das Formular zum Verwalten bestehender User
+     * @throws Exception
+     */
     public static void userVerwalten() throws Exception
     {
         Scene vtScene = new Scene(loadFXML("/userVerwaltenFXML.fxml"));
         Stage vtStage = new Stage();
         vtStage.setTitle("User Verwalten");
-        setIcon(vtStage);
-        vtStage.initOwner(previousStage);
-        vtStage.initModality(Modality.WINDOW_MODAL);
-        vtStage.setScene(vtScene);
-        vtStage.setResizable(false);
-        vtStage.showAndWait();
+        formularSettings(vtStage,vtScene);
     }
 
+    /**
+     * Öffnet das Formular zum anlegen neuer Gruppen
+     * @throws Exception
+     */
     public static void gruppeAnlegen() throws Exception
     {
         Scene vtScene = new Scene(loadFXML("/neueGruppeFXML.fxml"));
         Stage vtStage = new Stage();
         vtStage.setTitle("Gruppe anlegen");
-        setIcon(vtStage);
-        vtStage.initOwner(previousStage);
-        vtStage.initModality(Modality.WINDOW_MODAL);
-        vtStage.setScene(vtScene);
-        vtStage.setResizable(false);
-        vtStage.showAndWait();
+        formularSettings(vtStage,vtScene);
     }
-
+    /**
+     * Öffnet das Formular zum Verwalten bestehender Gruppen
+     * @throws Exception
+     */
     public static void gruppeVerwalten() throws Exception
     {
         Scene vtScene = new Scene(loadFXML("/gruppeVerwaltenFXML.fxml"));
         Stage vtStage = new Stage();
         vtStage.setTitle("Gruppen verwalten");
-        setIcon(vtStage);
-        vtStage.initOwner(previousStage);
-        vtStage.initModality(Modality.WINDOW_MODAL);
-        vtStage.setScene(vtScene);
-        vtStage.setResizable(false);
-        vtStage.showAndWait();
+        formularSettings(vtStage,vtScene);
     }
 
+    /**
+     * Öffnet das Formular zum bearbeiten einer Nachricht
+     * @param m Nachricht, die bearbeitet werden soll (Auswahl via TableView)
+     * @throws Exception
+     */
     public static void bearbeiteNachricht(Message m) throws Exception
     {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(GUIVS.class.getResource("/bearbeitenFXML.fxml"));
         Parent p = loader.load();
         BearbeitenFXMLController mc = loader.<BearbeitenFXMLController>getController();
+        //Übergabe des Messageobjekts an den FXMLController
         mc.setM(m);
         Scene vtScene = new Scene(p);
         Stage vtStage = new Stage();
         vtStage.setTitle("Nachricht bearbeiten");
-        setIcon(vtStage);
-        vtStage.initOwner(previousStage);
-        vtStage.initModality(Modality.WINDOW_MODAL);
-        vtStage.setScene(vtScene);
-        vtStage.setResizable(false);
-        vtStage.showAndWait();
+        formularSettings(vtStage,vtScene);
     }
 
-
+    /**
+     * Öffnet die Hauptansicht für Level-1 Benutzer
+     * @throws Exception
+     */
     public static void userAnsicht() throws Exception
     {
         Scene vtScene = new Scene(loadFXML("/userAnsichtFXML.fxml"));
@@ -284,6 +302,10 @@ public class GUIVS extends Application
         vtStage.showAndWait();
     }
 
+    /**
+     * Öffnet die Hauptansicht für Level-2 Benutzer
+     * @throws Exception
+     */
     public static void adminAnsicht() throws Exception
     {
         //fillgroups();
@@ -302,7 +324,10 @@ public class GUIVS extends Application
         vtStage.showAndWait();
     }
 
-
+    /**
+     * Öffnet das Loginfenster
+     * @param stage autogenerierte Start-stage, wird übegeben, da der Code nicht direkt in start() ausgeführt wird
+     */
     public static void login(Stage stage)
     {
         FXMLLoader loader = new FXMLLoader();
@@ -325,6 +350,11 @@ public class GUIVS extends Application
 
     }
 
+    /**
+     * die erste Methode die beim Starten des Programms aufgerufen wird
+     * @param stage autogenerierte Stage
+     * @throws Exception
+     */
     @Override
     public void start(Stage stage) throws Exception
     {
@@ -332,7 +362,8 @@ public class GUIVS extends Application
     }
 
     /**
-     * @param args the command line arguments
+     * startet das Programm via launch() --> start() wird ausgeführt,
+     * @param args Kommandozeilenparameter, werden (noch) ignoriert, spätere Verwendung möglich (TUI)
      */
     public static void main(String[] args)
     {
