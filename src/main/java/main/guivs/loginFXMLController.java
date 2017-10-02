@@ -5,30 +5,27 @@
  */
 package main.guivs;
 
-import main.classes.GUIVS;
-import main.classes.PopUpMessage;
-import main.classes.Control;
-import main.exceptions.EmptyStringException;
-import main.exceptions.IllegalCharacterException;
-import main.exceptions.*;
-import main.exceptions.NoUserFoundException;
-
-import java.net.URL;
-import java.rmi.RemoteException;
-import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import main.objects.*;
-import main.rmiinterface.NotifyUpdate;
+import main.classes.GUIVS;
+import main.classes.PopUpMessage;
+import main.exceptions.EmptyStringException;
+import main.exceptions.IllegalCharacterException;
+import main.exceptions.IllegalPermissionLevelException;
+import main.exceptions.NoUserFoundException;
+
+import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.ResourceBundle;
 
 /**
  * FXML-Controller des LoginScreens
- * @author  Jan-Merlin Geuskens, 3580970
+ *
+ * @author Jan-Merlin Geuskens, 3580970
  */
 public class loginFXMLController implements Initializable
 {
@@ -62,17 +59,17 @@ public class loginFXMLController implements Initializable
             }
 
             //Bei Level0-User -> öffne die zugehörige Anzeigetafel
-            if(GUIVS.instance.getMe().getLevel() == 0)
+            if (GUIVS.instance.getMe().getLevel() == 0)
             {
                 GUIVS.instance.getControl().getData();
                 GUIVS.oeffneAnzeigetafel(GUIVS.instance.getControl().getC().getGroupByName(GUIVS.instance.getMe().getName()));
             }//Bei Level1-User -> Lade die zugehörigen Daten und öffne die Useransicht
             else if (GUIVS.instance.getMe().getLevel() == 1)
             {
-                    GUIVS.instance.getControl().getData();
-                    Stage stage = (Stage) bLogin.getScene().getWindow();
-                    stage.close();
-                    GUIVS.userAnsicht();
+                GUIVS.instance.getControl().getData();
+                Stage stage = (Stage) bLogin.getScene().getWindow();
+                stage.close();
+                GUIVS.userAnsicht();
 
             }// Bei Level2-User -> Lade alle Daten und öffne die Adminansicht
             else if (GUIVS.instance.getMe().getLevel() == 2)
@@ -81,8 +78,7 @@ public class loginFXMLController implements Initializable
                 Stage stage = (Stage) bLogin.getScene().getWindow();
                 stage.close();
                 GUIVS.adminAnsicht();
-            }
-            else//Ansonsten wirf eine Exception
+            } else//Ansonsten wirf eine Exception
             {
                 throw new IllegalPermissionLevelException();
             }
@@ -95,7 +91,11 @@ public class loginFXMLController implements Initializable
         } catch (NoUserFoundException nufex)
         {
             pm.showError("Error", "Username oder Passwort falsch!");
-        } catch (Exception e)
+        }catch(RemoteException re)
+        {
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+        }
+         catch (Exception e)
         {
             pm.showError("Error", "Exception: " + e.toString());
             System.err.println(e.toString());
@@ -104,6 +104,7 @@ public class loginFXMLController implements Initializable
 
     /**
      * Leere initalize Methode, es muss nicht initalisiert werden
+     *
      * @param url
      * @param rb
      */

@@ -85,7 +85,7 @@ public class BearbeitenFXMLController implements Initializable
             e.printStackTrace();
         } catch (RemoteException e)
         {
-            e.printStackTrace();
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
         } catch (DatabaseConnectionException e)
         {
             e.printStackTrace();

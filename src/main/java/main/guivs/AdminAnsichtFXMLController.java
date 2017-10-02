@@ -254,7 +254,7 @@ public class AdminAnsichtFXMLController implements Initializable
             GUIVS.instance.getControl().getC().disconnect();
         } catch (RemoteException e)
         {
-            e.printStackTrace();
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
         }
         GUIVS.instance.getControl().setC(null);
         GUIVS.instance.setMe(null);

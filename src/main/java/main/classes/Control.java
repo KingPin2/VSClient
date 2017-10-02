@@ -31,6 +31,7 @@ import java.rmi.RemoteException;
 public class Control
 {
     private Client c;
+    private PopUpMessage pm;
     private ObservableList<Group> groups;
     private ObservableList<User> users;
     private ObservableList<Message> messages;
@@ -99,7 +100,7 @@ public class Control
                 pm.showInformation("Information", "Sie haben noch keine Nachricht veröffentlicht!");
             } catch (RemoteException e)
             {
-
+                pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
             } catch (UserAuthException e)
             {
                 e.printStackTrace();
@@ -133,7 +134,6 @@ public class Control
                 }
                 if (!found)
                 {
-                    PopUpMessage pm = new PopUpMessage();
                     pm.showInformation("Information", "Sie haben noch keine Nachricht veröffentlicht!");
                 }
             } catch (DatabaseConnectionException e)
@@ -141,7 +141,7 @@ public class Control
                 e.printStackTrace();
             } catch (RemoteException e)
             {
-                e.printStackTrace();
+                pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
             } catch (UserAuthException e)
             {
                 e.printStackTrace();
@@ -163,7 +163,7 @@ public class Control
                 e.printStackTrace();
             } catch (RemoteException e)
             {
-                e.printStackTrace();
+                pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
             } catch (DatabaseObjectNotFoundException e)
             {
                 //void, Noch keine Nachrichten auf Anzeigetafel soll keinen Fehler im Client verursachen
@@ -185,6 +185,7 @@ public class Control
     {
         try
         {
+            pm= new PopUpMessage();
             c = new Client("localhost");
         } catch (RemoteException rm)
         {
