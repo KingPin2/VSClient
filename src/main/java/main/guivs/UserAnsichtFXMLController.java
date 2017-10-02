@@ -36,6 +36,8 @@ import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
+import static java.lang.System.exit;
+
 /**
  * FXML Controller Klasse zur Useransicht
  *
@@ -192,8 +194,8 @@ public class UserAnsichtFXMLController implements Initializable
 
         GUIVS.instance.getControl().setC(null);
         GUIVS.instance.setMe(null);
-        Stage stage = (Stage) tTabelle.getScene().getWindow();
-        stage.close();
+        Platform.exit();
+        exit(0);
     }
 
     /**

@@ -30,6 +30,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
+import static java.lang.System.exit;
+
 /**
  * FXML Controller Klasse der Hauptansicht für Administratoren
  *
@@ -256,8 +258,8 @@ public class AdminAnsichtFXMLController implements Initializable
         }
         GUIVS.instance.getControl().setC(null);
         GUIVS.instance.setMe(null);
-        Stage stage = (Stage) tTabelle.getScene().getWindow();
-        stage.close();
+        Platform.exit();
+        exit(0);
     }
 
     /**

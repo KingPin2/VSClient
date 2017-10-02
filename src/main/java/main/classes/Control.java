@@ -156,7 +156,7 @@ public class Control
             //Lade nur die Daten dieser einen Gruppe
             try
             {
-                groups.addAll(GUIVS.instance.getControl().getC().getGroupByName(GUIVS.instance.getMe().getName()));
+                groups.add(GUIVS.instance.getControl().getC().getGroupByName(GUIVS.instance.getMe().getName()));
                 messages.addAll(GUIVS.instance.getControl().getC().getMessagesByGroup(GUIVS.instance.getControl().getC().getGroupByName(GUIVS.instance.getMe().getName())));
             } catch (DatabaseConnectionException e)
             {
