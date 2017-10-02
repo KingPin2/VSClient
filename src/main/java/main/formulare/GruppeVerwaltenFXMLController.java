@@ -20,19 +20,28 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 /**
- * FXML Controller class
+ * FXML Controller Klasse des Formulars Gruppe Vewalten
  *
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
  * @author Yannick Peter Neumann, 3690024
  *
+ *
+ *
+ * @author Jan-Merlin Geuskens , 3580970
+ * Allgemeine Erklärungen:
+ *
+ * In den ComboBoxen werden die Datenbankobjekte User und Group gespeichert, lediglich die toString() Methode
+ * wird mittels StringConverter überschrieben. Dies hat die Programmierung etwas erschwert, führt aber zu
+ * verbessertem Netzwerktraffic und leichter lesbarem Code, da nicht bei jeder Auswahl erneut ein Objekt vom
+ * Server abgefragt werden muss.
+ *
+ * Die Buttons neben den Comboboxen dienen nur der Bereitstellung der Funktionalitäten. Aus Zeitgründen wurde die
+ * Umsetzung von IconButtons an Stelle der normalen Buttons gestrichen.
+ *
  */
 public class GruppeVerwaltenFXMLController implements Initializable
 {
-
-    /**
-     * Initializes the controller class.
-     */
 
     private PopUpMessage pm;
     @FXML
@@ -44,16 +53,14 @@ public class GruppeVerwaltenFXMLController implements Initializable
     @FXML
     private ComboBox cbMod;
 
-//    @FXML private Button bKick;
-//    @FXML private Button bInvite;
-//    @FXML private Button bSave;
-//    @FXML private Button bCancel;
-
     private Group selectedGroup;
     private User selectedUser;
     private User selectedMod;
     private User selectedMember;
 
+    /**
+     * Schliesst das Formular
+     */
     @FXML
     private void close()
     {
@@ -61,6 +68,9 @@ public class GruppeVerwaltenFXMLController implements Initializable
         stage.close();
     }
 
+    /**
+     * Methode die beim Klick auf den Button "einladen" getriggert wird
+     */
     @FXML
     private void invite()
     {
@@ -74,10 +84,13 @@ public class GruppeVerwaltenFXMLController implements Initializable
             updateUsers();
         } catch (Exception e)
         {
-            pm.showError("Fehler", "Keine User ausgewählt!");
+            pm.showError("Fehler", "Sie haben keinen User ausgewählt!");
         }
     }
 
+    /**
+     * Methode die beim Klick auf den Button "Entfernen" getriggert wird
+     */
     @FXML
     private void kick()
     {
@@ -99,13 +112,16 @@ public class GruppeVerwaltenFXMLController implements Initializable
         }
     }
 
+    /**
+     * Methode die beim Klick auf den Button "Löschen" getriggert wird
+     */
     @FXML
     private void deleteGroup()
     {
         try
         {
             GUIVS.instance.getControl().getC().deleteGroup(selectedGroup);
-            pm.showInformation("Information", "Gruppe gelöscht!!");
+            pm.showInformation("Information", "Gruppe gelöscht!");
             updateGroups();
         } catch (Exception e)
         {
@@ -114,6 +130,10 @@ public class GruppeVerwaltenFXMLController implements Initializable
         }
     }
 
+    /**
+     * Methode die beim Klick auf den Button "Speichern" getriggert wird.
+     * bezieht sich nur auf die Änderung des GruppenModerators
+     */
     @FXML
     private void save()
     {
@@ -135,6 +155,9 @@ public class GruppeVerwaltenFXMLController implements Initializable
         }
     }
 
+    /**
+     * wird beim Ändern der Auswahl in der Combobox Moderator getriggert
+     */
     @FXML
     private void onChangeMod()
     {
@@ -148,20 +171,20 @@ public class GruppeVerwaltenFXMLController implements Initializable
         }
     }
 
+    /**
+     * wird beim Ändern der Auswahl in der ComboBox Member getriggert
+     */
     @FXML
     private void onChangeMember()
     {
         try
         {
-
             selectedMember = (User) cbMember.getSelectionModel().getSelectedItem();
 
         } catch (Exception e)
         {
             try
             {
-
-
                 cbMember.getSelectionModel().selectFirst();
                 selectedMember = (User) cbMember.getSelectionModel().getSelectedItem();
             } catch (Exception e2)
@@ -172,20 +195,19 @@ public class GruppeVerwaltenFXMLController implements Initializable
         }
     }
 
+    /**
+     * wird beim Ändern der Auswahl in der ComboBox User getriggert
+     */
     @FXML
     private void onChangeUser()
     {
         try
         {
-
             selectedUser = (User) cbUser.getSelectionModel().getSelectedItem();
-
         } catch (Exception e)
         {
             try
             {
-
-
                 cbUser.getSelectionModel().selectFirst();
                 selectedUser = (User) cbUser.getSelectionModel().getSelectedItem();
             } catch (Exception e2)
@@ -196,6 +218,9 @@ public class GruppeVerwaltenFXMLController implements Initializable
         }
     }
 
+    /**
+     * wird beim Ändern der Auswahl in der ComboBox Gruppe getriggert
+     */
     @FXML
     private void onChangeGroup()
     {
@@ -206,11 +231,15 @@ public class GruppeVerwaltenFXMLController implements Initializable
         {
             e.printStackTrace();
         }
+        //Bei Gruppenänderung werden alle anderen ComboBoxen auch aktualisiert
         updateGroupMembers();
         updateUsers();
         updateMods();
     }
 
+    /**
+     * ComboBox-update für Gruppen
+     */
     private void updateGroups()
     {
         try
@@ -231,12 +260,19 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
     }
 
+    /**
+     * ComboBox-Update für Gruppenmitglieder
+     */
     private void updateGroupMembers()
     {
         cbMember.getItems().clear();
         cbMember.getItems().addAll(selectedGroup.getMembers());
     }
 
+    /**
+     * ComboBox-Update für nicht-Gruppenmitglieder
+     * Anzeigetafel-Benutzer (Level-0) können nicht zu einer Gruppe hinzugefügt werden
+     */
     private void updateUsers()
     {
         cbUser.getItems().clear();
@@ -257,6 +293,10 @@ public class GruppeVerwaltenFXMLController implements Initializable
         cbUser.getItems().removeAll(((Group) cbGruppe.getSelectionModel().getSelectedItem()).getMembers());
     }
 
+    /**
+     * ComboBox-Update für Moderatoren
+     * Nur Level 2 User (Administratoren) können Moderator werden
+     */
     private void updateMods()
     {
         try
@@ -287,11 +327,22 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
     }
 
+    /**
+     * wird beim Aufruf des Formulars ausgeführt.
+     * Mit updateGroups() werden auch alle anderen ComboBoxen aktualisiert.
+     *
+     * Namensgebung nur zur besseren Lesbarkeit der initalize-Methode
+     */
     private void initGUI()
     {
         updateGroups();
     }
 
+    /**
+     * Wird beim laden des FXMLControllers getriggert
+     * @param url default-Übergabeparameter
+     * @param rb default-Übergabeparameter
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
@@ -300,6 +351,9 @@ public class GruppeVerwaltenFXMLController implements Initializable
         pm = new PopUpMessage();
         Platform.runLater(new Runnable()
         {
+            /**
+             * StringConverter für ComboBoxen setzen und initialies füllen der ComboBoxes
+             */
             @Override
             public void run()
             {

@@ -25,7 +25,7 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 /**
- * FXML Controller class
+ * FXML Controller Klasse, die beim Öffnen des "Nachricht Bearbeiten" Fensters instanziiert wird
  *
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
@@ -54,21 +54,31 @@ public class BearbeitenFXMLController implements Initializable
         return m;
     }
 
+    /**
+     * zum Übergeben der zu bearbeitenden Nachricht an den Controller.
+     * Wird von außen (GUIVS) aufgerufen
+     * @param m die zu bearbeitende Nachricht
+     */
     public void setM(Message m)
     {
         this.m = m;
     }
 
 
+    /**
+     * Methode, die beim Klick auf den Button "Veröffentlichen" ausgeführt wird
+     */
     @FXML
     private void veroeffentlichen()
     {
         m.setMessage(taNachricht.getText());
+        //Setze GruppenID der Nachricht auf 1( = Broadcast)
         m.setGroupId(1);
         try
         {
             GUIVS.instance.getControl().getC().saveMessage(m);
             pm.showInformation("Information", "Nachricht wurde veröffentlicht!");
+            //schließe das Fenster
             abbrechen();
         } catch (DatabaseObjectNotSavedException e)
         {
@@ -85,6 +95,9 @@ public class BearbeitenFXMLController implements Initializable
         }
     }
 
+    /**
+     * Speichert die (bearbeitete) Nachricht
+     */
     @FXML
     private void speichern()
     {
@@ -109,7 +122,9 @@ public class BearbeitenFXMLController implements Initializable
 
     }
 
-
+    /**
+     * Schließt das Formular
+     */
     @FXML
     private void abbrechen()
     {
@@ -119,7 +134,7 @@ public class BearbeitenFXMLController implements Initializable
     }
 
     /**
-     * Initializes the controller class.
+     * läd die übergebene Nachricht in das TextArea
      */
     private void ladeNachricht()
     {
@@ -133,15 +148,27 @@ public class BearbeitenFXMLController implements Initializable
         }
     }
 
+    /**
+     * wird beim öffnen des Formulars ausgeführt
+     * @param url default-Übergabeparameter
+     * @param rb default-Übergabeparameter
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-
+        //instanziiere neues PopUpMessage-Objekt
         pm = new PopUpMessage();
+        //Wenn der angemeldete User nicht Administrator ist, deaktiviere (ausgrauen) den Veröffentelichen-Button
         if (GUIVS.instance.getMe().getLevel() != 2)
         {
             bVeroeffentlichen.setDisable(true);
         }
+
+        /**ladeNachricht() muss in Platform.runLater gestartet werden, da zum
+        * Zeitpunkt des Aufrufs der initalize-Methode der Member m noch nicht gesetzt ist.
+         *
+        * Der Aufruf der initalize Methode wird durch "loader.load()" getriggert, siehe auch Klasse GUIVS
+        */
         Platform.runLater(new Runnable()
         {
             @Override
