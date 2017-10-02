@@ -19,7 +19,6 @@ import main.rmiinterface.Functions;
 import main.rmiinterface.NotifyUpdate;
 import main.rmiinterface.UpdateType;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -154,6 +153,12 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate
     }
 
 
+    /**
+     * Instanziiert Clientobjekt
+     *
+     * @param host Ip-Adresse oder Hostname des Servers
+     * @throws RemoteException
+     */
     public Client(String host) throws RemoteException
     {
         super();
@@ -179,6 +184,12 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate
         }
     }
 
+    /**
+     * Callback für Gruppenänderung
+     * @param g das geänderte Gruppenobjekt
+     * @param type Typ der Änderung gemäß rmiinterface.UpdateType
+     * @throws RemoteException RemoteException
+     */
     @Override
     public synchronized void onUpdateGroup(Group g, UpdateType type) throws RemoteException
     {
@@ -243,7 +254,12 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate
 
     }
 
-
+    /**
+     * Callback für Userupdate
+     * @param u das geänderte Userobjekt
+     * @param type der Updatetype gemäß rmiinterface.UpdateTypes
+     * @throws RemoteException RemoteException
+     */
     @Override
     public synchronized void onUpdateUser(User u, UpdateType type) throws RemoteException
     {
@@ -308,6 +324,12 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate
 
     }
 
+    /**
+     * Callback für MessageUpdates
+     * @param m das geänderte Messageobjekt
+     * @param type typ der Änderung gemäß rmiinterface.UpdateTypes
+     * @throws RemoteException RemoteException
+     */
     @Override
     public synchronized void onUpdateMessage(Message m, UpdateType type) throws RemoteException
     {
