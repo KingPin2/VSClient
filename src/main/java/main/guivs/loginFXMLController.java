@@ -64,6 +64,7 @@ public class loginFXMLController implements Initializable
             //Bei Level0-User -> öffne die zugehörige Anzeigetafel
             if(GUIVS.instance.getMe().getLevel() == 0)
             {
+                GUIVS.instance.getControl().getData();
                 GUIVS.oeffneAnzeigetafel(GUIVS.instance.getControl().getC().getGroupByName(GUIVS.instance.getMe().getName()));
             }//Bei Level1-User -> Lade die zugehörigen Daten und öffne die Useransicht
             else if (GUIVS.instance.getMe().getLevel() == 1)

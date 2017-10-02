@@ -147,7 +147,7 @@ public class Control
                 e.printStackTrace();
             } catch (DatabaseObjectNotFoundException e)
             {
-                e.printStackTrace();
+               //void
             }
             //Wenn es sich um eine Anzeigetafel handelt, dann...
         } else if (GUIVS.instance.getMe().getLevel() == 0)
@@ -166,7 +166,7 @@ public class Control
                 e.printStackTrace();
             } catch (DatabaseObjectNotFoundException e)
             {
-                e.printStackTrace();
+                //void, Noch keine Nachrichten auf Anzeigetafel soll keinen Fehler im Client verursachen
             } catch (UserAuthException e)
             {
                 e.printStackTrace();
