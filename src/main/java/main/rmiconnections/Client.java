@@ -8,6 +8,7 @@ package main.rmiconnections;
 
 import javafx.application.Platform;
 import main.classes.GUIVS;
+import main.classes.PopUpMessage;
 import main.exceptions.*;
 import main.guivs.AdminAnsichtFXMLController;
 import main.objects.Group;

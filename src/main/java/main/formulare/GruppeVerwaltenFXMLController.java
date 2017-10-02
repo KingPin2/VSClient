@@ -13,9 +13,13 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import main.classes.GUIVS;
 import main.classes.PopUpMessage;
+import main.exceptions.DatabaseConnectionException;
+import main.exceptions.DatabaseObjectNotFoundException;
+import main.exceptions.UserAuthException;
 import main.objects.Group;
 import main.objects.User;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -267,6 +271,24 @@ public class GruppeVerwaltenFXMLController implements Initializable
     {
         cbMember.getItems().clear();
         cbMember.getItems().addAll(selectedGroup.getMembers());
+        //Der GruppenUser soll nicht angezeigt werden
+        try
+        {
+            cbMember.getItems().remove(GUIVS.instance.getControl().getC().getUserByName(selectedGroup.getName()));
+        } catch (DatabaseConnectionException e)
+        {
+            e.printStackTrace();
+        } catch (RemoteException e)
+        {
+            e.printStackTrace();
+        } catch (DatabaseObjectNotFoundException e)
+        {
+            e.printStackTrace();
+        } catch (UserAuthException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     /**
