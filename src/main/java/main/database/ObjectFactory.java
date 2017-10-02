@@ -13,9 +13,9 @@ public class ObjectFactory {
 
     /**
      * Create user
-     * @param name
-     * @param password
-     * @param level
+     * @param name name
+     * @param password password
+     * @param level level
      * @return user
      */
     public static User createUser(String name, String password, int level){
@@ -24,8 +24,8 @@ public class ObjectFactory {
 
     /**
      * Create message
-     * @param message
-     * @param author
+     * @param message message
+     * @param author author
      * @return message
      */
     public static Message createMessage(String message, User author){
@@ -34,9 +34,9 @@ public class ObjectFactory {
 
     /**
      * Create group message
-     * @param message
-     * @param author
-     * @param group
+     * @param message message
+     * @param author author
+     * @param group group
      * @return message
      */
     public static Message createGroupMessage(String message, User author, Group group){
@@ -45,8 +45,8 @@ public class ObjectFactory {
 
     /**
      * Create empty group
-     * @param name
-     * @param moderator
+     * @param name name
+     * @param moderator moderator
      * @return group
      */
     public static Group createEmptyGroup(String name, User moderator){
@@ -55,9 +55,9 @@ public class ObjectFactory {
 
     /**
      * Create group with members
-     * @param name
-     * @param moderator
-     * @param members
+     * @param name name
+     * @param moderator moderator
+     * @param members members
      * @return group
      */
     public static Group createGroupWithMembers(String name, User moderator, ArrayList<User> members){

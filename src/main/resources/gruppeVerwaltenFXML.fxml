@@ -33,7 +33,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </ComboBox>
-                  <Button mnemonicParsing="false" onAction="#deleteGroup" prefWidth="70.0" text="Löschen" />
+                  <Button mnemonicParsing="false" onAction="#deleteGroup" prefWidth="70.0" text="Loeschen" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
@@ -78,7 +78,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </ComboBox>
-                  <Button fx:id="bSave" mnemonicParsing="false" onAction="#save" prefWidth="70.0" text="Ändern">
+                  <Button fx:id="bSave" mnemonicParsing="false" onAction="#save" prefWidth="70.0" text="Aendern">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>

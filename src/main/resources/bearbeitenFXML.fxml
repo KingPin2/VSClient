@@ -33,7 +33,7 @@
                         <Insets left="150.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="bVeroeffentlichen" onAction="#veroeffentlichen" mnemonicParsing="false" prefWidth="100.0" text="Veröffentlichen">
+                  <Button fx:id="bVeroeffentlichen" onAction="#veroeffentlichen" mnemonicParsing="false" prefWidth="100.0" text="Veroeffentlichen">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>

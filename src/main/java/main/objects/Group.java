@@ -14,7 +14,7 @@ public class Group implements Serializable {
     private ArrayList<User> members;
 
     /**
-     * Create group (with given ID -> Update group in main.database)
+     * Create group (with given ID  Update group in main.database)
      *
      * @param id        ID
      * @param name      Groupname
@@ -29,7 +29,7 @@ public class Group implements Serializable {
     }
 
     /**
-     * Create group without members (with ID -1 -> Save as new group in main.database)
+     * Create group without members (with ID -1 Save as new group in main.database)
      *
      * @param name      Groupname
      * @param moderator Moderator
@@ -39,7 +39,7 @@ public class Group implements Serializable {
     }
 
     /**
-     * Create group (with ID -1 -> Save as new group in main.database)
+     * Create group (with ID -1 Save as new group in main.database)
      *
      * @param name      Groupname
      * @param moderator Moderator

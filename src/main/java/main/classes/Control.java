@@ -97,15 +97,15 @@ public class Control
             } catch (DatabaseObjectNotFoundException e)
             {
                 PopUpMessage pm = new PopUpMessage();
-                pm.showInformation("Information", "Sie haben noch keine Nachricht veröffentlicht!");
+                pm.showInformation("Information", "Sie haben noch keine Nachricht veroeffentlicht!");
             } catch (RemoteException e)
             {
-                pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+                pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es spaeter erneut");
             } catch (UserAuthException e)
             {
                 e.printStackTrace();
             }
-            //Wenn regulärer User, dann...
+            //Wenn regulaerer User, dann...
         } else if (GUIVS.instance.getMe().getLevel() == 1)
         {
             initLists();
@@ -134,14 +134,14 @@ public class Control
                 }
                 if (!found)
                 {
-                    pm.showInformation("Information", "Sie haben noch keine Nachricht veröffentlicht!");
+                    pm.showInformation("Information", "Sie haben noch keine Nachricht veroeffentlicht!");
                 }
             } catch (DatabaseConnectionException e)
             {
                 e.printStackTrace();
             } catch (RemoteException e)
             {
-                pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+                pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es spaeter erneut");
             } catch (UserAuthException e)
             {
                 e.printStackTrace();
@@ -163,7 +163,7 @@ public class Control
                 e.printStackTrace();
             } catch (RemoteException e)
             {
-                pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+                pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es spaeter erneut");
             } catch (DatabaseObjectNotFoundException e)
             {
                 //void, Noch keine Nachrichten auf Anzeigetafel soll keinen Fehler im Client verursachen
@@ -177,9 +177,9 @@ public class Control
 
     /**
      * @author Jan-Merlin Geuskens, 3580970
-     * hält ein Client Objekt und stellt Schnittstelle zum Server zur Verfügung
+     * haelt ein Client Objekt und stellt Schnittstelle zum Server zur Verfuegung
      *
-     * IP-Adresse/Hostnamen des Servers hier an Client übergeben
+     * IP-Adresse/Hostnamen des Servers hier an Client uebergeben
      */
     public Control()
     {

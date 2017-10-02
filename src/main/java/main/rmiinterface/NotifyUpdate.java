@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
 /**
  * Created by Dominik on 26.09.2017.
  *
- * RMI Callback Interface für Server->Client Kommunikation
+ * RMI Callback Interface fuer Server Client Kommunikation
  */
 public interface NotifyUpdate extends Remote {
     void onUpdateGroup(Group g, UpdateType type) throws RemoteException;

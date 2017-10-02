@@ -30,9 +30,9 @@ import java.util.ResourceBundle;
  * @author Laura-Ann Schiestel, 3686779
  * @author Yannick Peter Neumann, 3690024
  *
- * User können Über die ComboBox ausgewählt werden.
- * Der Username ist nicht änderbar.
- * Änderbar sind Passwort und Berechtigung.
+ * User koennen Ueber die ComboBox ausgewaehlt werden.
+ * Der Username ist nicht aenderbar.
+ * Aenderbar sind Passwort und Berechtigung.
  *
  */
 public class UserVerwaltenFXMLController implements Initializable
@@ -59,7 +59,7 @@ public class UserVerwaltenFXMLController implements Initializable
     private TextField tfPasswort;
 
     /**
-     * löscht den ausgewählten User, sofern der Anwender es bestätigt
+     * loescht den ausgewaehlten User, sofern der Anwender es bestaetigt
      */
     @FXML
     private void deleteUser()
@@ -67,16 +67,16 @@ public class UserVerwaltenFXMLController implements Initializable
         try
         {
             User user = (User) cbUserwahl.getSelectionModel().getSelectedItem();
-            boolean auswahl = pm.showDialog("Möchten Sie den User " + ((User) cbUserwahl.getSelectionModel().getSelectedItem()).getName() + " wirklich löschen?");
+            boolean auswahl = pm.showDialog("Moechten Sie den User " + ((User) cbUserwahl.getSelectionModel().getSelectedItem()).getName() + " wirklich loeschen?");
             if (auswahl)
             {
                 GUIVS.instance.getControl().getC().deleteUser(user);
-                pm.showInformation("Information", "Der User wurde gelöscht.");
+                pm.showInformation("Information", "Der User wurde geloescht.");
                 this.user.clear();
                 initGUI();
             } else
             {
-                pm.showInformation("Information", "Der User wurde nicht gelöscht.");
+                pm.showInformation("Information", "Der User wurde nicht geloescht.");
             }
 
         } catch (Exception e)
@@ -87,7 +87,7 @@ public class UserVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * schließt das Formular
+     * schliesst das Formular
      */
     @FXML
     private void close()
@@ -98,7 +98,7 @@ public class UserVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * speichert den geänderten User
+     * speichert den geaenderten User
      */
     @FXML
     private void speichereUser()
@@ -120,7 +120,7 @@ public class UserVerwaltenFXMLController implements Initializable
             user.setLevel(level);
 
             GUIVS.instance.getControl().getC().saveUser(user);
-            pm.showInformation("Information", "User erfolgreich geändert!");
+            pm.showInformation("Information", "User erfolgreich geaendert!");
             close();
 
         } catch (Exception e)
@@ -129,7 +129,7 @@ public class UserVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * Initialisiert die Benutzeroberfläche
+     * Initialisiert die Benutzeroberflaeche
      */
     private void initGUI()
     {
@@ -150,7 +150,7 @@ public class UserVerwaltenFXMLController implements Initializable
             e.printStackTrace();
         } catch (RemoteException e)
         {
-            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es spaeter erneut");
         } catch (DatabaseObjectNotFoundException e)
         {
             e.printStackTrace();
@@ -202,9 +202,9 @@ public class UserVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * Wird beim Laden des FXML-Controller ausgeführt
-     * @param url default-Übergabeparameter
-     * @param rb default-Übergabeparameter
+     * Wird beim Laden des FXML-Controller ausgefuehrt
+     * @param url default-Uebergabeparameter
+     * @param rb default-Uebergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)

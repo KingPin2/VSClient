@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
  * @author Laura-Ann Schiestel, 3686779
  * @author Yannick Peter Neumann, 3690024
  *
- * Verwaltet Anzeigetafel-GUI und kümmert sich um die Initialisierung und das
+ * Verwaltet Anzeigetafel-GUI und kuemmert sich um die Initialisierung und das
  * Aktualisieren der NachrichtenBox-Elemente.
  *
  *
@@ -34,10 +34,10 @@ import java.util.ResourceBundle;
 public class AnzeigetafelFXMLController implements Initializable
 {
     /**
-     * Funktionsweise: Der AnzeigetafelFXMLController instanziiert für jedes
+     * Funktionsweise: Der AnzeigetafelFXMLController instanziiert fuer jedes
      * MessageObjekt in einer Gruppe eine NachrichtenBox (selbst erstelles FX-Steuerelement).
-     * Um die Referenz auf die ObservableList m (kommt von aussen) zu übergeben, wird die Methode setM()
-     * noch vor Ausführen der initialize Methode in der Klasse GUIVS aufgerufen.
+     * Um die Referenz auf die ObservableList m (kommt von aussen) zu uebergeben, wird die Methode setM()
+     * noch vor Ausfuehren der initialize Methode in der Klasse GUIVS aufgerufen.
      *
      */
 
@@ -64,7 +64,7 @@ public class AnzeigetafelFXMLController implements Initializable
         this.group = group;
     }
 
-    //nb hält die NachrichtenBox Steuerelemente
+    //nb haelt die NachrichtenBox Steuerelemente
     private ObservableList<Nachrichtenbox> nb;
 
     @Override
@@ -80,17 +80,17 @@ public class AnzeigetafelFXMLController implements Initializable
                  */
 
                 nb = FXCollections.observableArrayList();
-                //Wenn die übergebene Referenz nicht null ist bzw. die Liste nicht leer ist...
+                //Wenn die uebergebene Referenz nicht null ist bzw. die Liste nicht leer ist...
                 if (m != null)
                 {
-                    //...durchlaufe die Liste rückwärts (neuste Message zuerst)
+                    //...durchlaufe die Liste rueckwaerts (neuste Message zuerst)
                     for (int i = m.size() - 1; i >= 0; i--)
                     {
-                        //und instanziiere ein Nachrichtenboxelement für jede Nachricht
+                        //und instanziiere ein Nachrichtenboxelement fuer jede Nachricht
                         nb.add(new Nachrichtenbox(m.get(i)));
                     }
                 }
-                //Füge die Nachrichtenboxelemente zur VBox hinzu
+                //Fuege die Nachrichtenboxelemente zur VBox hinzu
                 vbox.getChildren().addAll(nb);
                 lTafel.setText("Anzeigetafel der Gruppe " + group.getName());
 
@@ -101,7 +101,7 @@ public class AnzeigetafelFXMLController implements Initializable
                 scrollpane.setFitToWidth(true);
 
                 //Registriere Changelistener auf die Listenreferenz
-                //wird ausgeführt, sobald sich irgendetwas ändert (Nachricht gelöscht, bearbeitet, hinzugefügt)
+                //wird ausgefuehrt, sobald sich irgendetwas aendert (Nachricht geloescht, bearbeitet, hinzugefuegt)
                 m.addListener(new ListChangeListener<Message>()
                 {
 
@@ -109,9 +109,9 @@ public class AnzeigetafelFXMLController implements Initializable
                     public void onChanged(Change<? extends Message> c)
                     {
                         /**
-                         * Update der GUI bei Änderung in der Message-Liste
+                         * Update der GUI bei Aenderung in der Message-Liste
                          */
-                        //Platform.runLater ist notwendig, da Änderungen an der GUI nur FX-Threads gestattet sind.
+                        //Platform.runLater ist notwendig, da Aenderungen an der GUI nur FX-Threads gestattet sind.
                         Platform.runLater(new Runnable()
                         {
                             @Override

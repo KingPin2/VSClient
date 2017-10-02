@@ -2,7 +2,7 @@ package main.rmiconnections;
 
 
 /**
- * Für spätere erweiterte Rechteverwaltung angelegter SecurityManager
+ * Fuer spaetere erweiterte Rechteverwaltung angelegter SecurityManager
  * durch Editierung der rmi.policy Konfigurierbar
  * @author Jan-Merlin Geuskens, 3580970
  */

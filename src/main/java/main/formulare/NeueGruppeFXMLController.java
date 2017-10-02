@@ -48,7 +48,7 @@ public class NeueGruppeFXMLController implements Initializable {
     private User user;
 
     /**
-     * schließt das Formular
+     * schliesst das Formular
      */
     @FXML
     private void close()
@@ -78,7 +78,7 @@ public class NeueGruppeFXMLController implements Initializable {
     }
 
     /**
-     * initialisert die ComboBox für die Moderatorauswahl
+     * initialisert die ComboBox fuer die Moderatorauswahl
      */
     private void initGUI()
     {
@@ -102,8 +102,8 @@ public class NeueGruppeFXMLController implements Initializable {
 
     /**
      * Wird beim Laden des Controllers getriggert.
-     * @param url default-Übergabeparameter
-     * @param rb default-Übergabeparameter
+     * @param url default-Uebergabeparameter
+     * @param rb default-Uebergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)

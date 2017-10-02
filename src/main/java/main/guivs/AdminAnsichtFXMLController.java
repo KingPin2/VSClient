@@ -33,7 +33,7 @@ import java.util.ResourceBundle;
 import static java.lang.System.exit;
 
 /**
- * FXML Controller Klasse der Hauptansicht für Administratoren
+ * FXML Controller Klasse der Hauptansicht fuer Administratoren
  *
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
@@ -42,9 +42,9 @@ import static java.lang.System.exit;
  *
  * @author Jan-Merlin Geuskens, 3580970
  *
- * Stellt im Vergleich zur Useransicht zusätzliche Funktionalitäten zur Verfügung um administrationsspezifsche
- * Forumulare zu öffnen. Im Gegensatz zur Useransicht werden in der zentralen TableView alle Nachrichten,
- * unabhängig vom Autor angezeigt.
+ * Stellt im Vergleich zur Useransicht zusaetzliche Funktionalitaeten zur Verfuegung um administrationsspezifsche
+ * Formulare zu oeffnen. Im Gegensatz zur Useransicht werden in der zentralen TableView alle Nachrichten,
+ * unabhaengig vom Autor angezeigt.
  *
  *
  */
@@ -57,7 +57,7 @@ public class AdminAnsichtFXMLController implements Initializable
 
     /**
      * getter
-     * @return in der TableView ausgewählte Nachricht
+     * @return in der TableView ausgewaehlte Nachricht
      */
     public static Message getSelectedMessage()
     {
@@ -81,7 +81,7 @@ public class AdminAnsichtFXMLController implements Initializable
     private Group selectedGroup;
 
     /**
-     * Wird getriggert, wenn die ComboBox zur Anzeigetafelauswahl eine Änderung registriert
+     * Wird getriggert, wenn die ComboBox zur Anzeigetafelauswahl eine Aenderung registriert
      */
     @FXML
     private void onBoardChange()
@@ -92,7 +92,7 @@ public class AdminAnsichtFXMLController implements Initializable
     }
 
     /**
-     * Instanziiert die ausgewählte Anzeigetafel
+     * Instanziiert die ausgewaehlte Anzeigetafel
      */
     @FXML
     private void anzeigetafel()
@@ -107,7 +107,7 @@ public class AdminAnsichtFXMLController implements Initializable
     }
 
     /**
-     * öffnet das "Gruppe anlegen" Formular
+     * oeffnet das "Gruppe anlegen" Formular
      */
     @FXML
     private void gruppeAnlegen()
@@ -123,7 +123,7 @@ public class AdminAnsichtFXMLController implements Initializable
     }
 
     /**
-     * abmelden und zurück zum LoginScreen
+     * abmelden und zurueck zum LoginScreen
      */
     @FXML
     private void about()
@@ -135,7 +135,7 @@ public class AdminAnsichtFXMLController implements Initializable
                 "Laura-Ann Schiestel,"+ "\t" + "\t"+ "3686779" + "\n" +
                 "Yannick Peter Neumann,"+"\t"+"\t"+ "3690024" + "\n" + "\n" +
 
-                "Wenn Sie Fehler finden, dürfen Sie sie behalten." + "\n" +
+                "Wenn Sie Fehler finden, duerfen Sie sie behalten." + "\n" +
                 "Bei Fragen schlagen Sie bitte Ihren Systemadministrator."
         );
     }
@@ -164,7 +164,7 @@ public class AdminAnsichtFXMLController implements Initializable
     }
 
     /**
-     * Öffnet das Formular "Gruppe bearbeiten"
+     * Oeffnet das Formular "Gruppe bearbeiten"
      */
     @FXML
     private void gruppeBearbeiten()
@@ -180,7 +180,7 @@ public class AdminAnsichtFXMLController implements Initializable
     }
 
     /**
-     * Öffnet das Formular "User verwalten"
+     * Oeffnet das Formular "User verwalten"
      */
     @FXML
     private void userVerwalten()
@@ -195,7 +195,7 @@ public class AdminAnsichtFXMLController implements Initializable
     }
 
     /**
-     * Öffnet das Formular "Neuer User"
+     * Oeffnet das Formular "Neuer User"
      */
     @FXML
     private void neuerUser()
@@ -212,7 +212,7 @@ public class AdminAnsichtFXMLController implements Initializable
     }
 
     /**
-     * Öffnet das Formular "Neue Nachricht"
+     * Oeffnet das Formular "Neue Nachricht"
      */
     @FXML
     private void neueNachricht()
@@ -227,7 +227,7 @@ public class AdminAnsichtFXMLController implements Initializable
     }
 
     /**
-     * Öffnet das Formular "Bearbeite Nachricht"
+     * Oeffnet das Formular "Bearbeite Nachricht"
      */
     @FXML
     private void bearbeiteNachricht()
@@ -244,7 +244,7 @@ public class AdminAnsichtFXMLController implements Initializable
     }
 
     /**
-     * Abmelden vom Server und schließen des Fensters
+     * Abmelden vom Server und schliessen des Fensters
      */
     @FXML
     private void schliessen()
@@ -254,7 +254,7 @@ public class AdminAnsichtFXMLController implements Initializable
             GUIVS.instance.getControl().getC().disconnect();
         } catch (RemoteException e)
         {
-            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es spaeter erneut");
         }
         GUIVS.instance.getControl().setC(null);
         GUIVS.instance.setMe(null);
@@ -263,14 +263,14 @@ public class AdminAnsichtFXMLController implements Initializable
     }
 
     /**
-     * löscht die in der TableView ausgewählte Nachricht, sofern der Benutzer zustimmt.
+     * loescht die in der TableView ausgewaehlte Nachricht, sofern der Benutzer zustimmt.
      */
     @FXML
     private void loeschen()
     {
             if (tTabelle.getSelectionModel().getSelectedItem() != null)
             {
-                boolean b = pm.showDialog("Die ausgewählte Nachricht wird unwiderruflich gelöscht!");
+                boolean b = pm.showDialog("Die ausgewaehlte Nachricht wird unwiderruflich geloescht!");
                 if (b == true)
                 {
                     try
@@ -283,20 +283,20 @@ public class AdminAnsichtFXMLController implements Initializable
                 }
             }else
             {
-                pm.showError("Error", "Sie haben keine Nachricht ausgewählt!");
+                pm.showError("Error", "Sie haben keine Nachricht ausgewaehlt!");
             }
     }
 
 
 
     /**
-     * Wird ausgeführt, wenn der FXML-Controller geladen wird.
+     * Wird ausgefuehrt, wenn der FXML-Controller geladen wird.
      * im Vergleich zu anderen Methoden etwas komplizierter, siehe lokale Kommentierung
      *
      * @author Jan-Merlin Geuskens, 3580970
      *
-     * @param url default-Übergabeparameter
-     * @param rb default-Übergabeparameter
+     * @param url default-Uebergabeparameter
+     * @param rb default-Uebergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -310,7 +310,7 @@ public class AdminAnsichtFXMLController implements Initializable
 
         //Komplizierte CellValueFactory mit anonymem innerem Callback zum Extrahieren des Namens des Autors der Message
         //Da das MessageObjekt ein UserObjekt beinhaltet und kein direkter Zugriff auf den Usernamen besteht,
-        //muss die Message zuerst entpackt werden. Der Autorname wird via Callback an die TableColumn zurückgeben
+        //muss die Message zuerst entpackt werden. Der Autorname wird via Callback an die TableColumn zurueckgeben
         tcUser.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>()
                 {
@@ -340,8 +340,8 @@ public class AdminAnsichtFXMLController implements Initializable
                 });
 
 
-        //RowListener für die Tableview
-        //Wenn auf eine Zeile doppelt geklickt wird, wird die ausgewählte Nachricht bearbeitet
+        //RowListener fuer die Tableview
+        //Wenn auf eine Zeile doppelt geklickt wird, wird die ausgewaehlte Nachricht bearbeitet
         //ein einfacher Klick selektiert lediglich
         tTabelle.setRowFactory(tv ->
         {
@@ -373,7 +373,7 @@ public class AdminAnsichtFXMLController implements Initializable
             {
                 if (groups != null)
                 {
-                    //StringConverter für Anzeigetafel-ComboBox
+                    //StringConverter fuer Anzeigetafel-ComboBox
                     cbAnzeigetafel.setConverter(new StringConverter()
                     {
                         @Override
@@ -393,9 +393,9 @@ public class AdminAnsichtFXMLController implements Initializable
                 cbAnzeigetafel.getSelectionModel().selectFirst();
                 selectedGroup = (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem();
 
-                //Filter für die TableView
+                //Filter fuer die TableView
                 //Ausdruck als Lambda mit innerem Lambda und integriertem Fehlerabfang, da der Filter implizit in einem
-                //seperaten Thread läuft und somit etwaige Exceptions nur von der Runtime gefangen werden können
+                //seperaten Thread laeuft und somit etwaige Exceptions nur von der Runtime gefangen werden koennen
                 //--> Vermeidung von Exceptions bevor sie entstehen
                 GUIVS.gruppenFilter.bind(Bindings.createObjectBinding(() ->
                         {
@@ -422,7 +422,7 @@ public class AdminAnsichtFXMLController implements Initializable
                 //binden des Comperators der Nachrichten an den Comperator der TableView
                 sortierteNachrichten.comparatorProperty().bind(tTabelle.comparatorProperty());
 
-                //dreht die Sortierung für Zeitstempel um ( ASC --> DESC)
+                //dreht die Sortierung fuer Zeitstempel um ( ASC --> DESC)
                 tcZeitstempel.setComparator(tcZeitstempel.getComparator().reversed());
 
                 //setze Die Sortierung in der TableView
@@ -435,9 +435,9 @@ public class AdminAnsichtFXMLController implements Initializable
                     @Override
                     public void onChanged(Change<? extends Message> c)
                     {
-                        //Wenn sich die Liste ändert, sortiere die Tabelle erneut
+                        //Wenn sich die Liste aendert, sortiere die Tabelle erneut
                         //(Elemente werden auf Grund der Eigenschaften der ObservableList
-                        //automatisch hinzugefügt, jedoch am Ende der Tabelle eingefügt)
+                        //automatisch hinzugefuegt, jedoch am Ende der Tabelle eingefuegt)
                         Platform.runLater(new Runnable()
                         {
                             @Override

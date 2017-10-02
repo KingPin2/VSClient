@@ -14,7 +14,7 @@ public class User implements Serializable {
     private int level;
 
     /**
-     * Create User (with ID -1 -> Save as new user in main.database)
+     * Create User (with ID -1 Save as new user in main.database)
      *
      * @param name     Username
      * @param password Password
@@ -26,7 +26,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Create User (with given ID -> Update user in main.database)
+     * Create User (with given ID Update user in main.database)
      *
      * @param id       Id
      * @param name     Username

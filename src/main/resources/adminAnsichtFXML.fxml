@@ -29,14 +29,14 @@
                 <Menu mnemonicParsing="false" text="Datei">
                   <items>
                     <MenuItem fx:id="miAbmelden" mnemonicParsing="false" onAction="#abmelden" text="Abmelden" />
-                    <MenuItem fx:id="miSchliessen" mnemonicParsing="false" onAction="#schliessen" text="Schließen" />
+                    <MenuItem fx:id="miSchliessen" mnemonicParsing="false" onAction="#schliessen" text="Schliessen" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Bearbeiten">
                   <items>
                     <MenuItem fx:id="miNeueNachricht" mnemonicParsing="false" onAction="#neueNachricht" text="Neue Nachricht" />
                     <MenuItem fx:id="miBearbeiten" mnemonicParsing="false" onAction="#bearbeiteNachricht" text="Nachricht bearbeiten" />
-                    <MenuItem fx:id="miLoeschen" mnemonicParsing="false" onAction="#loeschen" text="Nachricht löschen" />
+                    <MenuItem fx:id="miLoeschen" mnemonicParsing="false" onAction="#loeschen" text="Nachricht loeschen" />
                     <SeparatorMenuItem />
                     <MenuItem fx:id="miNeuerUser" mnemonicParsing="false" onAction="#neuerUser" text="User anlegen" />
                     <MenuItem fx:id="miUserBearbeiten" mnemonicParsing="false" onAction="#userVerwalten" text="User bearbeiten" />
@@ -67,7 +67,7 @@
                               <Insets bottom="4.0" left="16.0" top="4.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="bLoeschen" mnemonicParsing="false" onAction="#loeschen" prefWidth="110.0" text="Löschen">
+                        <Button fx:id="bLoeschen" mnemonicParsing="false" onAction="#loeschen" prefWidth="110.0" text="Loeschen">
                            <VBox.margin>
                               <Insets bottom="4.0" left="16.0" top="4.0" />
                            </VBox.margin>
@@ -80,7 +80,7 @@
                               <Insets bottom="4.0" left="16.0" top="20.0" />
                            </VBox.margin>
                         </ChoiceBox>
-                        <Button fx:id="bAnzeigetafel" mnemonicParsing="false" onAction="#anzeigetafel" prefWidth="110.0" text="Öffnen">
+                        <Button fx:id="bAnzeigetafel" mnemonicParsing="false" onAction="#anzeigetafel" prefWidth="110.0" text="Oeffnen">
                            <VBox.margin>
                               <Insets bottom="4.0" left="16.0" top="4.0" />
                            </VBox.margin>

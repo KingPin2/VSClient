@@ -25,7 +25,7 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 /**
- * FXML Controller Klasse, die beim Öffnen des "Nachricht Bearbeiten" Fensters instanziiert wird
+ * FXML Controller Klasse, die beim Oeffnen des "Nachricht Bearbeiten" Fensters instanziiert wird
  *
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
@@ -55,8 +55,8 @@ public class BearbeitenFXMLController implements Initializable
     }
 
     /**
-     * zum Übergeben der zu bearbeitenden Nachricht an den Controller.
-     * Wird von außen (GUIVS) aufgerufen
+     * zum Uebergeben der zu bearbeitenden Nachricht an den Controller.
+     * Wird von aussen (GUIVS) aufgerufen
      * @param m die zu bearbeitende Nachricht
      */
     public void setM(Message m)
@@ -66,7 +66,7 @@ public class BearbeitenFXMLController implements Initializable
 
 
     /**
-     * Methode, die beim Klick auf den Button "Veröffentlichen" ausgeführt wird
+     * Methode, die beim Klick auf den Button "Veroeffentlichen" ausgefuehrt wird
      */
     @FXML
     private void veroeffentlichen()
@@ -77,15 +77,15 @@ public class BearbeitenFXMLController implements Initializable
         try
         {
             GUIVS.instance.getControl().getC().saveMessage(m);
-            pm.showInformation("Information", "Nachricht wurde veröffentlicht!");
-            //schließe das Fenster
+            pm.showInformation("Information", "Nachricht wurde veroeffentlicht!");
+            //schliesse das Fenster
             abbrechen();
         } catch (DatabaseObjectNotSavedException e)
         {
             e.printStackTrace();
         } catch (RemoteException e)
         {
-            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es spaeter erneut");
         } catch (DatabaseConnectionException e)
         {
             e.printStackTrace();
@@ -110,7 +110,7 @@ public class BearbeitenFXMLController implements Initializable
             }
             m.setMessage(taNachricht.getText());
             GUIVS.instance.getControl().getC().saveMessage(m);
-            pm.showInformation("Nachricht geändert", "Nachricht erfolgreich geändert!");
+            pm.showInformation("Nachricht geaendert", "Nachricht erfolgreich geaendert!");
             abbrechen();
         } catch (EmptyStringException ese)
         {
@@ -123,7 +123,7 @@ public class BearbeitenFXMLController implements Initializable
     }
 
     /**
-     * Schließt das Formular
+     * Schliesst das Formular
      */
     @FXML
     private void abbrechen()
@@ -134,7 +134,7 @@ public class BearbeitenFXMLController implements Initializable
     }
 
     /**
-     * läd die übergebene Nachricht in das TextArea
+     * laed die uebergebene Nachricht in das TextArea
      */
     private void ladeNachricht()
     {
@@ -143,22 +143,22 @@ public class BearbeitenFXMLController implements Initializable
             taNachricht.setText(this.m.getMessage());
         } catch (NullPointerException e)
         {
-            pm.showError("Fehler", "Keine Nachricht ausgewählt oder Nachricht konnte nicht geladen werden!");
+            pm.showError("Fehler", "Keine Nachricht ausgewaehlt oder Nachricht konnte nicht geladen werden!");
             abbrechen();
         }
     }
 
     /**
-     * wird beim öffnen des Formulars ausgeführt
-     * @param url default-Übergabeparameter
-     * @param rb default-Übergabeparameter
+     * wird beim oeffnen des Formulars ausgefuehrt
+     * @param url default-Uebergabeparameter
+     * @param rb default-Uebergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
         //instanziiere neues PopUpMessage-Objekt
         pm = new PopUpMessage();
-        //Wenn der angemeldete User nicht Administrator ist, deaktiviere (ausgrauen) den Veröffentelichen-Button
+        //Wenn der angemeldete User nicht Administrator ist, deaktiviere (ausgrauen) den Veroeffentelichen-Button
         if (GUIVS.instance.getMe().getLevel() != 2)
         {
             bVeroeffentlichen.setDisable(true);

@@ -32,7 +32,7 @@ public class UserAnlegenFXMLController implements Initializable
     private PopUpMessage pm;
     private User neuerUser;
 
-    //Togglegroup für die RadioButtons
+    //Togglegroup fuer die RadioButtons
     private final ToggleGroup berechtigung = new ToggleGroup();
 
     @FXML
@@ -49,7 +49,7 @@ public class UserAnlegenFXMLController implements Initializable
     private PasswordField tfPasswort;
 
     /**
-     * Schließt das Formular
+     * Schliesst das Formular
      */
     @FXML
     private void close()
@@ -86,7 +86,7 @@ public class UserAnlegenFXMLController implements Initializable
             close();
         } catch (EmptyStringException es)
         {
-            pm.showError("Fehler", "Username und Passwort dürfen nicht leer sein!");
+            pm.showError("Fehler", "Username und Passwort duerfen nicht leer sein!");
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -94,10 +94,10 @@ public class UserAnlegenFXMLController implements Initializable
     }
 
     /**
-     * Wird beim Laden des FXML-Controllers ausgeführt
+     * Wird beim Laden des FXML-Controllers ausgefuehrt
      *
-     * @param url default-Übergabeparameter
-     * @param rb default-Übergabeparameter
+     * @param url default-Uebergabeparameter
+     * @param rb default-Uebergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)

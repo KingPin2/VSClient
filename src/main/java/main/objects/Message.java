@@ -20,12 +20,14 @@ public class Message implements Serializable {
     private CachedFunctions rmi;
 
     /**
-     * Create message (with given ID -> Update message in main.database)
+     * Create message (with given ID Update message in main.database)
      *
      * @param id      Id
      * @param message Message
      * @param group   Group
      * @param author  Author
+     * @param timestamp Zeitstempel der Nachricht
+     * @param rmi rmi
      */
     public Message(int id, String message, Group group, User author, Long timestamp, CachedFunctions rmi) {
         setID(id);
@@ -41,7 +43,7 @@ public class Message implements Serializable {
 
 
     /**
-     * Create  message (with ID -1 -> Save as new message in main.database)
+     * Create  message (with ID -1 Save as new message in main.database)
      *
      * @param message Message
      * @param author  Author
@@ -51,7 +53,7 @@ public class Message implements Serializable {
     }
 
     /**
-     * Create  group message (with ID -1 -> Save as new message in main.database)
+     * Create  group message (with ID -1 Save as new message in main.database)
      *
      * @param message Message
      * @param author  Author

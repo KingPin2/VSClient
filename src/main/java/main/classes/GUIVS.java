@@ -40,7 +40,7 @@ import static java.lang.System.exit;
  * @author Yannick Peter Neumann, 3690024
  *
  * Hauptverwaltungsklasse,
- * stellt static Methoden zum Öffnen der GUI-Fenster bereit
+ * stellt static Methoden zum Oeffnen der GUI-Fenster bereit
  * sowie die Referenz auf sich selbst, um auf via Control-Instanz auf RMI-Methoden zuzugreifen
  */
 public class GUIVS extends Application
@@ -50,9 +50,9 @@ public class GUIVS extends Application
     public static GUIVS instance;
     private Control control;
 
-    //Filter für Tableview (wird bei User und Admin benötigt)
+    //Filter fuer Tableview (wird bei User und Admin benoetigt)
     public static ObjectProperty<Predicate<Message>> gruppenFilter = new SimpleObjectProperty<>();
-    //Hashmap, die Gruppennamen mit Nachrichtenlisten(der jeweiligen Gruppe) verknüpft
+    //Hashmap, die Gruppennamen mit Nachrichtenlisten(der jeweiligen Gruppe) verknuepft
     private static HashMap<String, ObservableList<Message>> group_messages = new HashMap<String, ObservableList<Message>>();
 
     public static HashMap<String, ObservableList<Message>> getGroup_messages()
@@ -85,13 +85,13 @@ public class GUIVS extends Application
         return this.me;
     }
 
-    //Referenz auf das zuletzt geöffnete Fenster
+    //Referenz auf das zuletzt geoeffnete Fenster
     private static Stage previousStage;
 
     /**
      * Dient dazu, bei Formularen das Elternfenster festzulegen
      //und Owner sowie Modality festzulegen
-     * @param stage
+     * @param stage stage
      */
     public static void setPreviousStage(Stage stage)
     {
@@ -99,8 +99,8 @@ public class GUIVS extends Application
     }
 
     /**
-     * Setzt das Icon oben links für eine übergebene Stage
-     * @param stage
+     * Setzt das Icon oben links fuer eine uebergebene Stage
+     * @param stage stage
      */
     public static void setIcon(Stage stage)
     {
@@ -109,10 +109,10 @@ public class GUIVS extends Application
 
 
     /**
-     * stellt FXML-Loader zur Verfügung
+     * stellt FXML-Loader zur Verfuegung
      *
      * @param path Pfad zum FXML File, das geladen werden soll
-     * @return Referenz auf FXMLLoaderobjekt, welches die .FXML läd
+     * @return Referenz auf FXMLLoaderobjekt, welches die .FXML laed
      * @throws Exception
      */
     private static Parent loadFXML(String path) throws Exception
@@ -133,8 +133,8 @@ public class GUIVS extends Application
     }
 
     /**
-     * Beim Schließen der Hauptfenster wird die Verbindung zum Server getrennt
-     * @param stage übergebene Stage (Adminansicht, Useransicht und bei Anzeigetafellogin (zb. User Broadcast) auch bei der Anzeigetafel)
+     * Beim Schliessen der Hauptfenster wird die Verbindung zum Server getrennt
+     * @param stage uebergebene Stage (Adminansicht, Useransicht und bei Anzeigetafellogin (zb. User Broadcast) auch bei der Anzeigetafel)
      */
     public static void defaultClose(Stage stage)
     {
@@ -157,8 +157,8 @@ public class GUIVS extends Application
     }
 
     /**
-     * öffnet Formular "neue Nachricht"
-     * @throws Exception
+     * oeffnet Formular "neue Nachricht"
+     * @throws Exception InvocationTargetException, NullpointerException wahrscheinlich
      */
     public static void neueNachricht() throws Exception
     {
@@ -170,9 +170,9 @@ public class GUIVS extends Application
     }
 
     /**
-     * Öffnet eine Anzeigetafel-Instanz
-     * @param g die Gruppe, deren Anzeigetafel geöffnet werden soll
-     * @throws Exception InvocationTargetException, NullpointerException möglich
+     * Oeffnet eine Anzeigetafel-Instanz
+     * @param g die Gruppe, deren Anzeigetafel geoeffnet werden soll
+     * @throws Exception InvocationTargetException, NullpointerException moeglich
      */
     public static void oeffneAnzeigetafel(Group g) throws Exception
     {
@@ -204,7 +204,7 @@ public class GUIVS extends Application
         Scene vtScene = new Scene(root);
         Stage vtStage = new Stage();
         vtStage.setTitle("Anzeigetafel der Gruppe " + g.getName());
-        //Wenn Level0-User, dann disconnect() beim Schließen der Anzeigetafel
+        //Wenn Level0-User, dann disconnect() beim Schliessen der Anzeigetafel
         if (GUIVS.instance.getMe().getLevel() == 0)
         {
             defaultClose(vtStage);
@@ -215,8 +215,8 @@ public class GUIVS extends Application
     }
 
     /**
-     * Öffnet das Formular zum Anlegen eines neuen Users
-     * @throws Exception
+     * Oeffnet das Formular zum Anlegen eines neuen Users
+     * @throws Exception InvocationTargetException, NullpointerException moeglich
      */
     public static void neuerUser() throws Exception
     {
@@ -226,8 +226,8 @@ public class GUIVS extends Application
         formularSettings(vtStage,vtScene);
     }
     /**
-     * Öffnet das Formular zum Verwalten bestehender User
-     * @throws Exception
+     * Oeffnet das Formular zum Verwalten bestehender User
+     * @throws Exception InvocationTargetException, NullpointerException moeglich
      */
     public static void userVerwalten() throws Exception
     {
@@ -238,8 +238,8 @@ public class GUIVS extends Application
     }
 
     /**
-     * Öffnet das Formular zum anlegen neuer Gruppen
-     * @throws Exception
+     * Oeffnet das Formular zum anlegen neuer Gruppen
+     * @throws Exception InvocationTargetException, NullpointerException moeglich
      */
     public static void gruppeAnlegen() throws Exception
     {
@@ -249,8 +249,8 @@ public class GUIVS extends Application
         formularSettings(vtStage,vtScene);
     }
     /**
-     * Öffnet das Formular zum Verwalten bestehender Gruppen
-     * @throws Exception
+     * Oeffnet das Formular zum Verwalten bestehender Gruppen
+     * @throws Exception InvocationTargetException, NullpointerException moeglich
      */
     public static void gruppeVerwalten() throws Exception
     {
@@ -261,9 +261,9 @@ public class GUIVS extends Application
     }
 
     /**
-     * Öffnet das Formular zum bearbeiten einer Nachricht
+     * Oeffnet das Formular zum bearbeiten einer Nachricht
      * @param m Nachricht, die bearbeitet werden soll (Auswahl via TableView)
-     * @throws Exception
+     * @throws Exception InvocationTargetException, NullpointerException moeglich
      */
     public static void bearbeiteNachricht(Message m) throws Exception
     {
@@ -271,7 +271,7 @@ public class GUIVS extends Application
         loader.setLocation(GUIVS.class.getResource("/bearbeitenFXML.fxml"));
         Parent p = loader.load();
         BearbeitenFXMLController mc = loader.getController();
-        //Übergabe des Messageobjekts an den FXMLController
+        //Uebergabe des Messageobjekts an den FXMLController
         mc.setM(m);
         Scene vtScene = new Scene(p);
         Stage vtStage = new Stage();
@@ -280,15 +280,15 @@ public class GUIVS extends Application
     }
 
     /**
-     * Öffnet die Hauptansicht für Level-1 Benutzer
-     * @throws Exception
+     * Oeffnet die Hauptansicht fuer Level-1 Benutzer
+     * @throws Exception Exception
      */
     public static void userAnsicht() throws Exception
     {
         Scene vtScene = new Scene(loadFXML("/userAnsichtFXML.fxml"));
         Stage vtStage = new Stage();
         setPreviousStage(vtStage);
-        vtStage.setTitle("Ansicht für User");
+        vtStage.setTitle("Ansicht fuer User");
         defaultClose(vtStage);
         setIcon(vtStage);
         vtStage.setScene(vtScene);
@@ -297,8 +297,8 @@ public class GUIVS extends Application
     }
 
     /**
-     * Öffnet die Hauptansicht für Level-2 Benutzer
-     * @throws Exception
+     * Oeffnet die Hauptansicht fuer Level-2 Benutzer
+     * @throws Exception Exception
      */
     public static void adminAnsicht() throws Exception
     {
@@ -310,7 +310,7 @@ public class GUIVS extends Application
         Scene vtScene = new Scene(p);
         Stage vtStage = new Stage();
         setPreviousStage(vtStage);
-        vtStage.setTitle("Ansicht für Administratoren");
+        vtStage.setTitle("Ansicht fuer Administratoren");
         defaultClose(vtStage);
         setIcon(vtStage);
         vtStage.setScene(vtScene);
@@ -319,8 +319,8 @@ public class GUIVS extends Application
     }
 
     /**
-     * Öffnet das Loginfenster
-     * @param stage autogenerierte Start-stage, wird übegeben, da der Code nicht direkt in start() ausgeführt wird
+     * Oeffnet das Loginfenster
+     * @param stage autogenerierte Start-stage, wird uebegeben, da der Code nicht direkt in start() ausgefuehrt wird
      */
     public static void login(Stage stage)
     {
@@ -347,7 +347,7 @@ public class GUIVS extends Application
     /**
      * die erste Methode die beim Starten des Programms aufgerufen wird
      * @param stage autogenerierte Stage
-     * @throws Exception
+     * @throws Exception InvocationTargetException, NullpointerException moeglich
      */
     @Override
     public void start(Stage stage) throws Exception
@@ -356,8 +356,8 @@ public class GUIVS extends Application
     }
 
     /**
-     * startet das Programm via launch() --> start() wird ausgeführt,
-     * @param args Kommandozeilenparameter, werden (noch) ignoriert, spätere Verwendung möglich (TUI)
+     * startet das Programm via launch(), d.h. start() wird ausgefuehrt,
+     * @param args Kommandozeilenparameter, werden (noch) ignoriert, spaetere Verwendung moeglich (TUI)
      */
     public static void main(String[] args)
     {

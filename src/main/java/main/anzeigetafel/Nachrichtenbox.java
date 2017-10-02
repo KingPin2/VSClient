@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
  * @author Laura-Ann Schiestel, 3686779
  * @author Yannick Peter Neumann, 3690024
  *
- * FX-Controller für das Steuerelement Nachrichtenbox
+ * FX-Controller fuer das Steuerelement Nachrichtenbox
  */
 public class Nachrichtenbox extends HBox
 {
@@ -33,7 +33,7 @@ public class Nachrichtenbox extends HBox
     private TextArea message;
     private static final DateFormat dateFormat = new SimpleDateFormat("<dd.MM> HH:mm");
 
-    //leerer Konstruktor, wurde nur zum testen benötigt
+    //leerer Konstruktor, wurde nur zum testen benoetigt
     /*
     public Nachrichtenbox()
     {

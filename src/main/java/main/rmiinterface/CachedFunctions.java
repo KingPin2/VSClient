@@ -115,6 +115,7 @@ public class CachedFunctions implements Serializable {
      * Remove from cache, if message is updated
      *
      * @param m Message
+     * @param type type
      */
     public void onUpdateMessage(Message m, UpdateType type) {
         try {
@@ -133,6 +134,7 @@ public class CachedFunctions implements Serializable {
      * Remove from cache, if group is updated
      *
      * @param g Group
+     * @param type type
      */
     public void onUpdateGroup(Group g, UpdateType type) {
         try {
@@ -151,6 +153,7 @@ public class CachedFunctions implements Serializable {
      * Remove from cache, if user is updated
      *
      * @param u User
+     * @param type type
      */
     public void onUpdateUser(User u, UpdateType type) {
         try {

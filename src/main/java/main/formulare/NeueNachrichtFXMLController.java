@@ -49,14 +49,14 @@ public class NeueNachrichtFXMLController implements Initializable
     private Group selectedGroup;
 
     /**
-     * wird getriggert, wenn Gruppe in ComboBox ausgewählt wird
+     * wird getriggert, wenn Gruppe in ComboBox ausgewaehlt wird
      */
     @FXML
     private void onGroupChange()
     {
         try
         {
-            //Wenn die ausgewählte Gruppe nicht null ist, lade die Gruppe vom Server (bzw. aus dem Cache)
+            //Wenn die ausgewaehlte Gruppe nicht null ist, lade die Gruppe vom Server (bzw. aus dem Cache)
             selectedGroup = cbGroup.getSelectionModel().getSelectedItem().toString() != null ?
                     GUIVS.instance.getControl().getC().getGroupByName(cbGroup.getSelectionModel().getSelectedItem().toString())
                     : selectedGroup;
@@ -65,7 +65,7 @@ public class NeueNachrichtFXMLController implements Initializable
             e.printStackTrace();
         } catch (RemoteException e)
         {
-            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es spaeter erneut");
             e.printStackTrace();
         } catch (DatabaseObjectNotFoundException e)
         {
@@ -77,7 +77,7 @@ public class NeueNachrichtFXMLController implements Initializable
     }
 
     /**
-     * schließt das Formular
+     * schliesst das Formular
      */
     @FXML
     private void abbrechen()
@@ -87,7 +87,7 @@ public class NeueNachrichtFXMLController implements Initializable
     }
 
     /**
-     * Update für die Anzeigetafel-Combobox
+     * Update fuer die Anzeigetafel-Combobox
      */
     private void updateGroups()
     {
@@ -121,13 +121,13 @@ public class NeueNachrichtFXMLController implements Initializable
             Message m = ObjectFactory.createGroupMessage(taNachricht.getText(), GUIVS.instance.getMe(), selectedGroup);
             GUIVS.instance.getControl().getC().saveMessage(m);
             pm.showInformation("Information", "Ihre Nachricht wurde gespeichert!");
-            //schließen des Fensters
+            //schliessen des Fensters
         } catch (DatabaseObjectNotSavedException e)
         {
             e.printStackTrace();
         } catch (RemoteException e)
         {
-            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es spaeter erneut");
         } catch (DatabaseConnectionException e)
         {
             e.printStackTrace();
@@ -142,7 +142,7 @@ public class NeueNachrichtFXMLController implements Initializable
     }
 
     /**
-     * Initialisiert die Oberfläche des Formulars
+     * Initialisiert die Oberflaeche des Formulars
      */
     private void initGUI()
     {
@@ -152,8 +152,8 @@ public class NeueNachrichtFXMLController implements Initializable
 
     /**
      * Initialisiert den FXML-Controller des Formulars
-     * @param url default-Übergabeparameter
-     * @param rb default-Übergabeparameter
+     * @param url default-Uebergabeparameter
+     * @param rb default-Uebergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)

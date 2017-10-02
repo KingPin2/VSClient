@@ -46,7 +46,7 @@ import static java.lang.System.exit;
  * @author Yannick Peter Neumann, 3690024
  *
  *
- * Stellt die grundlegeden Funktionalitäten für Level-1 User zur Verfügung
+ * Stellt die grundlegeden Funktionalitaeten fuer Level-1 User zur Verfuegung
  * */
 public class UserAnsichtFXMLController implements Initializable
 {
@@ -79,7 +79,7 @@ public class UserAnsichtFXMLController implements Initializable
     private Group selectedGroup;
 
     /**
-     * wird getriggert, wenn eine Änderung in der ComboBox zur Anzeigetafel-Auswahl erfolgt
+     * wird getriggert, wenn eine Aenderung in der ComboBox zur Anzeigetafel-Auswahl erfolgt
      */
     @FXML
     private void onBoardChange()
@@ -91,7 +91,7 @@ public class UserAnsichtFXMLController implements Initializable
 
 
     /**
-     * instanziiert die ausgewählte Anzeigetafel
+     * instanziiert die ausgewaehlte Anzeigetafel
      */
     @FXML
     private void anzeigetafel()
@@ -107,7 +107,7 @@ public class UserAnsichtFXMLController implements Initializable
 
 
     /**
-     * meldet den User beim Server ab und öffnet anschließend erneut den LoginScreen
+     * meldet den User beim Server ab und oeffnet anschliessend erneut den LoginScreen
      */
     @FXML
     private void abmelden()
@@ -142,12 +142,12 @@ public class UserAnsichtFXMLController implements Initializable
                 "Laura-Ann Schiestel,"+ "\t" + "\t"+ "3686779" + "\n" +
                 "Yannick Peter Neumann,"+"\t"+"\t"+ "3690024" + "\n" + "\n" +
 
-                "Wenn Sie Fehler finden, dürfen Sie sie behalten." + "\n" +
+                "Wenn Sie Fehler finden, duerfen Sie sie behalten." + "\n" +
                 "Bei Fragen schlagen Sie bitte Ihren Systemadministrator."
         );
     }
     /**
-     * Öffnet das Formular "Neue Nachricht"
+     * Oeffnet das Formular "Neue Nachricht"
      */
     @FXML
     private void neueNachricht()
@@ -162,7 +162,7 @@ public class UserAnsichtFXMLController implements Initializable
     }
 
     /**
-     * Öffnet das Formular "Bearbeite Nachricht"
+     * Oeffnet das Formular "Bearbeite Nachricht"
      */
     @FXML
     private void bearbeiteNachricht()
@@ -179,7 +179,7 @@ public class UserAnsichtFXMLController implements Initializable
     }
 
     /**
-     * beendet zunächst die Verbindung zum Server und anschließend das Programm selbst
+     * beendet zunaechst die Verbindung zum Server und anschliessend das Programm selbst
      */
     @FXML
     private void schliessen()
@@ -189,7 +189,7 @@ public class UserAnsichtFXMLController implements Initializable
             GUIVS.instance.getControl().getC().disconnect();
         } catch (RemoteException e)
         {
-            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es spaeter erneut");
         }
 
         GUIVS.instance.getControl().setC(null);
@@ -199,14 +199,14 @@ public class UserAnsichtFXMLController implements Initializable
     }
 
     /**
-     * löscht die ausgewählte Nachricht, sofern der Nutzer den vorgang bestätigt
+     * loescht die ausgewaehlte Nachricht, sofern der Nutzer den vorgang bestaetigt
      */
     @FXML
     private void loeschen()
     {
         if (tTabelle.getSelectionModel().getSelectedItem() != null)
         {
-            boolean b = pm.showDialog("Die ausgewählte Nachricht wird unwiderruflich gelöscht!");
+            boolean b = pm.showDialog("Die ausgewaehlte Nachricht wird unwiderruflich geloescht!");
             if (b == true)
             {
                 try
@@ -219,15 +219,15 @@ public class UserAnsichtFXMLController implements Initializable
             }
         }else
         {
-            pm.showError("Error", "Sie haben keine Nachricht ausgewählt!");
+            pm.showError("Error", "Sie haben keine Nachricht ausgewaehlt!");
         }
     }
 
 
     /**
      * Wird getriggert, wenn der FYMLController geladen wird
-     * @param url default-Übergabeparameter
-     * @param rb default-Übergabeparameter
+     * @param url default-Uebergabeparameter
+     * @param rb default-Uebergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -256,7 +256,7 @@ public class UserAnsichtFXMLController implements Initializable
 
 
         //RowListener wie in der Adminansicht
-        //öffnet bei Doppelklick die Ausgewählte Nachricht im "Bearbeiten Formular"
+        //oeffnet bei Doppelklick die Ausgewaehlte Nachricht im "Bearbeiten Formular"
         tTabelle.setRowFactory(tv ->
         {
             TableRow<Message> row = new TableRow<>();

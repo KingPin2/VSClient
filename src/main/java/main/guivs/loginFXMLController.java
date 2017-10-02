@@ -38,8 +38,8 @@ public class loginFXMLController implements Initializable
 
     /**
      * Fragt beim Server an, ob der User mit den eingegebenen Daten existiert.
-     * Wenn ja, wird das zurückgegebene User-Objekt in GUIVS gespeichert.
-     * Wenn nein, wird eine Meldung über fehlerhafte Eingabe des Users angezeigt.
+     * Wenn ja, wird das zurueckgegebene User-Objekt in GUIVS gespeichert.
+     * Wenn nein, wird eine Meldung ueber fehlerhafte Eingabe des Users angezeigt.
      */
     @FXML
     private void login()
@@ -58,12 +58,12 @@ public class loginFXMLController implements Initializable
                 throw new NoUserFoundException();
             }
 
-            //Bei Level0-User -> öffne die zugehörige Anzeigetafel
+            //Bei Level0-User -> oeffne die zugehoerige Anzeigetafel
             if (GUIVS.instance.getMe().getLevel() == 0)
             {
                 GUIVS.instance.getControl().getData();
                 GUIVS.oeffneAnzeigetafel(GUIVS.instance.getControl().getC().getGroupByName(GUIVS.instance.getMe().getName()));
-            }//Bei Level1-User -> Lade die zugehörigen Daten und öffne die Useransicht
+            }//Bei Level1-User -> Lade die zugehoerigen Daten und oeffne die Useransicht
             else if (GUIVS.instance.getMe().getLevel() == 1)
             {
                 GUIVS.instance.getControl().getData();
@@ -71,7 +71,7 @@ public class loginFXMLController implements Initializable
                 stage.close();
                 GUIVS.userAnsicht();
 
-            }// Bei Level2-User -> Lade alle Daten und öffne die Adminansicht
+            }// Bei Level2-User -> Lade alle Daten und oeffne die Adminansicht
             else if (GUIVS.instance.getMe().getLevel() == 2)
             {
                 GUIVS.instance.getControl().getData();
@@ -84,16 +84,16 @@ public class loginFXMLController implements Initializable
             }
         } catch (IllegalCharacterException icex)
         {
-            pm.showError("Error", "Eingaben dürfen weder ' noch ` enthalten");
+            pm.showError("Error", "Eingaben duerfen weder ' noch ` enthalten");
         } catch (EmptyStringException esex)
         {
-            pm.showError("Error", "Eingaben dürfen nicht leer sein!");
+            pm.showError("Error", "Eingaben duerfen nicht leer sein!");
         } catch (NoUserFoundException nufex)
         {
             pm.showError("Error", "Username oder Passwort falsch!");
         }catch(RemoteException re)
         {
-            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es spaeter erneut");
         }
          catch (Exception e)
         {
@@ -105,8 +105,8 @@ public class loginFXMLController implements Initializable
     /**
      * Leere initalize Methode, es muss nicht initalisiert werden
      *
-     * @param url
-     * @param rb
+     * @param url default-Uebergabeparameter
+     * @param rb default-Uebergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)

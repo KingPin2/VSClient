@@ -33,14 +33,14 @@ import java.util.function.Predicate;
  *
  *
  * @author Jan-Merlin Geuskens , 3580970
- * Allgemeine Erklärungen:
+ * Allgemeine Erklaerungen:
  *
  * In den ComboBoxen werden die Datenbankobjekte User und Group gespeichert, lediglich die toString() Methode
- * wird mittels StringConverter überschrieben. Dies hat die Programmierung etwas erschwert, führt aber zu
+ * wird mittels StringConverter ueberschrieben. Dies hat die Programmierung etwas erschwert, fuehrt aber zu
  * verbessertem Netzwerktraffic und leichter lesbarem Code, da nicht bei jeder Auswahl erneut ein Objekt vom
  * Server abgefragt werden muss.
  *
- * Die Buttons neben den Comboboxen dienen nur der Bereitstellung der Funktionalitäten. Aus Zeitgründen wurde die
+ * Die Buttons neben den Comboboxen dienen nur der Bereitstellung der Funktionalitaeten. Aus Zeitgruenden wurde die
  * Umsetzung von IconButtons an Stelle der normalen Buttons gestrichen.
  *
  */
@@ -83,12 +83,12 @@ public class GruppeVerwaltenFXMLController implements Initializable
         {
             selectedGroup.addMember(selectedUser);
             GUIVS.instance.getControl().getC().saveGroup(selectedGroup);
-            pm.showInformation("Einladung", "User " + selectedUser.getName() + " wurde zur Gruppe hinzugefügt");
+            pm.showInformation("Einladung", "User " + selectedUser.getName() + " wurde zur Gruppe hinzugefuegt");
             updateGroupMembers();
             updateUsers();
         } catch (Exception e)
         {
-            pm.showError("Fehler", "Sie haben keinen User ausgewählt!");
+            pm.showError("Fehler", "Sie haben keinen User ausgewaehlt!");
         }
     }
 
@@ -111,13 +111,13 @@ public class GruppeVerwaltenFXMLController implements Initializable
             } catch (Exception e)
             {
                 e.printStackTrace();
-                pm.showError("Fehler", "Kein Member ausgewählt!");
+                pm.showError("Fehler", "Kein Member ausgewaehlt!");
             }
         }
     }
 
     /**
-     * Methode die beim Klick auf den Button "Löschen" getriggert wird
+     * Methode die beim Klick auf den Button "Loeschen" getriggert wird
      */
     @FXML
     private void deleteGroup()
@@ -125,18 +125,18 @@ public class GruppeVerwaltenFXMLController implements Initializable
         try
         {
             GUIVS.instance.getControl().getC().deleteGroup(selectedGroup);
-            pm.showInformation("Information", "Gruppe gelöscht!");
+            pm.showInformation("Information", "Gruppe geloescht!");
             updateGroups();
         } catch (Exception e)
         {
-            pm.showInformation("Information", "Keine Gruppe ausgewählt!");
+            pm.showInformation("Information", "Keine Gruppe ausgewaehlt!");
             e.printStackTrace();
         }
     }
 
     /**
      * Methode die beim Klick auf den Button "Speichern" getriggert wird.
-     * bezieht sich nur auf die Änderung des GruppenModerators
+     * bezieht sich nur auf die Aenderung des GruppenModerators
      */
     @FXML
     private void save()
@@ -147,7 +147,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
             pm.showInformation("Information", "Neuer Moderator gespeichert");
         } else
         {
-            pm.showInformation("Information", "Moderator wurde nicht geändert");
+            pm.showInformation("Information", "Moderator wurde nicht geaendert");
         }
 
         try
@@ -160,7 +160,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * wird beim Ändern der Auswahl in der Combobox Moderator getriggert
+     * wird beim Aendern der Auswahl in der Combobox Moderator getriggert
      */
     @FXML
     private void onChangeMod()
@@ -176,7 +176,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * wird beim Ändern der Auswahl in der ComboBox Member getriggert
+     * wird beim Aendern der Auswahl in der ComboBox Member getriggert
      */
     @FXML
     private void onChangeMember()
@@ -200,7 +200,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * wird beim Ändern der Auswahl in der ComboBox User getriggert
+     * wird beim Aendern der Auswahl in der ComboBox User getriggert
      */
     @FXML
     private void onChangeUser()
@@ -223,7 +223,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * wird beim Ändern der Auswahl in der ComboBox Gruppe getriggert
+     * wird beim Aendern der Auswahl in der ComboBox Gruppe getriggert
      */
     @FXML
     private void onChangeGroup()
@@ -235,14 +235,14 @@ public class GruppeVerwaltenFXMLController implements Initializable
         {
             e.printStackTrace();
         }
-        //Bei Gruppenänderung werden alle anderen ComboBoxen auch aktualisiert
+        //Bei Gruppenaenderung werden alle anderen ComboBoxen auch aktualisiert
         updateGroupMembers();
         updateUsers();
         updateMods();
     }
 
     /**
-     * ComboBox-update für Gruppen
+     * ComboBox-update fuer Gruppen
      */
     private void updateGroups()
     {
@@ -265,7 +265,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * ComboBox-Update für Gruppenmitglieder
+     * ComboBox-Update fuer Gruppenmitglieder
      */
     private void updateGroupMembers()
     {
@@ -292,8 +292,8 @@ public class GruppeVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * ComboBox-Update für nicht-Gruppenmitglieder
-     * Anzeigetafel-Benutzer (Level-0) können nicht zu einer Gruppe hinzugefügt werden
+     * ComboBox-Update fuer nicht-Gruppenmitglieder
+     * Anzeigetafel-Benutzer (Level-0) koennen nicht zu einer Gruppe hinzugefuegt werden
      */
     private void updateUsers()
     {
@@ -310,8 +310,8 @@ public class GruppeVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * ComboBox-Update für Moderatoren
-     * Nur Level 2 User (Administratoren) können Moderator werden
+     * ComboBox-Update fuer Moderatoren
+     * Nur Level 2 User (Administratoren) koennen Moderator werden
      */
     private void updateMods()
     {
@@ -338,7 +338,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * wird beim Aufruf des Formulars ausgeführt.
+     * wird beim Aufruf des Formulars ausgefuehrt.
      * Mit updateGroups() werden auch alle anderen ComboBoxen aktualisiert.
      *
      * Namensgebung nur zur besseren Lesbarkeit der initalize-Methode
@@ -350,8 +350,8 @@ public class GruppeVerwaltenFXMLController implements Initializable
 
     /**
      * Wird beim laden des FXMLControllers getriggert
-     * @param url default-Übergabeparameter
-     * @param rb default-Übergabeparameter
+     * @param url default-Uebergabeparameter
+     * @param rb default-Uebergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -362,7 +362,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
         Platform.runLater(new Runnable()
         {
             /**
-             * StringConverter für ComboBoxen setzen und initialies füllen der ComboBoxes
+             * StringConverter fuer ComboBoxen setzen und initialies fuellen der ComboBoxes
              */
             @Override
             public void run()

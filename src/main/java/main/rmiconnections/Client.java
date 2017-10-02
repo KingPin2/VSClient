@@ -3,7 +3,7 @@ package main.rmiconnections;
 /**
  * @author Jan-Merlin Geuskens, 3580970
  * Stellt die RMI Implementierung, die Cached Methoden und Objekte sowie die CallBack-Implementierung.
- * Teileweise noch ungenutzte Methoden wurden bereits vorausschauen für spätere Versionen implementiert
+ * Teileweise noch ungenutzte Methoden wurden bereits vorausschauen fuer spaetere Versionen implementiert
  */
 
 import javafx.application.Platform;
@@ -159,7 +159,7 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate
      * Instanziiert Clientobjekt
      *
      * @param host Ip-Adresse oder Hostname des Servers
-     * @throws RemoteException
+     * @throws RemoteException RemoteException
      */
     public Client(String host) throws RemoteException
     {
@@ -177,7 +177,7 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate
         }catch(RemoteException re)
         {
             PopUpMessage pm = new PopUpMessage();
-            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es spaeter erneut");
             Platform.exit();
             exit(0);
         }
@@ -189,9 +189,9 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate
     }
 
     /**
-     * Callback für Gruppenänderung
-     * @param g das geänderte Gruppenobjekt
-     * @param type Typ der Änderung gemäß rmiinterface.UpdateType
+     * Callback fuer Gruppenaenderung
+     * @param g das geaenderte Gruppenobjekt
+     * @param type Typ der Aenderung gemaess rmiinterface.UpdateType
      * @throws RemoteException RemoteException
      */
     @Override
@@ -259,9 +259,9 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate
     }
 
     /**
-     * Callback für Userupdate
-     * @param u das geänderte Userobjekt
-     * @param type der Updatetype gemäß rmiinterface.UpdateTypes
+     * Callback fuer Userupdate
+     * @param u das geaenderte Userobjekt
+     * @param type der Updatetype gemaess rmiinterface.UpdateTypes
      * @throws RemoteException RemoteException
      */
     @Override
@@ -329,9 +329,9 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate
     }
 
     /**
-     * Callback für MessageUpdates
-     * @param m das geänderte Messageobjekt
-     * @param type typ der Änderung gemäß rmiinterface.UpdateTypes
+     * Callback fuer MessageUpdates
+     * @param m das geaenderte Messageobjekt
+     * @param type typ der Aenderung gemaess rmiinterface.UpdateTypes
      * @throws RemoteException RemoteException
      */
     @Override
