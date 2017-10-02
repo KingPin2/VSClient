@@ -204,24 +204,23 @@ public class UserAnsichtFXMLController implements Initializable
     @FXML
     private void loeschen()
     {
-
-
-        boolean b = pm.showDialog("Die ausgewählte Nachricht wird unwiderruflich gelöscht!");
-        if (b == true)
+        if (tTabelle.getSelectionModel().getSelectedItem() != null)
         {
-            if (tTabelle.getSelectionModel().getSelectedItem() != null)
+            boolean b = pm.showDialog("Die ausgewählte Nachricht wird unwiderruflich gelöscht!");
+            if (b == true)
             {
                 try
                 {
                     GUIVS.instance.getControl().getC().deleteMessage(tTabelle.getSelectionModel().getSelectedItem());
                 } catch (Exception e)
                 {
-                    pm.showError("Error", "Die Tabelle ist leer!");
                     e.printStackTrace();
                 }
             }
+        }else
+        {
+            pm.showError("Error", "Sie haben keine Nachricht ausgewählt!");
         }
-
     }
 
 
