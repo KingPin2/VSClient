@@ -18,6 +18,8 @@ import main.rmiinterface.CachedFunctions;
 import main.rmiinterface.Functions;
 import main.rmiinterface.NotifyUpdate;
 import main.rmiinterface.UpdateType;
+
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -165,7 +167,12 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate
             this.rmi = (Functions) registry.lookup("Functions");
             this.cRMI = new CachedFunctions(rmi);
             clientID = rmi.connect(this);
-        } catch (Exception e)
+        }catch(RemoteException re)
+        {
+            PopUpMessage pm = new PopUpMessage();
+            pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+        }
+        catch (Exception e)
         {
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();
