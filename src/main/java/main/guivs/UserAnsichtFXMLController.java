@@ -135,16 +135,15 @@ public class UserAnsichtFXMLController implements Initializable
     {
         pm.showInformation("Autoren","Diese Software wurde entwickelt von: " +"\n" + "\n" +
 
-                "Jan-Merlin Geuskens, 3580970" +"\n"+
-                "Dominik Bergum, 3603490" + "\n" +
-                "Laura-Ann Schiestel, 3686779" + "\n" +
-                "Yannick Peter Neumann, 3690024" + "\n" + "\n" +
+                "Jan-Merlin Geuskens,"+"\t" + "\t" + "3580970" +"\n"+
+                "Dominik Bergum,"+ "\t" + "\t" + "\t" + "3603490" + "\n" +
+                "Laura-Ann Schiestel,"+ "\t" + "\t"+ "3686779" + "\n" +
+                "Yannick Peter Neumann,"+"\t"+"\t"+ "3690024" + "\n" + "\n" +
 
                 "Wenn Sie Fehler finden, dürfen Sie sie behalten." + "\n" +
                 "Bei Fragen schlagen Sie bitte Ihren Systemadministrator."
         );
     }
-
     /**
      * Öffnet das Formular "Neue Nachricht"
      */
