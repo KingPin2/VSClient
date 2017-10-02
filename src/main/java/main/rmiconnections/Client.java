@@ -26,6 +26,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
+import static java.lang.System.exit;
+
 public class Client extends UnicastRemoteObject implements NotifyUpdate
 {
 
@@ -176,6 +178,8 @@ public class Client extends UnicastRemoteObject implements NotifyUpdate
         {
             PopUpMessage pm = new PopUpMessage();
             pm.showError("Error","Der Server ist momentan nicht zu erreichen, bitte versuchen Sie es später erneut");
+            Platform.exit();
+            exit(0);
         }
         catch (Exception e)
         {
