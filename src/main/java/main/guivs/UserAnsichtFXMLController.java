@@ -110,6 +110,10 @@ public class UserAnsichtFXMLController implements Initializable
     @FXML
     private void abmelden()
     {
+        //TODO BugFix NullPointerException bei Relog
+
+        pm.showError("Achtung","Diese Funktion ist leider noch nicht (fehlerfrei) implementiert");
+        /*
         GUIVS.instance.setMe(null);
         GUIVS.setPreviousStage(null);
         try
@@ -122,6 +126,7 @@ public class UserAnsichtFXMLController implements Initializable
         schliessen();
         Stage stage = new Stage();
         GUIVS.login(stage);
+        */
     }
 
     /**
