@@ -169,7 +169,7 @@ public class UserAnsichtFXMLController implements Initializable
     {
         try
         {
-            selectedMessage = (Message) tTabelle.getSelectionModel().getSelectedItem();
+            selectedMessage = tTabelle.getSelectionModel().getSelectedItem();
             GUIVS.bearbeiteNachricht(selectedMessage);
 
         } catch (Exception e)

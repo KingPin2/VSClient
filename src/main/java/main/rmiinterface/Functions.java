@@ -9,6 +9,10 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+
+/**
+ * RMI Interface
+ */
 public interface Functions extends Remote {
     User getUserById(String key, int id) throws RemoteException, DatabaseObjectNotFoundException, DatabaseConnectionException, UserAuthException;
 

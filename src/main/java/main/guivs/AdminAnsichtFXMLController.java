@@ -234,7 +234,7 @@ public class AdminAnsichtFXMLController implements Initializable
     {
         try
         {
-            selectedMessage = (Message) tTabelle.getSelectionModel().getSelectedItem();
+            selectedMessage = tTabelle.getSelectionModel().getSelectedItem();
             GUIVS.bearbeiteNachricht(selectedMessage);
 
         } catch (Exception e)
@@ -399,11 +399,9 @@ public class AdminAnsichtFXMLController implements Initializable
                 //--> Vermeidung von Exceptions bevor sie entstehen
                 GUIVS.gruppenFilter.bind(Bindings.createObjectBinding(() ->
                         {
-                            return (message -> message != null &&  message.getGroup() != null && cbAnzeigetafel != null
+                            return (message -> (message != null && message.getGroup() != null && cbAnzeigetafel != null
                                     && cbAnzeigetafel.getValue() instanceof Group
-                                    && ((Group) cbAnzeigetafel.getValue()) != null ?
-                                        ((Group) cbAnzeigetafel.getValue()).getID() == message.getGroup().getID()
-                                        : false);
+                                    && cbAnzeigetafel.getValue() != null) && ((Group) cbAnzeigetafel.getValue()).getID() == message.getGroup().getID());
 
                         },
                         cbAnzeigetafel.valueProperty()));

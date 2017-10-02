@@ -95,7 +95,7 @@ public class GUIVS extends Application
      */
     public static void setPreviousStage(Stage stage)
     {
-        instance.previousStage = stage;
+        previousStage = stage;
     }
 
     /**
@@ -179,7 +179,7 @@ public class GUIVS extends Application
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(GUIVS.class.getResource("/Anzeigetafel.fxml"));
         Parent root = loader.load();
-        AnzeigetafelFXMLController ac = loader.<AnzeigetafelFXMLController>getController();
+        AnzeigetafelFXMLController ac = loader.getController();
 
         //Gruppenfilter auf Messages initalisieren
         FilteredList<Message> groupFilteredData = new FilteredList<>(GUIVS.instance.getControl().getMessages(), p -> true);
@@ -188,13 +188,7 @@ public class GUIVS extends Application
             @Override
             public boolean test(Message message)
             {
-                if (message.getGroup().getID() == g.getID())
-                {
-                    return true;
-                } else
-                {
-                    return false;
-                }
+                return message.getGroup().getID() == g.getID();
 
             }
         });
@@ -276,7 +270,7 @@ public class GUIVS extends Application
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(GUIVS.class.getResource("/bearbeitenFXML.fxml"));
         Parent p = loader.load();
-        BearbeitenFXMLController mc = loader.<BearbeitenFXMLController>getController();
+        BearbeitenFXMLController mc = loader.getController();
         //Übergabe des Messageobjekts an den FXMLController
         mc.setM(m);
         Scene vtScene = new Scene(p);

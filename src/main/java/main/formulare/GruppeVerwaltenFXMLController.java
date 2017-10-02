@@ -281,13 +281,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
             @Override
             public boolean test(User user)
             {
-                if (user.getLevel() > 0)
-                {
-                    return true;
-                } else
-                {
-                    return false;
-                }
+                return user.getLevel() > 0;
             }
         }));
         cbUser.getItems().removeAll(((Group) cbGruppe.getSelectionModel().getSelectedItem()).getMembers());
@@ -307,13 +301,7 @@ public class GruppeVerwaltenFXMLController implements Initializable
                 @Override
                 public boolean test(User user)
                 {
-                    if (user.getLevel() == 2)
-                    {
-                        return true;
-                    } else
-                    {
-                        return false;
-                    }
+                    return user.getLevel() == 2;
                 }
             }));
             cbMod.getSelectionModel().select(selectedGroup.getModerator());
