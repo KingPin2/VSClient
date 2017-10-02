@@ -37,10 +37,15 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 /**
- * FXML Controller class
+ * FXML Controller Klasse zur Useransicht
  *
- * @author Laura
- */
+ * @author Jan-Merlin Geuskens , 3580970
+ * @author Laura-Ann Schiestel, 3686779
+ * @author Yannick Peter Neumann, 3690024
+ *
+ *
+ * Stellt die grundlegeden Funktionalitäten für Level-1 User zur Verfügung
+ * */
 public class UserAnsichtFXMLController implements Initializable
 {
     private PopUpMessage pm;
@@ -48,12 +53,13 @@ public class UserAnsichtFXMLController implements Initializable
     private ObservableList<Message> nachrichten;
     private ObservableList<Group> groups;
 
+    private static Message selectedMessage;
     public static Message getSelectedMessage()
     {
         return selectedMessage;
     }
 
-    private static Message selectedMessage;
+
 
     @FXML
     private ChoiceBox cbAnzeigetafel;
@@ -70,15 +76,21 @@ public class UserAnsichtFXMLController implements Initializable
 
     private Group selectedGroup;
 
+    /**
+     * wird getriggert, wenn eine Änderung in der ComboBox zur Anzeigetafel-Auswahl erfolgt
+     */
     @FXML
     private void onBoardChange()
     {
-
-        selectedGroup = cbAnzeigetafel.getSelectionModel().getSelectedItem() != null ? (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem() : selectedGroup;
-
+        selectedGroup = cbAnzeigetafel.getSelectionModel().getSelectedItem() != null ?
+                (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem()
+                : selectedGroup;
     }
 
 
+    /**
+     * instanziiert die ausgewählte Anzeigetafel
+     */
     @FXML
     private void anzeigetafel()
     {
@@ -92,6 +104,9 @@ public class UserAnsichtFXMLController implements Initializable
     }
 
 
+    /**
+     * meldet den User beim Server ab und öffnet anschließend erneut den LoginScreen
+     */
     @FXML
     private void abmelden()
     {
@@ -107,10 +122,11 @@ public class UserAnsichtFXMLController implements Initializable
         schliessen();
         Stage stage = new Stage();
         GUIVS.login(stage);
-
     }
 
-
+    /**
+     * Öffnet das Formular "Neue Nachricht"
+     */
     @FXML
     private void neueNachricht()
     {
@@ -123,6 +139,9 @@ public class UserAnsichtFXMLController implements Initializable
         }
     }
 
+    /**
+     * Öffnet das Formular "Bearbeite Nachricht"
+     */
     @FXML
     private void bearbeiteNachricht()
     {
@@ -137,6 +156,9 @@ public class UserAnsichtFXMLController implements Initializable
         }
     }
 
+    /**
+     * beendet zunächst die Verbindung zum Server und anschließend das Programm selbst
+     */
     @FXML
     private void schliessen()
     {
@@ -154,6 +176,9 @@ public class UserAnsichtFXMLController implements Initializable
         stage.close();
     }
 
+    /**
+     * löscht die ausgewählte Nachricht, sofern der Nutzer den vorgang bestätigt
+     */
     @FXML
     private void loeschen()
     {
@@ -177,8 +202,11 @@ public class UserAnsichtFXMLController implements Initializable
 
     }
 
+
     /**
-     * Initializes the controller class.
+     * Wird getriggert, wenn der FYMLController geladen wird
+     * @param url default-Übergabeparameter
+     * @param rb default-Übergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -187,10 +215,10 @@ public class UserAnsichtFXMLController implements Initializable
         pm = new PopUpMessage();
 
         nachrichten = GUIVS.instance.getControl().getMessages();
-
         groups = GUIVS.instance.getControl().getGroups();
 
-
+        //CellValueFactories analog zur Adminansicht, jeoch ohne die Spalte User, da der Level1-User nur seine
+        //eigenen Nachrichten bearbeiten kann
         tcNachrichten.setCellValueFactory(new PropertyValueFactory<Message, String>("message"));
         tcZeitstempel.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>()
@@ -206,6 +234,8 @@ public class UserAnsichtFXMLController implements Initializable
                 });
 
 
+        //RowListener wie in der Adminansicht
+        //öffnet bei Doppelklick die Ausgewählte Nachricht im "Bearbeiten Formular"
         tTabelle.setRowFactory(tv ->
         {
             TableRow<Message> row = new TableRow<>();
@@ -226,6 +256,8 @@ public class UserAnsichtFXMLController implements Initializable
             });
             return row;
         });
+
+
         Platform.runLater(new Runnable()
         {
             @Override

@@ -54,7 +54,7 @@ public class AdminAnsichtFXMLController implements Initializable
     private ObservableList<Group> groups;
 
     /**
-     *
+     * getter
      * @return in der TableView ausgewählte Nachricht
      */
     public static Message getSelectedMessage()
@@ -268,6 +268,9 @@ public class AdminAnsichtFXMLController implements Initializable
 
     /**
      * Wird ausgeführt, wenn der FXML-Controller geladen wird.
+     * im Vergleich zu anderen Methoden etwas komplizierter, siehe lokale Kommentierung
+     *
+     * @author Jan-Merlin Geuskens, 3580970
      *
      * @param url default-Übergabeparameter
      * @param rb default-Übergabeparameter
@@ -368,7 +371,7 @@ public class AdminAnsichtFXMLController implements Initializable
                 selectedGroup = (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem();
 
                 //Filter für die TableView
-                //Ausdruck als Lambda mit innerem Lambda und integriertem Fehlerabfang, da der Filter impliziet in einem
+                //Ausdruck als Lambda mit innerem Lambda und integriertem Fehlerabfang, da der Filter implizit in einem
                 //seperaten Thread läuft und somit etwaige Exceptions nur von der Runtime gefangen werden können
                 //--> Vermeidung von Exceptions bevor sie entstehen
                 GUIVS.gruppenFilter.bind(Bindings.createObjectBinding(() ->

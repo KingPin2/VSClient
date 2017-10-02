@@ -27,6 +27,7 @@ import main.objects.*;
 import main.rmiinterface.NotifyUpdate;
 
 /**
+ * FXML-Controller des LoginScreens
  * @author  Jan-Merlin Geuskens, 3580970
  */
 public class loginFXMLController implements Initializable
@@ -37,6 +38,12 @@ public class loginFXMLController implements Initializable
     private PasswordField pfPassword;
     @FXML
     private Button bLogin;
+
+    /**
+     * Fragt beim Server an, ob der User mit den eingegebenen Daten existiert.
+     * Wenn ja, wird das zurückgegebene User-Objekt in GUIVS gespeichert.
+     * Wenn nein, wird eine Meldung über fehlerhafte Eingabe des Users angezeigt.
+     */
     @FXML
     private void login()
     {
@@ -45,6 +52,7 @@ public class loginFXMLController implements Initializable
         {
             GUIVS.instance.setMe
                     (
+
                             GUIVS.instance.getControl().getC().loginUser(tfUsername.getText(), pfPassword.getText())
                     );
 
@@ -53,11 +61,11 @@ public class loginFXMLController implements Initializable
                 throw new NoUserFoundException();
             }
 
-
+            //Bei Level0-User -> öffne die zugehörige Anzeigetafel
             if(GUIVS.instance.getMe().getLevel() == 0)
             {
                 GUIVS.oeffneAnzeigetafel(GUIVS.instance.getControl().getC().getGroupByName(GUIVS.instance.getMe().getName()));
-            }
+            }//Bei Level1-User -> Lade die zugehörigen Daten und öffne die Useransicht
             else if (GUIVS.instance.getMe().getLevel() == 1)
             {
                     GUIVS.instance.getControl().getData();
@@ -65,16 +73,18 @@ public class loginFXMLController implements Initializable
                     stage.close();
                     GUIVS.userAnsicht();
 
-            } else if (GUIVS.instance.getMe().getLevel() == 2)
+            }// Bei Level2-User -> Lade alle Daten und öffne die Adminansicht
+            else if (GUIVS.instance.getMe().getLevel() == 2)
             {
                 GUIVS.instance.getControl().getData();
                 Stage stage = (Stage) bLogin.getScene().getWindow();
                 stage.close();
                 GUIVS.adminAnsicht();
-            } else
-                {
-                    throw new IllegalPermissionLevelException();
-                }
+            }
+            else//Ansonsten wirf eine Exception
+            {
+                throw new IllegalPermissionLevelException();
+            }
         } catch (IllegalCharacterException icex)
         {
             pm.showError("Error", "Eingaben dürfen weder ' noch ` enthalten");
@@ -90,6 +100,12 @@ public class loginFXMLController implements Initializable
             System.err.println(e.toString());
         }
     }
+
+    /**
+     * Leere initalize Methode, es muss nicht initalisiert werden
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
