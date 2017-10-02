@@ -26,7 +26,7 @@ import main.objects.Group;
 import main.objects.Message;
 
 /**
- * FXML Controller class
+ * FXML Controller Klasse des Formulars "neue Nachricht"
  *
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
@@ -48,12 +48,18 @@ public class NeueNachrichtFXMLController implements Initializable
     private ChoiceBox cbGroup;
     private Group selectedGroup;
 
+    /**
+     * wird getriggert, wenn Gruppe in ComboBox ausgewählt wird
+     */
     @FXML
     private void onGroupChange()
     {
         try
         {
-            selectedGroup = cbGroup.getSelectionModel().getSelectedItem().toString() != null ? GUIVS.instance.getControl().getC().getGroupByName(cbGroup.getSelectionModel().getSelectedItem().toString()) : selectedGroup;
+            //Wenn die ausgewählte Gruppe nicht null ist, lade die Gruppe vom Server (bzw. aus dem Cache)
+            selectedGroup = cbGroup.getSelectionModel().getSelectedItem().toString() != null ?
+                    GUIVS.instance.getControl().getC().getGroupByName(cbGroup.getSelectionModel().getSelectedItem().toString())
+                    : selectedGroup;
         } catch (DatabaseConnectionException e)
         {
             e.printStackTrace();
@@ -69,7 +75,9 @@ public class NeueNachrichtFXMLController implements Initializable
         }
     }
 
-
+    /**
+     * schließt das Formular
+     */
     @FXML
     private void abbrechen()
     {
@@ -77,6 +85,9 @@ public class NeueNachrichtFXMLController implements Initializable
         stage.close();
     }
 
+    /**
+     * Update für die Anzeigetafel-Combobox
+     */
     private void updateGroups()
     {
         cbGroup.getItems().clear();
@@ -92,6 +103,9 @@ public class NeueNachrichtFXMLController implements Initializable
 
     }
 
+    /**
+     * sendet die erstellte Nachricht an den Server
+     */
     @FXML
     private void senden()
     {
@@ -106,6 +120,7 @@ public class NeueNachrichtFXMLController implements Initializable
             Message m = ObjectFactory.createGroupMessage(taNachricht.getText(), GUIVS.instance.getMe(), selectedGroup);
             GUIVS.instance.getControl().getC().saveMessage(m);
             pm.showInformation("Information", "Ihre Nachricht wurde gespeichert!");
+            //schließen des Fensters
         } catch (DatabaseObjectNotSavedException e)
         {
             e.printStackTrace();
@@ -125,7 +140,9 @@ public class NeueNachrichtFXMLController implements Initializable
         abbrechen();
     }
 
-
+    /**
+     * Initialisiert die Oberfläche des Formulars
+     */
     private void initGUI()
     {
         updateGroups();
@@ -133,12 +150,14 @@ public class NeueNachrichtFXMLController implements Initializable
     }
 
     /**
-     * Initializes the controller class.
+     * Initialisiert den FXML-Controller des Formulars
+     * @param url default-Übergabeparameter
+     * @param rb default-Übergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        // TODO
+        //Focus auf Abbrechen-Button legen
         this.bAbbrechen.requestFocus();
         pm = new PopUpMessage();
         Platform.runLater(new Runnable()

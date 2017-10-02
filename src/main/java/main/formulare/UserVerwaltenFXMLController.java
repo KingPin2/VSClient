@@ -24,15 +24,19 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 /**
- * FXML Controller class
+ * FXML Controller Klasse des Formulars "User verwalten"
  *
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
  * @author Yannick Peter Neumann, 3690024
+ *
+ * User können Über die ComboBox ausgewählt werden.
+ * Der Username ist nicht änderbar.
+ * Änderbar sind Passwort und Berechtigung.
+ *
  */
 public class UserVerwaltenFXMLController implements Initializable
 {
-
     private PopUpMessage pm;
     private ObservableList<User> user;
     private final ToggleGroup berechtigung = new ToggleGroup();
@@ -54,7 +58,9 @@ public class UserVerwaltenFXMLController implements Initializable
     @FXML
     private TextField tfPasswort;
 
-
+    /**
+     * löscht den ausgewählten User, sofern der Anwender es bestätigt
+     */
     @FXML
     private void deleteUser()
     {
@@ -80,6 +86,9 @@ public class UserVerwaltenFXMLController implements Initializable
 
     }
 
+    /**
+     * schließt das Formular
+     */
     @FXML
     private void close()
     {
@@ -88,6 +97,9 @@ public class UserVerwaltenFXMLController implements Initializable
 
     }
 
+    /**
+     * speichert den geänderten User
+     */
     @FXML
     private void speichereUser()
     {
@@ -103,11 +115,11 @@ public class UserVerwaltenFXMLController implements Initializable
 
         try
         {
-            User neuerUser = (User) cbUserwahl.getSelectionModel().getSelectedItem();
-            neuerUser.setPassword(tfPasswort.getText());
-            neuerUser.setLevel(level);
+            User user = (User) cbUserwahl.getSelectionModel().getSelectedItem();
+            user.setPassword(tfPasswort.getText());
+            user.setLevel(level);
 
-            GUIVS.instance.getControl().getC().saveUser(neuerUser);
+            GUIVS.instance.getControl().getC().saveUser(user);
             pm.showInformation("Information", "User erfolgreich geändert!");
             close();
 
@@ -116,6 +128,9 @@ public class UserVerwaltenFXMLController implements Initializable
         }
     }
 
+    /**
+     * Initialisiert die Benutzeroberfläche
+     */
     private void initGUI()
     {
         try
@@ -146,6 +161,9 @@ public class UserVerwaltenFXMLController implements Initializable
 
     }
 
+    /**
+     * wird getrigget, sobald in der ComboBox User eine Auswahl erfolgt
+     */
     @FXML
     private void selectUser()
     {
@@ -171,7 +189,7 @@ public class UserVerwaltenFXMLController implements Initializable
                     }
                 } else
                 {
-                    //TODO
+                    // void
                 }
             } else
             {
@@ -184,16 +202,21 @@ public class UserVerwaltenFXMLController implements Initializable
     }
 
     /**
-     * Initializes the controller class.
+     * Wird beim Laden des FXML-Controller ausgeführt
+     * @param url default-Übergabeparameter
+     * @param rb default-Übergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
         pm = new PopUpMessage();
         user = FXCollections.observableArrayList();
+
         rbUser.setToggleGroup(berechtigung);
         rbAdmin.setToggleGroup(berechtigung);
-
+        /**
+         * StringCoverter setzen
+         */
         cbUserwahl.setConverter(new StringConverter()
         {
             @Override
@@ -209,6 +232,7 @@ public class UserVerwaltenFXMLController implements Initializable
             }
         });
         cbUserwahl.setItems(user);
+
         Platform.runLater(new Runnable()
         {
             @Override
@@ -217,9 +241,6 @@ public class UserVerwaltenFXMLController implements Initializable
                 initGUI();
             }
         });
-
-
-        // TODO
     }
 
 }

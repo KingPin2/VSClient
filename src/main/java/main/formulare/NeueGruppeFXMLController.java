@@ -21,7 +21,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 /**
- * FXML Controller class
+ * FXML Controller Klasse
  *
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
@@ -47,6 +47,9 @@ public class NeueGruppeFXMLController implements Initializable {
     private Group group = null;
     private User user;
 
+    /**
+     * schließt das Formular
+     */
     @FXML
     private void close()
     {
@@ -55,6 +58,9 @@ public class NeueGruppeFXMLController implements Initializable {
         stage.close();
     }
 
+    /**
+     * Speichert die konfigurierte Gruppe
+     */
     @FXML
     private void speichern()
     {
@@ -67,10 +73,13 @@ public class NeueGruppeFXMLController implements Initializable {
             close();
         }catch(Exception e)
         {
-
+            pm.showError("Error","Die Gruppe konnte nicht gespeichert werden!");
         }
     }
 
+    /**
+     * initialisert die ComboBox für die Moderatorauswahl
+     */
     private void initGUI()
     {
 
@@ -90,20 +99,15 @@ public class NeueGruppeFXMLController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     /**
-     * Initializes the controller class.
+     * Wird beim Laden des Controllers getriggert.
+     * @param url default-Übergabeparameter
+     * @param rb default-Übergabeparameter
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        try
-        {
-            System.out.println(GUIVS.instance.getControl().getC().getUserByName("merlin").toString());
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+    public void initialize(URL url, ResourceBundle rb)
+    {
         pm = new PopUpMessage();
         bAbbrechen.setCancelButton(true);
         Platform.runLater(new Runnable()

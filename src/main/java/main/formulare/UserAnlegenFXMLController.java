@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * FXML Controller class
+ * FXML Controller Klasse des Formulars "User anlegen"
  *
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
@@ -31,8 +31,9 @@ public class UserAnlegenFXMLController implements Initializable
 
     private PopUpMessage pm;
     private User neuerUser;
+
+    //Togglegroup für die RadioButtons
     private final ToggleGroup berechtigung = new ToggleGroup();
-    ;
 
     @FXML
     private Button bSpeichern;
@@ -47,6 +48,9 @@ public class UserAnlegenFXMLController implements Initializable
     @FXML
     private PasswordField tfPasswort;
 
+    /**
+     * Schließt das Formular
+     */
     @FXML
     private void close()
     {
@@ -54,6 +58,9 @@ public class UserAnlegenFXMLController implements Initializable
         stage.close();
     }
 
+    /**
+     * erstellt ein User-Objekt aus den Eingabedaten und sendet es zum Server
+     */
     @FXML
     private void speichereUser()
     {
@@ -86,6 +93,12 @@ public class UserAnlegenFXMLController implements Initializable
         }
     }
 
+    /**
+     * Wird beim Laden des FXML-Controllers ausgeführt
+     *
+     * @param url default-Übergabeparameter
+     * @param rb default-Übergabeparameter
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
