@@ -31,11 +31,20 @@ import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
 /**
- * FXML Controller class
+ * FXML Controller Klasse der Hauptansicht für Administratoren
  *
  * @author Jan-Merlin Geuskens , 3580970
  * @author Laura-Ann Schiestel, 3686779
  * @author Yannick Peter Neumann, 3690024
+ *
+ *
+ * @author Jan-Merlin Geuskens, 3580970
+ *
+ * Stellt im Vergleich zur Useransicht zusätzliche Funktionalitäten zur Verfügung um administrationsspezifsche
+ * Forumulare zu öffnen. Im Gegensatz zur Useransicht werden in der zentralen TableView alle Nachrichten,
+ * unabhängig vom Autor angezeigt.
+ *
+ *
  */
 public class AdminAnsichtFXMLController implements Initializable
 {
@@ -44,6 +53,10 @@ public class AdminAnsichtFXMLController implements Initializable
     private ObservableList<Message> nachrichten;
     private ObservableList<Group> groups;
 
+    /**
+     *
+     * @return in der TableView ausgewählte Nachricht
+     */
     public static Message getSelectedMessage()
     {
         return selectedMessage;
@@ -51,8 +64,6 @@ public class AdminAnsichtFXMLController implements Initializable
     private static Message selectedMessage;
 
 
-    // private ArrayList<ChoiceBox <KeyValuePair > > cbEntries;
-    //Immer sichtbar in Navigation
     @FXML
     private ChoiceBox cbAnzeigetafel;
 
@@ -66,12 +77,21 @@ public class AdminAnsichtFXMLController implements Initializable
     @FXML
     private TableColumn tcZeitstempel;
     private Group selectedGroup;
+
+    /**
+     * Wird getriggert, wenn die ComboBox zur Anzeigetafelauswahl eine Änderung registriert
+     */
     @FXML
     private void onBoardChange()
     {
-        selectedGroup = cbAnzeigetafel.getSelectionModel().getSelectedItem() != null ? (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem() : selectedGroup;
+        selectedGroup = cbAnzeigetafel.getSelectionModel().getSelectedItem() != null ?
+                (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem()
+                : selectedGroup;
     }
 
+    /**
+     * Instanziiert die ausgewählte Anzeigetafel
+     */
     @FXML
     private void anzeigetafel()
     {
@@ -83,6 +103,10 @@ public class AdminAnsichtFXMLController implements Initializable
             e.printStackTrace();
         }
     }
+
+    /**
+     * öffnet das "Gruppe anlegen" Formular
+     */
     @FXML
     private void gruppeAnlegen()
     {
@@ -95,6 +119,10 @@ public class AdminAnsichtFXMLController implements Initializable
         }
 
     }
+
+    /**
+     * abmelden und zurück zum LoginScreen
+     */
     @FXML
     private void abmelden()
     {
@@ -113,6 +141,9 @@ public class AdminAnsichtFXMLController implements Initializable
 
     }
 
+    /**
+     * Öffnet das Formular "Gruppe bearbeiten"
+     */
     @FXML
     private void gruppeBearbeiten()
     {
@@ -126,6 +157,9 @@ public class AdminAnsichtFXMLController implements Initializable
 
     }
 
+    /**
+     * Öffnet das Formular "User verwalten"
+     */
     @FXML
     private void userVerwalten()
     {
@@ -138,6 +172,9 @@ public class AdminAnsichtFXMLController implements Initializable
         }
     }
 
+    /**
+     * Öffnet das Formular "Neuer User"
+     */
     @FXML
     private void neuerUser()
     {
@@ -152,6 +189,9 @@ public class AdminAnsichtFXMLController implements Initializable
 
     }
 
+    /**
+     * Öffnet das Formular "Neue Nachricht"
+     */
     @FXML
     private void neueNachricht()
     {
@@ -164,6 +204,9 @@ public class AdminAnsichtFXMLController implements Initializable
         }
     }
 
+    /**
+     * Öffnet das Formular "Bearbeite Nachricht"
+     */
     @FXML
     private void bearbeiteNachricht()
     {
@@ -178,6 +221,9 @@ public class AdminAnsichtFXMLController implements Initializable
         }
     }
 
+    /**
+     * Abmelden vom Server und schließen des Fensters
+     */
     @FXML
     private void schliessen()
     {
@@ -194,6 +240,9 @@ public class AdminAnsichtFXMLController implements Initializable
         stage.close();
     }
 
+    /**
+     * löscht die in der TableView ausgewählte Nachricht, sofern der Benutzer zustimmt.
+     */
     @FXML
     private void loeschen()
     {
@@ -218,16 +267,24 @@ public class AdminAnsichtFXMLController implements Initializable
     }
 
     /**
-     * Initializes the controller class.
+     * Wird ausgeführt, wenn der FXML-Controller geladen wird.
+     *
+     * @param url default-Übergabeparameter
+     * @param rb default-Übergabeparameter
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
 
         pm = new PopUpMessage();
+
+        //Lade alle Nachrichten und Gruppen vor (Admin)
         nachrichten = GUIVS.instance.getControl().getMessages();
         groups = GUIVS.instance.getControl().getGroups();
 
+        //Komplizierte CellValueFactory mit anonymem innerem Callback zum Extrahieren des Namens des Autors der Message
+        //Da das MessageObjekt ein UserObjekt beinhaltet und kein direkter Zugriff auf den Usernamen besteht,
+        //muss die Message zuerst entpackt werden. Der Autorname wird via Callback an die TableColumn zurückgeben
         tcUser.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>()
                 {
@@ -239,9 +296,10 @@ public class AdminAnsichtFXMLController implements Initializable
                         return name;
                     }
                 });
-
-
+        //simple CellValueFactory zum extrahieren der Nachricht
         tcNachrichten.setCellValueFactory(new PropertyValueFactory<Message, String>("message"));
+
+        //CellValueFactory mit innerem Callback zum extrahieren und Formatieren des Zeitstempels
         tcZeitstempel.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Message, String>, ObservableValue<String>>()
                 {
@@ -256,6 +314,9 @@ public class AdminAnsichtFXMLController implements Initializable
                 });
 
 
+        //RowListener für die Tableview
+        //Wenn auf eine Zeile doppelt geklickt wird, wird die ausgewählte Nachricht bearbeitet
+        //ein einfacher Klick selektiert lediglich
         tTabelle.setRowFactory(tv ->
         {
             TableRow<Message> row = new TableRow<>();
@@ -276,6 +337,9 @@ public class AdminAnsichtFXMLController implements Initializable
             });
             return row;
         });
+
+
+
         Platform.runLater(new Runnable()
         {
             @Override
@@ -283,6 +347,7 @@ public class AdminAnsichtFXMLController implements Initializable
             {
                 if (groups != null)
                 {
+                    //StringConverter für Anzeigetafel-ComboBox
                     cbAnzeigetafel.setConverter(new StringConverter()
                     {
                         @Override
@@ -302,29 +367,53 @@ public class AdminAnsichtFXMLController implements Initializable
                 cbAnzeigetafel.getSelectionModel().selectFirst();
                 selectedGroup = (Group) cbAnzeigetafel.getSelectionModel().getSelectedItem();
 
+                //Filter für die TableView
+                //Ausdruck als Lambda mit innerem Lambda und integriertem Fehlerabfang, da der Filter impliziet in einem
+                //seperaten Thread läuft und somit etwaige Exceptions nur von der Runtime gefangen werden können
+                //--> Vermeidung von Exceptions bevor sie entstehen
                 GUIVS.gruppenFilter.bind(Bindings.createObjectBinding(() ->
                         {
-                            return (message -> message != null &&  message.getGroup() != null && cbAnzeigetafel != null && cbAnzeigetafel.getValue() instanceof Group && ((Group) cbAnzeigetafel.getValue()) != null ? ((Group) cbAnzeigetafel.getValue()).getID() == message.getGroup().getID() : false);
+                            return (message -> message != null &&  message.getGroup() != null && cbAnzeigetafel != null
+                                    && cbAnzeigetafel.getValue() instanceof Group
+                                    && ((Group) cbAnzeigetafel.getValue()) != null ?
+                                        ((Group) cbAnzeigetafel.getValue()).getID() == message.getGroup().getID()
+                                        : false);
 
                         },
                         cbAnzeigetafel.valueProperty()));
+                //wrappen der ObservableList in einer FilteredList
                 FilteredList<Message> gefilterteNachrichten = new FilteredList<Message>(nachrichten, p -> true);
-                gefilterteNachrichten.predicateProperty().bind(Bindings.createObjectBinding(() -> GUIVS.gruppenFilter.get(), GUIVS.gruppenFilter));
+                //setzen des Filters
+                gefilterteNachrichten.predicateProperty().bind(Bindings.createObjectBinding
+                (
+                        () -> GUIVS.gruppenFilter.get(), GUIVS.gruppenFilter)
+                );
 
-
+                //wrappen der filteredList in einer SortedList
                 SortedList<Message> sortierteNachrichten = new SortedList<Message>(gefilterteNachrichten);
+
+                //zuweisen der Daten zur Tablle
                 tTabelle.setItems(sortierteNachrichten);
 
+                //binden des Comperators der Nachrichten an den Comperator der TableView
                 sortierteNachrichten.comparatorProperty().bind(tTabelle.comparatorProperty());
 
+                //dreht die Sortierung für Zeitstempel um ( ASC --> DESC)
                 tcZeitstempel.setComparator(tcZeitstempel.getComparator().reversed());
+
+                //setze Die Sortierung in der TableView
                 tTabelle.getSortOrder().add(tcZeitstempel);
 
+                //registriere ChangeListener auf die FilteredList
+                //(und damit impliziet auf die zu Grunde liegende externe ObservableList)
                 gefilterteNachrichten.addListener(new ListChangeListener<Message>()
                 {
                     @Override
                     public void onChanged(Change<? extends Message> c)
                     {
+                        //Wenn sich die Liste ändert, sortiere die Tabelle erneut
+                        //(Elemente werden auf Grund der Eigenschaften der ObservableList
+                        //automatisch hinzugefügt, jedoch am Ende der Tabelle eingefügt)
                         Platform.runLater(new Runnable()
                         {
                             @Override
